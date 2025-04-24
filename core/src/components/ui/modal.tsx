@@ -6,10 +6,10 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -27,8 +27,8 @@ export const BaseModal: React.FC<BaseModalProps> = ({
   footer,
 }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#141415] border border-[#1E1E20] text-white">
+    <Dialog open={isOpen} onOpenChange={onClose} >
+      <DialogContent className="bg-[#0E0E0F] border border-[#1E1E20] text-white">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -65,12 +65,20 @@ export const FormModal: React.FC<FormModalProps> = ({
       title={title}
       footer={
         <>
-          <Button variant="outline" onClick={onClose}>
-            {cancelText}
-          </Button>
-          <Button type="submit" form="modal-form" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : submitText}
-          </Button>
+          <Button
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              {cancelText}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={onSubmit}
+              disabled={isSubmitting}
+              icon={<Plus className="w-4 h-4" />}
+            >
+              {isSubmitting ? "Creating..." : submitText}
+            </Button>
         </>
       }
     >

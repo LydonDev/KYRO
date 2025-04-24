@@ -235,6 +235,8 @@ const AdminRegionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>("list");
+const [showCreateModal, setShowCreateModal] = useState(false);
+const [showEditModal, setShowEditModal] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "nodes" | "servers">(
     "overview",
@@ -386,6 +388,8 @@ const AdminRegionsPage = () => {
   };
 
   const handleCreate = async (e: React.FormEvent) => {
+    // On modal submit, close modal on success
+
     e.preventDefault();
     setFormError(null);
 
@@ -411,6 +415,7 @@ const AdminRegionsPage = () => {
       }
 
       await fetchData();
+      setShowCreateModal(false);
       setView("list");
       setFormData({ name: "", identifier: "" });
       showAlert("success", `Region "${formData.name}" created successfully`);
@@ -423,6 +428,8 @@ const AdminRegionsPage = () => {
   };
 
   const handleEdit = async (e: React.FormEvent) => {
+    // On modal submit, close modal on success
+
     e.preventDefault();
     if (!selectedRegion) return;
     setFormError(null);
@@ -457,6 +464,7 @@ const AdminRegionsPage = () => {
         setSelectedRegion(updatedRegion);
       }
 
+      setShowEditModal(false);
       setView("view");
       setFormData({ name: "", identifier: "" });
     } catch (err) {
@@ -757,18 +765,22 @@ const AdminRegionsPage = () => {
         </p>
       </div>
 
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-3 justify-end">
         <Button
           type="button"
+
           onClick={() => {
-            setView(type === "edit" ? "view" : "list");
-            if (type === "create") setSelectedRegion(null);
-            setFormData({ name: "", identifier: "" });
+            setShowCreateModal(false);
+            setShowEditModal(false);
           }}
         >
           Cancel
         </Button>
-        <Button type="submit" variant="secondary">
+        <Button 
+        type="submit" 
+        variant="secondary"
+        icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+        >
           {type === "create" ? "Create Region" : "Update Region"}
         </Button>
       </div>
@@ -788,7 +800,6 @@ const AdminRegionsPage = () => {
             <Button
               onClick={() => {
                 setView("list");
-                setSelectedRegion(null);
               }}
               variant="secondary"
               icon={<ArrowLeftIcon className="w-3 h-3" />}
@@ -800,9 +811,10 @@ const AdminRegionsPage = () => {
               <p className="text-xs text-white">{selectedRegion.identifier}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             <Button
               onClick={() => {
+                setShowEditModal(true);
                 setFormData({
                   name: selectedRegion.name,
                   identifier: selectedRegion.identifier,
@@ -811,7 +823,6 @@ const AdminRegionsPage = () => {
                     selectedRegion.fallbackRegionId || undefined,
                   serverLimit: selectedRegion.serverLimit || undefined,
                 });
-                setView("edit");
               }}
               variant="secondary"
               icon={<PencilIcon className="w-4 h-4" />}
@@ -1246,7 +1257,7 @@ const AdminRegionsPage = () => {
                 serverLimit: contextMenu.region.serverLimit || undefined,
               });
               setSelectedRegion(contextMenu.region);
-              setView("edit");
+              setShowEditModal(true);
               setContextMenu(null);
             }}
             onDelete={() => {
@@ -1286,7 +1297,7 @@ const AdminRegionsPage = () => {
                 </div>
                 <div className="flex space-x-3">
                   <Button
-                    onClick={() => setView("create")}
+                    onClick={() => setShowCreateModal(true)}
                     variant="secondary"
                     icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
                   >
@@ -1301,47 +1312,62 @@ const AdminRegionsPage = () => {
             </div>
           )}
 
-          {view === "create" && (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Button
-                  onClick={() => {
-                    setView("list");
-                    setSelectedRegion(null);
-                  }}
-                  variant="secondary"
-                  icon={<ArrowLeftIcon className="w-4 h-4" />}
-                ></Button>
-                <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
-                    Create Region
-                  </h1>
-                </div>
-              </div>
-              {renderForm("create")}
-            </div>
-          )}
+          {/* Modal for Creating Region */}
+          <AnimatePresence>
+            {showCreateModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+                onClick={() => setShowCreateModal(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="bg-[#0E0E0F] border border-[#1E1E20] rounded-lg max-w-lg w-full p-6 relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center space-x-4 mb-4">
+                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">Create Region</h1>
+                  </div>
+                  {renderForm("create")}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {view === "edit" && (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Button
-                  onClick={() => {
-                    setView("view");
-                    setFormData({ name: "", identifier: "" });
-                  }}
-                  variant="secondary"
-                  icon={<ArrowLeftIcon className="w-4 h-4" />}
-                ></Button>
-                <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
-                    Edit Region
-                  </h1>
-                </div>
-              </div>
-              {renderForm("edit")}
-            </div>
-          )}
+          <AnimatePresence>
+            {showEditModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+                onClick={() => {
+                  setShowEditModal(false);
+                  setFormData({ name: "", identifier: "" });
+                  setView("view");
+                }}
+              >
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="bg-[#0E0E0F] border border-[#1E1E20] rounded-lg max-w-lg w-full p-6 relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center space-x-4 mb-4">
+                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">Edit Region</h1>
+                  </div>
+                  {renderForm("edit")}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {view === "view" && renderRegionView()}
         </div>

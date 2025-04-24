@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Pencil, Trash2, Server, AlertCircle } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertCircle } from "lucide-react";
 import { useProjects } from "../../contexts/ProjectContext";
 import { Button } from "@/components/UI";
 import { Input } from "@/components/ui/input";
@@ -60,9 +60,9 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#0E0E0F] border border-[#1E1E20]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="text-[#FFFFFF]">{title}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           {formError && (
@@ -72,12 +72,16 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
             </Alert>
           )}
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium">
+            <label htmlFor="name" className="text-sm font-medium text-[#FFFFFF]">
               Project Name
             </label>
             <Input
               id="name"
               value={name}
+              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                    text-sm text-[#FFFFFF]
+                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    transition-colors duration-200"
               onChange={(e) => setName(e.target.value)}
               placeholder="My Project"
               required
@@ -85,20 +89,35 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="description" className="text-sm font-medium">
+            <label htmlFor="description" className="text-sm font-medium text-[#FFFFFF]">
               Description (optional)
             </label>
             <Textarea
               id="description"
               value={description}
+              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                    text-sm text-[#FFFFFF]
+                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    transition-colors duration-200"
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief description of this project"
               rows={3}
             />
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save"}
+          <Button
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => onSubmit(name, description)}
+              disabled={isSubmitting}
+              icon={<Plus className="w-4 h-4" />}
+            >
+              {isSubmitting ? "Creating..." : "Create"}
             </Button>
           </DialogFooter>
         </form>
@@ -257,14 +276,7 @@ const ProjectsPage: React.FC = () => {
                   </p>
                 )}
 
-                <div className="mt-6 flex space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => (window.location.href = `/servers`)}
-                  >
-                    <Server className="w-3 h-3 mr-2" />
-                    Servers
-                  </Button>
+                <div className="mt-6 flex space-x-1">
                   {!project.isDefault && (
                     <div className="flex space-x-2 ml-auto">
                       <Button
@@ -273,19 +285,19 @@ const ProjectsPage: React.FC = () => {
                           setCurrentProject(project);
                           setEditDialogOpen(true);
                         }}
+                        icon={<Pencil className="w-4 h-4" />}
                       >
-                        <Pencil className="w-4 h-4" />
+                        Edit
                       </Button>
                       <Button
                         variant="danger"
-                        size="sm"
-                        className="text-[#9CA3AF] hover:text-[#FFFFFF] hover:bg-[#1A1A1A]"
                         onClick={() => {
                           setCurrentProject(project);
                           setDeleteDialogOpen(true);
                         }}
+                        icon={<Trash2 className="w-4 h-4" />}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        Delete
                       </Button>
                     </div>
                   )}
@@ -322,7 +334,7 @@ const ProjectsPage: React.FC = () => {
 
       {/* Delete Project Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-[#0E0E0F] text-[#FFFFFF] border border-[#1E1E20]">
           <DialogHeader>
             <DialogTitle>Delete Project</DialogTitle>
           </DialogHeader>
@@ -331,10 +343,18 @@ const ProjectsPage: React.FC = () => {
             undone.
           </p>
           <DialogFooter>
+          <Button
+              variant="secondary"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
             <Button
               variant="danger"
               onClick={handleDeleteProject}
               disabled={isSubmitting}
+              icon={<Trash2 className="w-4 h-4" />}
             >
               {isSubmitting ? "Deleting..." : "Delete"}
             </Button>

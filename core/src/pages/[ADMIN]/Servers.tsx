@@ -8,6 +8,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge, Button } from "@/components/UI";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { FormModal } from "@/components/ui/modal";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "../[AUTH]/SignIn";
 import { useNavigate } from "react-router-dom";
@@ -131,6 +132,8 @@ interface EditFormData {
 type View = "list" | "create" | "view" | "edit";
 
 const AdminServersPage = () => {
+  // ...existing state
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   // Core state
   const [servers, setServers] = useState<Server[]>([]);
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -179,10 +182,12 @@ const AdminServersPage = () => {
   });
 
   const [formError, setFormError] = useState<string | null>(null);
+  // Modal state for create server
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Search state
-  const [userSearch, setUserSearch] = useState("");
-  const [unitSearch, setUnitSearch] = useState("");
+  const [userSearch] = useState("");
+  const [unitSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
   // Add loading states for edit operation
@@ -638,16 +643,6 @@ const AdminServersPage = () => {
           <label className="block text-xs font-medium text-[#FFFFFF]">
             Unit
           </label>
-          <input
-            type="text"
-            value={unitSearch}
-            onChange={(e) => setUnitSearch(e.target.value)}
-            className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
-            placeholder="Search units..."
-          />
           <select
             value={createFormData.unitId}
             onChange={(e) => updateFormData({ unitId: e.target.value })}
@@ -670,16 +665,6 @@ const AdminServersPage = () => {
           <label className="block text-xs font-medium text-[#FFFFFF]">
             User
           </label>
-          <input
-            type="text"
-            value={userSearch}
-            onChange={(e) => setUserSearch(e.target.value)}
-            className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
-            placeholder="Search users..."
-          />
           <select
             value={createFormData.userId}
             onChange={(e) => updateFormData({ userId: e.target.value })}
@@ -738,7 +723,7 @@ const AdminServersPage = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium text-gray-700">
+            <label className="block text-xs font-medium text-[#FFFFFF]">
               CPU (%)
             </label>
             <input
@@ -756,40 +741,6 @@ const AdminServersPage = () => {
               required
             />
           </div>
-        </div>
-
-        <div className="flex items-center space-x-3">
-          <Button
-            type="button"
-            onClick={() => {
-              setView("list");
-              setSelectedServer(null);
-              setCreateFormData({
-                name: "",
-                nodeId: "",
-                unitId: "",
-                userId: "",
-                allocationId: "",
-                memoryMiB: 1024,
-                diskMiB: 10240,
-                cpuPercent: 100,
-                regionId: "",
-              });
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="secondary"
-            type="submit"
-            disabled={
-              (deploymentTab === "nodes" &&
-                (!createFormData.nodeId || !createFormData.allocationId)) ||
-              (deploymentTab === "regions" && !createFormData.regionId)
-            }
-          >
-            Create Server
-          </Button>
         </div>
       </form>
     );
@@ -829,16 +780,6 @@ const AdminServersPage = () => {
           <label className="block text-xs font-medium text-[#FFFFFF]">
             Unit
           </label>
-          <input
-            type="text"
-            value={unitSearch}
-            onChange={(e) => setUnitSearch(e.target.value)}
-            className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
-            placeholder="Search units..."
-          />
           <select
             value={editFormData.unitId}
             onChange={(e) =>
@@ -935,21 +876,6 @@ const AdminServersPage = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <Button
-            type="button"
-            disabled={updating}
-            onClick={() => {
-              setView("view");
-              setFormError(null);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={updating} variant="secondary">
-            {updating ? "Updating..." : "Update Server"}
-          </Button>
-        </div>
       </form>
     );
   };
@@ -994,7 +920,7 @@ const AdminServersPage = () => {
                   cpuPercent: selectedServer.cpuPercent,
                 });
                 setFormError(null);
-                setView("edit");
+                setIsEditModalOpen(true);
               }}
               variant="secondary"
             >
@@ -1166,7 +1092,7 @@ const AdminServersPage = () => {
                     Manage all servers running on your nodes.
                   </p>
                 </div>
-                <Button onClick={() => setView("create")} variant="secondary">
+                <Button onClick={() => setIsCreateModalOpen(true)} variant="secondary">
                   <PlusIcon className="w-3.5 h-3.5 mr-1.5" />
                   Create Server
                 </Button>
@@ -1241,12 +1167,40 @@ const AdminServersPage = () => {
                   </div>
                 )}
               </div>
+
+              {/* Modal for Create Server */}
+              <FormModal
+                isOpen={isCreateModalOpen}
+                onClose={() => {
+                  setIsCreateModalOpen(false);
+                  setFormError(null);
+                  setCreateFormData({
+                    name: "",
+                    nodeId: "",
+                    unitId: "",
+                    userId: "",
+                    allocationId: "",
+                    memoryMiB: 1024,
+                    diskMiB: 10240,
+                    cpuPercent: 100,
+                    regionId: "",
+                  });
+                }}
+                title="Create Server"
+                onSubmit={handleCreate}
+                isSubmitting={loading}
+                error={formError}
+                submitText="Create Server"
+                cancelText="Cancel"
+              >
+                {renderCreateForm()}
+              </FormModal>
             </div>
           )}
 
           {view === "create" && (
             <div className="space-y-6">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3">
                 <Button
                   onClick={() => {
                     setView("list");
@@ -1266,27 +1220,21 @@ const AdminServersPage = () => {
             </div>
           )}
 
-          {view === "edit" && (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Button
-                  onClick={() => {
-                    setView("view");
-                    setFormError(null);
-                  }}
-                  variant="secondary"
-                >
-                  <ArrowLeftIcon className="w-4 h-4" />
-                </Button>
-                <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
-                    Edit Server: {selectedServer?.name}
-                  </h1>
-                </div>
-              </div>
-              {renderEditForm()}
-            </div>
-          )}
+          <FormModal
+  isOpen={isEditModalOpen}
+  onClose={() => {
+    setIsEditModalOpen(false);
+    setFormError(null);
+  }}
+  title={selectedServer ? `Edit Server: ${selectedServer.name}` : 'Edit Server'}
+  onSubmit={handleEdit}
+  isSubmitting={updating}
+  error={formError}
+  submitText={updating ? 'Updating...' : 'Update Server'}
+  cancelText="Cancel"
+>
+  {renderEditForm()}
+</FormModal>
 
           {view === "view" && renderServerView()}
         </div>

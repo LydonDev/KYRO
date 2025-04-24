@@ -80,6 +80,48 @@ if (!server) {
 }
 
 export default function Backups() {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [server, setServer] = useState<ServerDetails | null>(null);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchServer = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `/api/servers/${id}?include[node]=true&include[status]=true`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch server");
+        const data = await response.json();
+
+        if (!data.node?.fqdn || !data.node?.port) {
+          throw new Error("Server node information is missing");
+        }
+
+        setServer(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      }
+    };
+
+    fetchServer();
+  }, [id]);
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  if (!server) {
+    navigate("/unauthorized");
+  }
+
   return (
     <div className="bg-[#0E0E0F] min-h-screen p-6">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">

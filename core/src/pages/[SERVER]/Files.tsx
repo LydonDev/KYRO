@@ -1203,40 +1203,38 @@ const FileManager: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-[#0E0E0F]/80 border border-[#1E1E20] rounded-lg px-4 py-3"
+              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#0E0E0F] border border-[#1E1E20] rounded-lg px-4 py-3 flex items-center gap-2 shadow-lg"
             >
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-[#FFFFFF]">
-                  {selectedFiles.size}{" "}
-                  {selectedFiles.size === 1 ? "item" : "items"} selected
-                </span>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setModal({ type: "compress" })}
-                  disabled={operationLoading.compress}
-                  icon={<ArchiveBoxIcon className="w-4 h-4 mr-1.5" />}
-                >
-                  {operationLoading.compress ? "Creating..." : "Create Archive"}
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={handleMassDelete}
-                  disabled={operationLoading.massDelete}
-                  icon={<TrashIcon className="w-4 h-4 mr-1.5" />}
-                >
-                  {operationLoading.massDelete ? "Deleting..." : "Delete"}
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setSelectedFiles(new Set())}
-                  icon={<XMarkIcon className="w-4 h-4 mr-1.5" />}
-                >
-                  Clear Selection
-                </Button>
-              </div>
+              <span className="text-sm font-medium text-[#FFFFFF] mr-2">
+                {selectedFiles.size}{" "}
+                {selectedFiles.size === 1 ? "item" : "items"} selected
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setModal({ type: "compress" })}
+                disabled={operationLoading.compress}
+                icon={<ArchiveBoxIcon className="w-4 h-4 mr-1.5" />}
+              >
+                {operationLoading.compress ? "Creating..." : "Create Archive"}
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={handleMassDelete}
+                disabled={operationLoading.massDelete}
+                icon={<TrashIcon className="w-4 h-4 mr-1.5" />}
+              >
+                {operationLoading.massDelete ? "Deleting..." : "Delete"}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setSelectedFiles(new Set())}
+                icon={<XMarkIcon className="w-4 h-4 mr-1.5" />}
+              >
+                Clear Selection
+              </Button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -1748,9 +1746,6 @@ const FileManager: React.FC = () => {
                   : "Move"
             }
           >
-            <label className="block text-sm font-medium text-[#9CA3AF] mb-1">
-              Destination Path
-            </label>
             <input
               type="text"
               name="path"
@@ -1758,10 +1753,10 @@ const FileManager: React.FC = () => {
                 currentPath.length > 0 ? currentPath.join("/") : "/"
               }
               autoFocus
-              className="w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                text-sm text-[#FFFFFF]
-                focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                transition-colors duration-200"
+              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                    text-sm text-[#FFFFFF]
+                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    transition-colors duration-200"
             />
           </FormModal>
         )}
@@ -1787,10 +1782,10 @@ const FileManager: React.FC = () => {
               name="mode"
               defaultValue={modal.data.file.mode}
               autoFocus
-              className="w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                text-sm text-[#FFFFFF]
-                focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                transition-colors duration-200"
+              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                    text-sm text-[#FFFFFF]
+                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    transition-colors duration-200"
             />
             <div className="text-xs text-[#9CA3AF] mt-1">
               Examples: 644 (rw-r--r--), 755 (rwxr-xr-x), 777 (rwxrwxrwx)
@@ -1816,10 +1811,10 @@ const FileManager: React.FC = () => {
               name="name"
               placeholder="Archive name (without .zip)"
               autoFocus
-              className="w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                text-sm text-[#FFFFFF]
-                focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                transition-colors duration-200"
+              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                    text-sm text-[#FFFFFF]
+                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    transition-colors duration-200"
             />
             <div className="mt-2 text-xs text-[#9CA3AF]">
               Selected items: {Array.from(selectedFiles).join(", ")}
