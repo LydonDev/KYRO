@@ -141,15 +141,15 @@ const AdminServersPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>("list");
   const [selectedServer, setSelectedServer] = useState<Server | null>(null);
-    const { user } = useAuth();
-    const navigate = useNavigate();
-  
-    // Restrict access to admin only
-    useEffect(() => {
-      if (!user || !user.permissions.includes("admin")) {
-        navigate("/unauthorized", { replace: true });
-      }
-    }, [user, navigate]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Restrict access to admin only
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
 
   // Deployment tab state - moved to top level
   const [deploymentTab, setDeploymentTab] = useState<"nodes" | "regions">(
@@ -626,7 +626,8 @@ const AdminServersPage = () => {
                   </p>
                 )}
                 <p className="text-xs text-gray-300 mt-1">
-                  {appName} will automatically select the best node in this region
+                  {appName} will automatically select the best node in this
+                  region
                 </p>
               </>
             )}
@@ -698,7 +699,7 @@ const AdminServersPage = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-1"> 
+          <div className="space-y-1">
             <label className="block text-xs font-medium text-[#FFFFFF]">
               Memory (MiB)
             </label>
@@ -758,7 +759,7 @@ const AdminServersPage = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-        <Button
+          <Button
             type="button"
             onClick={() => {
               setView("list");
@@ -935,7 +936,7 @@ const AdminServersPage = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-        <Button
+          <Button
             type="button"
             disabled={updating}
             onClick={() => {
@@ -945,11 +946,7 @@ const AdminServersPage = () => {
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            disabled={updating}
-            variant="secondary"
-          >
+          <Button type="submit" disabled={updating} variant="secondary">
             {updating ? "Updating..." : "Update Server"}
           </Button>
         </div>
@@ -1025,11 +1022,15 @@ const AdminServersPage = () => {
               </div>
               <div>
                 <div className="text-xs text-[#A1A1AA]">Name</div>
-                <div className="text-sm mt-1 text-[#FFFFFF]">{selectedServer.name}</div>
+                <div className="text-sm mt-1 text-[#FFFFFF]">
+                  {selectedServer.name}
+                </div>
               </div>
               <div>
                 <div className="text-xs text-[#A1A1AA]">Internal ID</div>
-                <div className="text-sm mt-1 text-[#FFFFFF]">{selectedServer.internalId}</div>
+                <div className="text-sm mt-1 text-[#FFFFFF]">
+                  {selectedServer.internalId}
+                </div>
               </div>
               <div>
                 <div className="text-xs text-[#A1A1AA]">Current State</div>
@@ -1040,15 +1041,15 @@ const AdminServersPage = () => {
                   {selectedServer.state === "stopped" && (
                     <Badge variant="info">{selectedServer.state}</Badge>
                   )}
-                  {["creating", "installing", "updating", "deleting"].includes(selectedServer.state) && (
-                    <Badge variant="warning">{selectedServer.state}</Badge>
-                  )}
+                  {["creating", "installing", "updating", "deleting"].includes(
+                    selectedServer.state,
+                  ) && <Badge variant="warning">{selectedServer.state}</Badge>}
                   {["starting", "stopping"].includes(selectedServer.state) && (
                     <Badge variant="warning">{selectedServer.state}</Badge>
                   )}
-                  {["install_failed", "update_failed", "errored"].includes(selectedServer.state) && (
-                    <Badge variant="danger">{selectedServer.state}</Badge>
-                  )}
+                  {["install_failed", "update_failed", "errored"].includes(
+                    selectedServer.state,
+                  ) && <Badge variant="danger">{selectedServer.state}</Badge>}
                   {["installed"].includes(selectedServer.state) && (
                     <Badge variant="info">{selectedServer.state}</Badge>
                   )}
@@ -1165,10 +1166,7 @@ const AdminServersPage = () => {
                     Manage all servers running on your nodes.
                   </p>
                 </div>
-                <Button
-                  onClick={() => setView("create")}
-                  variant="secondary"
-                >
+                <Button onClick={() => setView("create")} variant="secondary">
                   <PlusIcon className="w-3.5 h-3.5 mr-1.5" />
                   Create Server
                 </Button>

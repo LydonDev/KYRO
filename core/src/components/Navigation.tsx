@@ -15,6 +15,7 @@ import {
   PuzzlePieceIcon,
 } from "@heroicons/react/24/solid";
 import { useAuth } from "../pages/[AUTH]/SignIn";
+import { DatabaseIcon, Hammer } from "lucide-react";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
@@ -87,9 +88,7 @@ function Sidebar() {
           to="/servers"
           className="h-12 flex items-center w-full px-4 hover:bg-[#232325] rounded-lg active:scale-95 transition"
         >
-          <span className="text-base font-semibold text-white">
-            {appName}
-          </span>
+          <span className="text-base font-semibold text-white">{appName}</span>
         </Link>
       </div>
 
@@ -135,15 +134,42 @@ function Sidebar() {
                 isActive={location.pathname.endsWith("/files")}
               />
 
-<NavItem
+              <NavItem
                 to={`/servers/${serverId}/plugins`}
                 icon={PuzzlePieceIcon}
                 label="Plugins"
                 isActive={location.pathname.endsWith("/plugins")}
               />
 
+              <NavItem
+                to={`/servers/${serverId}/mods`}
+                icon={Hammer}
+                label="Mods"
+                isActive={location.pathname.endsWith("/mods")}
+              />
 
-                            <NavItem
+              <NavItem
+                to={`/servers/${serverId}/players`}
+                icon={UsersIcon}
+                label="Players"
+                isActive={location.pathname.endsWith("/players")}
+              />
+
+              <NavItem
+                to={`/servers/${serverId}/backups`}
+                icon={ArchiveBoxIcon}
+                label="Backups"
+                isActive={location.pathname.endsWith("/backups")}
+              />
+
+              <NavItem
+                to={`/servers/${serverId}/databases`}
+                icon={DatabaseIcon}
+                label="Databases"
+                isActive={location.pathname.endsWith("/databases")}
+              />
+
+              <NavItem
                 to={`/servers/${serverId}/settings`}
                 icon={CogIcon}
                 label="Settings"

@@ -164,15 +164,15 @@ const NodeContextMenu: React.FC<{
 }> = ({ position, onClose, onEdit, onDelete }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState(position);
-    const { user } = useAuth();
-    const navigate = useNavigate();
-  
-    // Restrict access to admin only
-    useEffect(() => {
-      if (!user || !user.permissions.includes("admin")) {
-        navigate("/unauthorized", { replace: true });
-      }
-    }, [user, navigate]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Restrict access to admin only
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -211,20 +211,20 @@ const NodeContextMenu: React.FC<{
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     // Use a small delay to ensure the menu has been rendered
     const timer = setTimeout(adjustPosition, 10);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
       clearTimeout(timer);
     };
   }, [onClose, position]);
 
   const actions = [
-    { label: 'Edit', icon: PencilIcon, action: onEdit },
-    { label: 'Delete', icon: TrashIcon, action: onDelete, destructive: true },
+    { label: "Edit", icon: PencilIcon, action: onEdit },
+    { label: "Delete", icon: TrashIcon, action: onDelete, destructive: true },
   ];
 
   return (
@@ -245,7 +245,9 @@ const NodeContextMenu: React.FC<{
             action();
           }}
           className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
-            destructive ? 'text-red-500 hover:bg-red-900/20' : 'text-[#9CA3AF] hover:bg-[#1E1E20]'
+            destructive
+              ? "text-red-500 hover:bg-red-900/20"
+              : "text-[#9CA3AF] hover:bg-[#1E1E20]"
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -299,7 +301,10 @@ const AdminNodesPage = () => {
   const [tableSortDirection, setTableSortDirection] = useState<"asc" | "desc">(
     "asc",
   );
-  const [contextMenu, setContextMenu] = useState<{ node: Node; position: { x: number; y: number } } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    node: Node;
+    position: { x: number; y: number };
+  } | null>(null);
   console.log(error);
   useEffect(() => {
     if (
@@ -745,7 +750,7 @@ const AdminNodesPage = () => {
       </div>
 
       <div className="flex items-center space-x-3">
-      <Button
+        <Button
           type="button"
           onClick={() => {
             setView(type === "edit" ? "view" : "list");
@@ -755,10 +760,7 @@ const AdminNodesPage = () => {
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          variant="secondary"
-        >
+        <Button type="submit" variant="secondary">
           {type === "create" ? "Create Node" : "Update Node"}
         </Button>
       </div>
@@ -1297,7 +1299,7 @@ const AdminNodesPage = () => {
                   </div>
 
                   <Button
-                    type="submit" 
+                    type="submit"
                     disabled={isCreatingAllocation}
                     icon={isCreatingAllocation ? <LoadingSpinner /> : null}
                     variant="secondary"
@@ -1335,9 +1337,7 @@ const AdminNodesPage = () => {
               }}
               icon={<ArrowLeftIcon className="w-3.5 h-3.5 mr-1.5" />}
               variant="secondary"
-            >
-          
-            </Button>
+            ></Button>
             <div>
               <h2 className="text-lg font-semibold text-white">
                 {selectedNode.name}
@@ -1387,7 +1387,9 @@ const AdminNodesPage = () => {
           <Button
             onClick={() => setActiveTab("allocations")}
             variant={activeTab === "allocations" ? "primary" : "secondary"}
-            className={activeTab === "allocations" ? "font-bold" : "font-normal"}
+            className={
+              activeTab === "allocations" ? "font-bold" : "font-normal"
+            }
           >
             Allocations
           </Button>
@@ -1412,15 +1414,21 @@ const AdminNodesPage = () => {
                 </div>
                 <div>
                   <div className="text-xs text-white">Name</div>
-                  <div className="text-sm mt-1 text-gray-400">{selectedNode.name}</div>
+                  <div className="text-sm mt-1 text-gray-400">
+                    {selectedNode.name}
+                  </div>
                 </div>
                 <div>
                   <div className="text-xs text-white">FQDN</div>
-                  <div className="text-sm mt-1 text-gray-400">{selectedNode.fqdn}</div>
+                  <div className="text-sm mt-1 text-gray-400">
+                    {selectedNode.fqdn}
+                  </div>
                 </div>
                 <div>
                   <div className="text-xs text-white">Port</div>
-                  <div className="text-sm mt-1 text-gray-400">{selectedNode.port}</div>
+                  <div className="text-sm mt-1 text-gray-400">
+                    {selectedNode.port}
+                  </div>
                 </div>
                 <div>
                   <div className="text-xs text-white">Status</div>
@@ -1708,41 +1716,31 @@ const AdminNodesPage = () => {
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("name")}
               >
-                <div className="flex items-center">
-                  Name
-                </div>
+                <div className="flex items-center">Name</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("fqdn")}
               >
-                <div className="flex items-center">
-                  FQDN
-                </div>
+                <div className="flex items-center">FQDN</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("port")}
               >
-                <div className="flex items-center">
-                  Port
-                </div>
+                <div className="flex items-center">Port</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("status")}
               >
-                <div className="flex items-center">
-                  Status
-                </div>
+                <div className="flex items-center">Status</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("servers")}
               >
-                <div className="flex items-center">
-                  Servers
-                </div>
+                <div className="flex items-center">Servers</div>
               </th>
               <th className="p-3 text-right text-xs font-medium text-gray-400 tracking-wider">
                 Actions
@@ -1766,15 +1764,15 @@ const AdminNodesPage = () => {
                   <td className="p-3 text-xs text-gray-400">
                     <div className="flex items-center">
                       <FolderIcon className="w-4 h-4 mr-1.5 text-gray-400" />
-                      <span className="font-medium text-white">{node.name}</span>
+                      <span className="font-medium text-white">
+                        {node.name}
+                      </span>
                     </div>
                   </td>
                   <td className="p-3 text-xs text-white">{node.fqdn}</td>
                   <td className="p-3 text-xs text-white">{node.port}</td>
                   <td className="p-3 text-xs">
-                    <Badge
-                      variant={node.isOnline ? "success" : "danger"}
-                    >
+                    <Badge variant={node.isOnline ? "success" : "danger"}>
                       {node.isOnline ? "Online" : "Offline"}
                     </Badge>
                   </td>
@@ -1811,10 +1809,7 @@ const AdminNodesPage = () => {
             })}
             {nodes.length === 0 && (
               <tr>
-                <td
-                  colSpan={6}
-                  className="p-4 text-center text-white text-xs"
-                >
+                <td colSpan={6} className="p-4 text-center text-white text-xs">
                   No nodes found
                 </td>
               </tr>

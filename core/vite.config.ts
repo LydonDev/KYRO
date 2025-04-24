@@ -8,12 +8,12 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+    include: ["react", "react-dom", "react-router-dom", "framer-motion"],
   },
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, './index.html'),
+        main: resolve(__dirname, "./index.html"),
       },
     },
   },

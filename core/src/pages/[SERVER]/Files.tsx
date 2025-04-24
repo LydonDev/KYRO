@@ -1153,7 +1153,6 @@ const FileManager: React.FC = () => {
     navigate("/unauthorized");
   }
 
-
   return (
     <div
       className="bg-[#0E0E0F] min-h-screen p-6"
@@ -1625,17 +1624,17 @@ const FileManager: React.FC = () => {
                   <Button
                     onClick={async () => {
                       setModal((prev) =>
-                        prev ? { ...prev, loading: true } : null
+                        prev ? { ...prev, loading: true } : null,
                       );
                       const success = await handleSaveFile(
                         modal.data.file,
-                        modal.data.content
+                        modal.data.content,
                       );
                       if (success) {
                         setModal(null);
                       } else {
                         setModal((prev) =>
-                          prev ? { ...prev, loading: false } : null
+                          prev ? { ...prev, loading: false } : null,
                         );
                       }
                     }}
@@ -1655,34 +1654,34 @@ const FileManager: React.FC = () => {
                 </span>
               )}
               <div className="flex-1 overflow-hidden rounded-md border border-[#1E1E20]">
-                      <Editor
-                        value={modal.data.content}
-                        language={
-                          modal.data.file.name.endsWith(".properties")
-                            ? "properties"
-                            : modal.data.file.mime.split("/")[1] || "plaintext"
-                        }
-                        theme="vs-dark"
-                        options={{
-                          minimap: { enabled: false },
-                          fontSize: 14,
-                          lineNumbers: "on",
-                          scrollBeyondLastLine: false,
-                          wordWrap: "on",
-                          padding: { top: 20 },
-                          readOnly: modal.data.file.readonly === true,
-                        }}
-                        onChange={(content) => {
-                          setModal((prev) =>
-                            prev
-                              ? {
-                                  ...prev,
-                                  data: { ...prev.data, content },
-                                }
-                              : null,
-                          );
-                        }}
-                      />
+                <Editor
+                  value={modal.data.content}
+                  language={
+                    modal.data.file.name.endsWith(".properties")
+                      ? "properties"
+                      : modal.data.file.mime.split("/")[1] || "plaintext"
+                  }
+                  theme="vs-dark"
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    lineNumbers: "on",
+                    scrollBeyondLastLine: false,
+                    wordWrap: "on",
+                    padding: { top: 20 },
+                    readOnly: modal.data.file.readonly === true,
+                  }}
+                  onChange={(content) => {
+                    setModal((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            data: { ...prev.data, content },
+                          }
+                        : null,
+                    );
+                  }}
+                />
               </div>
             </div>
           </BaseModal>
@@ -1733,15 +1732,21 @@ const FileManager: React.FC = () => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget as HTMLFormElement);
               handleMoveFile(
-              modal.data.file,
-              formData.get("path") as string,
-              modal.data.isCopy
-            );
+                modal.data.file,
+                formData.get("path") as string,
+                modal.data.isCopy,
+              );
             }}
             isSubmitting={modal.loading}
-            submitText={modal.loading
-              ? modal.data.isCopy ? "Copying..." : "Moving..."
-              : modal.data.isCopy ? "Copy" : "Move"}
+            submitText={
+              modal.loading
+                ? modal.data.isCopy
+                  ? "Copying..."
+                  : "Moving..."
+                : modal.data.isCopy
+                  ? "Copy"
+                  : "Move"
+            }
           >
             <label className="block text-sm font-medium text-[#9CA3AF] mb-1">
               Destination Path
@@ -1749,7 +1754,9 @@ const FileManager: React.FC = () => {
             <input
               type="text"
               name="path"
-              defaultValue={currentPath.length > 0 ? currentPath.join("/") : "/"}
+              defaultValue={
+                currentPath.length > 0 ? currentPath.join("/") : "/"
+              }
               autoFocus
               className="w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
                 text-sm text-[#FFFFFF]
@@ -1767,10 +1774,7 @@ const FileManager: React.FC = () => {
             onSubmit={(e: React.FormEvent) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget as HTMLFormElement);
-              handleChmodFile(
-              modal.data.file,
-              formData.get("mode") as string
-            );
+              handleChmodFile(modal.data.file, formData.get("mode") as string);
             }}
             isSubmitting={modal.loading}
             submitText={modal.loading ? "Changing..." : "Change"}

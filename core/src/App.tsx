@@ -101,8 +101,8 @@ function App() {
     <AuthProvider>
       <SystemProvider>
         <ProjectProvider>
-            <Layout>          
-              <ErrorBoundary>
+          <Layout>
+            <ErrorBoundary>
               <Suspense fallback={<LoadingSpinner />}>
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -296,8 +296,8 @@ function App() {
                   </motion.div>
                 </AnimatePresence>
               </Suspense>
-              </ErrorBoundary>
-            </Layout>
+            </ErrorBoundary>
+          </Layout>
         </ProjectProvider>
       </SystemProvider>
     </AuthProvider>

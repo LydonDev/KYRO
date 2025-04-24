@@ -182,20 +182,20 @@ const RegionContextMenu: React.FC<{
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     // Use a small delay to ensure the menu has been rendered
     const timer = setTimeout(adjustPosition, 10);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
       clearTimeout(timer);
     };
   }, [onClose, position]);
 
   const actions = [
-    { label: 'Edit', icon: PencilIcon, action: onEdit },
-    { label: 'Delete', icon: TrashIcon, action: onDelete, destructive: true },
+    { label: "Edit", icon: PencilIcon, action: onEdit },
+    { label: "Delete", icon: TrashIcon, action: onDelete, destructive: true },
   ];
 
   return (
@@ -216,7 +216,9 @@ const RegionContextMenu: React.FC<{
             action();
           }}
           className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
-            destructive ? 'text-red-500 hover:bg-red-900/20' : 'text-[#9CA3AF] hover:bg-[#1E1E20]'
+            destructive
+              ? "text-red-500 hover:bg-red-900/20"
+              : "text-[#9CA3AF] hover:bg-[#1E1E20]"
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -255,15 +257,15 @@ const AdminRegionsPage = () => {
     position: { x: number; y: number };
   } | null>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string>("");
-    const { user } = useAuth();
-    const navigate = useNavigate();
-  
-    // Restrict access to admin only
-    useEffect(() => {
-      if (!user || !user.permissions.includes("admin")) {
-        navigate("/unauthorized", { replace: true });
-      }
-    }, [user, navigate]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Restrict access to admin only
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
 
   console.log(error);
   useEffect(() => {
@@ -756,7 +758,7 @@ const AdminRegionsPage = () => {
       </div>
 
       <div className="flex items-center space-x-3">
-      <Button
+        <Button
           type="button"
           onClick={() => {
             setView(type === "edit" ? "view" : "list");
@@ -766,10 +768,7 @@ const AdminRegionsPage = () => {
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          variant="secondary"
-        >
+        <Button type="submit" variant="secondary">
           {type === "create" ? "Create Region" : "Update Region"}
         </Button>
       </div>
@@ -793,15 +792,12 @@ const AdminRegionsPage = () => {
               }}
               variant="secondary"
               icon={<ArrowLeftIcon className="w-3 h-3" />}
-            >
-            </Button>
+            ></Button>
             <div>
               <h2 className="text-lg font-semibold text-white">
                 {selectedRegion.name}
               </h2>
-              <p className="text-xs text-white">
-                {selectedRegion.identifier}
-              </p>
+              <p className="text-xs text-white">{selectedRegion.identifier}</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
@@ -826,7 +822,6 @@ const AdminRegionsPage = () => {
               onClick={() => handleDelete(selectedRegion.id)}
               variant="danger"
               icon={<TrashIcon className="w-4 h-4" />}
-  
             >
               Delete
             </Button>
@@ -869,7 +864,9 @@ const AdminRegionsPage = () => {
                 </div>
                 <div>
                   <div className="text-xs text-white">Name</div>
-                  <div className="text-sm mt-1 text-gray-500">{selectedRegion.name}</div>
+                  <div className="text-sm mt-1 text-gray-500">
+                    {selectedRegion.name}
+                  </div>
                 </div>
                 <div>
                   <div className="text-xs text-white">Identifier</div>
@@ -923,7 +920,9 @@ const AdminRegionsPage = () => {
                     </div>
                     <div>
                       <div className="text-xs text-white">Servers</div>
-                      <div className="text-sm mt-1 text-gray-500">{serverCount}</div>
+                      <div className="text-sm mt-1 text-gray-500">
+                        {serverCount}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1105,41 +1104,31 @@ const AdminRegionsPage = () => {
                 className="p-3 text-left text-xs font-medium text-gray-500 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("name")}
               >
-                <div className="flex items-center">
-                  Name
-                </div>
+                <div className="flex items-center">Name</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-500 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("identifier")}
               >
-                <div className="flex items-center">
-                  Identifier
-                </div>
+                <div className="flex items-center">Identifier</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-500 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("country")}
               >
-                <div className="flex items-center">
-                  Country
-                </div>
+                <div className="flex items-center">Country</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-500 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("nodes")}
               >
-                <div className="flex items-center">
-                  Nodes
-                </div>
+                <div className="flex items-center">Nodes</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-500 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("servers")}
               >
-                <div className="flex items-center">
-                  Servers
-                </div>
+                <div className="flex items-center">Servers</div>
               </th>
               <th className="p-3 text-right text-xs font-medium text-gray-500 tracking-wider">
                 Actions
@@ -1215,10 +1204,7 @@ const AdminRegionsPage = () => {
             })}
             {regions.length === 0 && (
               <tr>
-                <td
-                  colSpan={6}
-                  className="p-4 text-center text-white text-xs"
-                >
+                <td colSpan={6} className="p-4 text-center text-white text-xs">
                   No regions found
                 </td>
               </tr>
@@ -1255,7 +1241,8 @@ const AdminRegionsPage = () => {
                 name: contextMenu.region.name,
                 identifier: contextMenu.region.identifier,
                 countryId: contextMenu.region.countryId || undefined,
-                fallbackRegionId: contextMenu.region.fallbackRegionId || undefined,
+                fallbackRegionId:
+                  contextMenu.region.fallbackRegionId || undefined,
                 serverLimit: contextMenu.region.serverLimit || undefined,
               });
               setSelectedRegion(contextMenu.region);
@@ -1324,8 +1311,7 @@ const AdminRegionsPage = () => {
                   }}
                   variant="secondary"
                   icon={<ArrowLeftIcon className="w-4 h-4" />}
-                >
-                </Button>
+                ></Button>
                 <div>
                   <h1 className="text-lg font-semibold text-[#FFFFFF]">
                     Create Region
@@ -1346,8 +1332,7 @@ const AdminRegionsPage = () => {
                   }}
                   variant="secondary"
                   icon={<ArrowLeftIcon className="w-4 h-4" />}
-                >
-                </Button>
+                ></Button>
                 <div>
                   <h1 className="text-lg font-semibold text-[#FFFFFF]">
                     Edit Region

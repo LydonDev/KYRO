@@ -5,6 +5,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## Features
+
 - **Fast backend** powered by Bun
 - **Integrated CLI** for migrations, database management, and utilities
 - **SQLite** database (easy to set up, portable)
@@ -19,6 +20,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ## Getting Started
 
 ### Prerequisites
+
 - [Bun](https://bun.sh) (v1.2.10 or newer)
 - [Node.js](https://nodejs.org) (for some frontend dependencies)
 - [Docker](https://www.docker.com) (optional, for running containers)
@@ -27,12 +29,14 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 - [Resend API key](https://resend.com) (for email verification)
 
 ### Installation
+
 1. **Clone the repositories:**
 
    ```bash
    git clone https://github.com/LydonDev/KRYPTON.git
    git clone https://github.com/LydonDev/KYRO.git
    ```
+
 2. **Install dependencies:**
 
    ```bash
@@ -43,6 +47,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    cd core
    bun install
    ```
+
 3. **Copy environment variables:**
 
    ```bash
@@ -53,6 +58,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    cd core
    cp .env.example .env
    ```
+
 4. **Run migrations:**
 
    ```bash
@@ -60,17 +66,21 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    kyro unit seed
    kyro migrate --force
    ```
+
 5. **Run the application:**
+
    - **Development:**
 
      ```bash
      kyro dev
      ```
+
    - **Production:**
 
      ```bash
      kyro prod
      ```
+
 6. **Configure Krypton:**
 
    ```bash
@@ -81,6 +91,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## Usage
+
 - Access the UI at [http://localhost:5173](http://localhost:5173) (default)
 - Use the CLI (`kyro`) for migrations, DB management, and utilities
 - Authenticate via email (verification required)
@@ -89,6 +100,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## Configuration
+
 - **.env** files are required in both `KYRO` and `KRYPTON` directories. Example files are provided as `.env.example`.
 - **Resend API Key** is required for email verification (set `RESEND_API_KEY` in `.env`).
 - **APP_URL** should be set for correct email links.
@@ -96,6 +108,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## Authentication & Permissions
+
 - JWT-based authentication
 - Email verification required (Resend integration)
 - Role-based permissions (admin & user)
@@ -104,6 +117,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## CLI Commands
+
 - `kyro migrate --force` - Run all pending migrations
 - `kyro dev` - Start backend and frontend in development mode
 - `kyro prod` - Build and start in production mode
@@ -112,7 +126,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## License
+
 (C) This dashboard is provided free of charge, with no warranties, support, or liability. You are welcome to use, modify, and share this project for any purpose, commercial or non-commercial. Attribution is appreciated but not required. Please respect the spirit of open source—do not sell this project as your own proprietary work.
 
 ---
-

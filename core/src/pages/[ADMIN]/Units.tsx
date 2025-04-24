@@ -140,10 +140,7 @@ const EnvironmentVariableForm: React.FC<{
       </div>
 
       {variables.map((variable, index) => (
-        <div
-          key={index}
-          className="border-t border-[#1E1E20] p-3 space-y-3"
-        >
+        <div key={index} className="border-t border-[#1E1E20] p-3 space-y-3">
           <div className="flex justify-between items-start">
             <div className="grow space-y-3">
               <div className="grid grid-cols-2 gap-2">
@@ -337,7 +334,7 @@ const ConfigFilesForm: React.FC<{
               icon={<TrashIcon className="w-4 h-4" />}
               variant="danger"
             >
-              Remove  
+              Remove
             </Button>
           </div>
         </div>
@@ -1137,7 +1134,7 @@ const AdminUnitsPage: React.FC = () => {
 
       {/* Action Buttons */}
       <div className="flex items-center space-x-3">
-      <Button
+        <Button
           type="button"
           onClick={() => {
             setView(type === "edit" ? "view" : "list");
@@ -1146,10 +1143,7 @@ const AdminUnitsPage: React.FC = () => {
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          variant="secondary"
-        >
+        <Button type="submit" variant="secondary">
           {type === "create" ? "Create Unit" : "Update Unit"}
         </Button>
       </div>
@@ -1170,8 +1164,7 @@ const AdminUnitsPage: React.FC = () => {
               }}
               variant="secondary"
               icon={<ArrowLeftIcon className="w-3.5 h-3.5 mr-1.5" />}
-            >
-            </Button>
+            ></Button>
             <div>
               <h2 className="text-lg font-semibold text-white">
                 {selectedUnit.name}
@@ -1220,7 +1213,9 @@ const AdminUnitsPage: React.FC = () => {
         <Card className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs p-6 space-y-4">
           <div>
             <div className="text-xs text-[#FFFFFF]">Description</div>
-            <div className="text-sm mt-1 text-gray-400">{selectedUnit.description}</div>
+            <div className="text-sm mt-1 text-gray-400">
+              {selectedUnit.description}
+            </div>
           </div>
 
           <div className="pt-4 border-t border-[#1E1E20]">
@@ -1316,13 +1311,12 @@ const AdminUnitsPage: React.FC = () => {
             {selectedUnit.configFiles.length > 0 ? (
               <div className="space-y-3">
                 {selectedUnit.configFiles.map((file, index) => (
-                  <div
-                    key={index}
-                    className="border-t border-[#1E1E20] p-3"
-                  >
+                  <div key={index} className="border-t border-[#1E1E20] p-3">
                     <div>
                       <div className="text-xs text-gray-500">Path</div>
-                      <div className="text-sm font-mono mt-1 text-gray-400">{file.path}</div>
+                      <div className="text-sm font-mono mt-1 text-gray-400">
+                        {file.path}
+                      </div>
                     </div>
                     <div className="mt-2">
                       <div className="text-xs text-gray-500">Content</div>
@@ -1456,10 +1450,7 @@ const AdminUnitsPage: React.FC = () => {
                   accept=".json"
                   onChange={handleImportEgg}
                 />
-                <Button
-                  onClick={() => setView("create")}
-                  variant="secondary"
-                >
+                <Button onClick={() => setView("create")} variant="secondary">
                   Create Unit
                 </Button>
               </div>
@@ -1491,7 +1482,7 @@ const AdminUnitsPage: React.FC = () => {
                 </Card>
               ))}
 
-              {units.length === 0 && (  
+              {units.length === 0 && (
                 <div className="text-center py-6 bg-[#0E0E0F] rounded-md border border-[#1E1E20]">
                   <p className="text-xs text-[#FFFFFF]">No units found</p>
                 </div>

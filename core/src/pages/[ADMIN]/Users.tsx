@@ -59,7 +59,6 @@ const Alert: React.FC<AlertProps> = ({ type, message, onDismiss }) => {
         ? "border-green-100"
         : "border-yellow-100";
 
-        
   return (
     <div
       className={`${bgColor} border ${borderColor} rounded-md flex items-start justify-between`}
@@ -135,19 +134,19 @@ const UserContextMenu: React.FC<{
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     const timer = setTimeout(adjustPosition, 10);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
       clearTimeout(timer);
     };
   }, [onClose, position]);
 
   const actions = [
-    { label: 'Edit', icon: PencilIcon, action: onEdit },
-    { label: 'Delete', icon: TrashIcon, action: onDelete, destructive: true },
+    { label: "Edit", icon: PencilIcon, action: onEdit },
+    { label: "Delete", icon: TrashIcon, action: onDelete, destructive: true },
   ];
 
   return (
@@ -168,7 +167,9 @@ const UserContextMenu: React.FC<{
             action();
           }}
           className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
-            destructive ? 'text-red-500 hover:bg-red-900/20' : 'text-[#9CA3AF] hover:bg-[#1E1E20]'
+            destructive
+              ? "text-red-500 hover:bg-red-900/20"
+              : "text-[#9CA3AF] hover:bg-[#1E1E20]"
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -180,7 +181,10 @@ const UserContextMenu: React.FC<{
 };
 
 const AdminUsersPage = () => {
-  const [contextMenu, setContextMenu] = useState<{ user: User; position: { x: number; y: number } } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    user: User;
+    position: { x: number; y: number };
+  } | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -582,7 +586,7 @@ const AdminUsersPage = () => {
       </div>
 
       <div className="flex items-center space-x-3">
-      <Button
+        <Button
           type="button"
           onClick={() => {
             setView(type === "edit" ? "view" : "list");
@@ -596,16 +600,12 @@ const AdminUsersPage = () => {
         >
           Cancel
         </Button>
-        <Button
-          variant="secondary"
-          type="submit"
-        >
+        <Button variant="secondary" type="submit">
           {type === "create" ? "Create User" : "Update User"}
         </Button>
       </div>
     </form>
   );
-
 
   const renderUserView = () => {
     if (!selectedUser) return null;
@@ -614,7 +614,7 @@ const AdminUsersPage = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 ">
-          <Button
+            <Button
               onClick={() => {
                 setView("list");
                 setSelectedUser(null);
@@ -665,7 +665,9 @@ const AdminUsersPage = () => {
           <Button
             onClick={() => setActiveTab("permissions")}
             variant={activeTab === "permissions" ? "primary" : "secondary"}
-            className={activeTab === "permissions" ? "font-bold" : "font-normal"}
+            className={
+              activeTab === "permissions" ? "font-bold" : "font-normal"
+            }
           >
             Permissions
           </Button>
@@ -680,18 +682,17 @@ const AdminUsersPage = () => {
                   <div className="text-sm font-mono mt-1 text-gray-400">
                     {selectedUser.id}
                   </div>
-                </div>  
+                </div>
                 <div>
                   <div className="text-xs text-white">Username</div>
-                  <div className="text-sm mt-1 text-gray-400">{selectedUser.username}</div>
+                  <div className="text-sm mt-1 text-gray-400">
+                    {selectedUser.username}
+                  </div>
                 </div>
                 <div>
                   <div className="text-xs text-white">Permissions</div>
                   <div className="mt-1">
-                    <Badge
-                      variant="info"
-                      className="text-xs"
-                    >
+                    <Badge variant="info" className="text-xs">
                       {selectedUser.permissions[0]}
                     </Badge>
                   </div>
@@ -786,25 +787,19 @@ const AdminUsersPage = () => {
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("username")}
               >
-                <div className="flex items-center">
-                  Username
-                </div>
+                <div className="flex items-center">Username</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("permissions")}
               >
-                <div className="flex items-center">
-                  Permissions
-                </div>
+                <div className="flex items-center">Permissions</div>
               </th>
               <th
                 className="p-3 text-left text-xs font-medium text-gray-400 tracking-wider cursor-pointer"
                 onClick={() => handleTableSort("createdAt")}
               >
-                <div className="flex items-center">
-                  Created
-                </div>
+                <div className="flex items-center">Created</div>
               </th>
               <th className="p-3 text-right text-xs font-medium text-gray-400 tracking-wider">
                 Actions
@@ -828,10 +823,7 @@ const AdminUsersPage = () => {
                   </div>
                 </td>
                 <td className="p-3 text-xs">
-                  <Badge
-                    variant="info"
-                    className="text-xs"
-                  >
+                  <Badge variant="info" className="text-xs">
                     {user.permissions[0]}
                   </Badge>
                 </td>
@@ -839,25 +831,24 @@ const AdminUsersPage = () => {
                   {user.createdAt.toLocaleDateString()}
                 </td>
                 <td className="p-3 text-right whitespace-nowrap">
-                    <div
-                      className="flex items-center justify-end"
-                      onClick={(e) => e.stopPropagation()}
+                  <div
+                    className="flex items-center justify-end"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setContextMenu({
+                          user,
+                          position: { x: e.clientX, y: e.clientY },
+                        });
+                      }}
+                      className="p-1 text-[#9CA3AF] cursor-pointer hover:text-white"
                     >
-                      <button
-                      
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setContextMenu({
-                            user,
-                            position: { x: e.clientX, y: e.clientY },
-                          });
-                        }}
-                        className="p-1 text-[#9CA3AF] cursor-pointer hover:text-white"
-                      >
-                        <EllipsisVerticalIcon className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+                      <EllipsisVerticalIcon className="w-4 h-4" />
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
             {users.length === 0 && (
@@ -902,7 +893,9 @@ const AdminUsersPage = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">Users</h1>
+                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
+                    Users
+                  </h1>
                   <p className="text-xs text-gray-400 mt-1">
                     Manage users and their permissions for accessing the panel.
                   </p>

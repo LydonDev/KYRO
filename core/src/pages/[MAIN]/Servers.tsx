@@ -264,7 +264,7 @@ export default function Home() {
 
         {/* Tabs */}
         <div className="mb-4 flex space-x-1">
-        <Button
+          <Button
             onClick={() => setActiveTab("servers")}
             variant={activeTab === "servers" ? "primary" : "secondary"}
             className={activeTab === "servers" ? "font-bold" : "font-normal"}

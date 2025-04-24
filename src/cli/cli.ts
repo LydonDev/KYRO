@@ -921,7 +921,9 @@ boltCommand
 
 // =========== UNIT COMMANDS ===========
 // Unit command group
-const unitCommand = program.command("unit").description(`Manage ${appName} units`);
+const unitCommand = program
+  .command("unit")
+  .description(`Manage ${appName} units`);
 
 // List units
 unitCommand
@@ -1079,7 +1081,9 @@ unitCommand
         unitData = await promptUnitDetails();
       } else {
         console.error(
-          chalk.yellow(`${appName} Please specify either --file or --interactive`),
+          chalk.yellow(
+            `${appName} Please specify either --file or --interactive`,
+          ),
         );
         process.exit(1);
       }
@@ -1298,7 +1302,9 @@ unitCommand
 
       if (existing) {
         console.log(
-          chalk.yellow(`${appName} A unit with short name '${shortName}' already exists`),
+          chalk.yellow(
+            `${appName} A unit with short name '${shortName}' already exists`,
+          ),
         );
 
         // Generate a unique shortName by appending a number
@@ -1502,7 +1508,9 @@ unitCommand
 
 // =========== CARGO COMMANDS ===========
 // Cargo command group
-const cargoCommand = program.command("cargo").description(`Manage ${appName} cargo`);
+const cargoCommand = program
+  .command("cargo")
+  .description(`Manage ${appName} cargo`);
 
 // List cargo
 cargoCommand
@@ -2842,7 +2850,9 @@ program
     });
 
     if (installResult.status !== 0) {
-      console.error(chalk.red(`Failed to install dependencies in ${appName}-ui`));
+      console.error(
+        chalk.red(`Failed to install dependencies in ${appName}-ui`),
+      );
       process.exit(1);
     }
 
@@ -2858,8 +2868,7 @@ program
         {
           type: "list",
           name: "deployment",
-          message:
-            `Do you have a domain or would you like to run ${appName} locally?`,
+          message: `Do you have a domain or would you like to run ${appName} locally?`,
           choices: [
             { name: "Run locally", value: "local" },
             { name: "Deploy with domain", value: "domain" },
@@ -2974,7 +2983,9 @@ program
     }
 
     console.log(
-      chalk.blue(`Writing \`${appName}-ui\` .env file with "API_URL=${apiUrl}"`),
+      chalk.blue(
+        `Writing \`${appName}-ui\` .env file with "API_URL=${apiUrl}"`,
+      ),
     );
 
     try {
@@ -3381,7 +3392,9 @@ program
         ),
       );
       console.log(
-        chalk.green(`You can access ${appName} at ${apiUrl.replace("/api", "")}`),
+        chalk.green(
+          `You can access ${appName} at ${apiUrl.replace("/api", "")}`,
+        ),
       );
     }
 

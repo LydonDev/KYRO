@@ -14,7 +14,6 @@ const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 const app = express();
 const __dirname = process.cwd();
 
-
 app.use(express.json());
 
 // API routes

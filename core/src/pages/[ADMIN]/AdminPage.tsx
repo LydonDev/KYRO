@@ -3,7 +3,12 @@ import {
   BookOpenIcon,
   HeartIcon,
 } from "@heroicons/react/24/solid";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/UI";
 import { useEffect, useState } from "react";
 import { useAuth } from "../[AUTH]/SignIn";
@@ -13,7 +18,9 @@ const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
 const AdminPage = () => {
   const currentVersion = import.meta.env.VITE_KYRO_VERSION || "0.0.0";
-  const [versionStatus, setVersionStatus] = useState<"latest" | "outdated" | "ahead">("latest");
+  const [versionStatus, setVersionStatus] = useState<
+    "latest" | "outdated" | "ahead"
+  >("latest");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -27,12 +34,14 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchVersion = async () => {
       try {
-        const response = await fetch("https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD");
+        const response = await fetch(
+          "https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD",
+        );
         const latestVersion = (await response.text()).trim();
 
         const compareVersions = (v1: string, v2: string) => {
-          const a = v1.split('.').map(Number);
-          const b = v2.split('.').map(Number);
+          const a = v1.split(".").map(Number);
+          const b = v2.split(".").map(Number);
           for (let i = 0; i < Math.max(a.length, b.length); i++) {
             const n1 = a[i] || 0;
             const n2 = b[i] || 0;
@@ -48,7 +57,9 @@ const AdminPage = () => {
           setVersionStatus("outdated");
         } else if (result > 0) {
           setVersionStatus("ahead");
-          throw new Error(`Current version (${currentVersion}) is ahead of GitHub version (${latestVersion})`);
+          throw new Error(
+            `Current version (${currentVersion}) is ahead of GitHub version (${latestVersion})`,
+          );
         } else {
           setVersionStatus("latest");
         }
@@ -76,7 +87,9 @@ const AdminPage = () => {
                 <div className="flex items-start w-full">
                   <div className="w-full">
                     <CardTitle className="flex items-center text-[#FFFFFF] w-full">
-                      <span className="text-lg font-semibold">{appName} Panel</span>
+                      <span className="text-lg font-semibold">
+                        {appName} Panel
+                      </span>
                       {versionStatus === "latest" && (
                         <Badge variant="success" className="ml-2">
                           {currentVersion} Latest
@@ -94,7 +107,9 @@ const AdminPage = () => {
                       )}
                     </CardTitle>
                     <CardDescription className="mt-2 w-full">
-                      {appName} is an open-source, self-hosted, web-based panel for managing your servers and services. It is designed to be easy to use, fast, and secure.
+                      {appName} is an open-source, self-hosted, web-based panel
+                      for managing your servers and services. It is designed to
+                      be easy to use, fast, and secure.
                     </CardDescription>
                   </div>
                 </div>
@@ -106,10 +121,18 @@ const AdminPage = () => {
                   <div className="flex items-start w-full">
                     <div className="w-full">
                       <CardTitle className="flex items-center text-[#FFFFFF] w-full">
-                        <span className="text-lg font-semibold">Competitor</span>
+                        <span className="text-lg font-semibold">
+                          Competitor
+                        </span>
                       </CardTitle>
                       <CardDescription className="mt-2 w-full">
-                        {appName} was created to bring something new to the game server management panel market as all the other alternatives are no longer maintained, have vulnerabilities, or just look horrible. Unlike traditional options, {appName} focuses on modern design, security, and performance to offer a superior user experience.
+                        {appName} was created to bring something new to the game
+                        server management panel market as all the other
+                        alternatives are no longer maintained, have
+                        vulnerabilities, or just look horrible. Unlike
+                        traditional options, {appName} focuses on modern design,
+                        security, and performance to offer a superior user
+                        experience.
                       </CardDescription>
                     </div>
                   </div>
@@ -151,9 +174,7 @@ const AdminPage = () => {
               <BookOpenIcon className="w-4 h-4" />
               <span>Documentation</span>
             </a>
-            <button
-              className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
-            >
+            <button className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]">
               <HeartIcon className="w-4 h-4" />
               <span>Support the Project</span>
             </button>
