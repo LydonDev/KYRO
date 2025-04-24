@@ -13,7 +13,6 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 - **Role-based permissions** and access control
 - **Server management** (create, update, power actions, etc.)
 - **Project, node, and unit management**
-- **REST API** (Express)
 - **Easy development and production modes**
 
 ---
@@ -55,19 +54,14 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    cd core
    cp .env.example .env
    ```
-4. **Configure Krypton:**
-
-   ```bash
-   cd ../KRYPTON
-   bun run configure
-   ```
-5. **Run migrations:**
+4. **Run migrations:**
 
    ```bash
    cd ../KYRO
+   kyro unit seed
    kyro migrate --force
    ```
-6. **Run the application:**
+5. **Run the application:**
    - **Development:**
 
      ```bash
@@ -78,6 +72,12 @@ Kyro is a high-performance, modern, and user-friendly server management platform
      ```bash
      kyro prod
      ```
+6. **Configure Krypton:**
+
+   ```bash
+   cd ../KRYPTON
+   bun run configure
+   ```
 
 ---
 
