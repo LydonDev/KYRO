@@ -30,11 +30,13 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 ### Installation
 1. **Clone the repositories:**
+
    ```bash
    git clone https://github.com/LydonDev/KRYPTON.git
    git clone https://github.com/LydonDev/KYRO.git
    ```
 2. **Install dependencies:**
+
    ```bash
    cd KRYPTON
    bun install
@@ -44,6 +46,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    bun install
    ```
 3. **Copy environment variables:**
+
    ```bash
    cd ../KRYPTON
    cp .env.example .env
@@ -53,21 +56,25 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    cp .env.example .env
    ```
 4. **Configure Krypton:**
+
    ```bash
    cd ../KRYPTON
    bun run configure
    ```
 5. **Run migrations:**
+
    ```bash
    cd ../KYRO
    kyro migrate --force
    ```
 6. **Run the application:**
    - **Development:**
+
      ```bash
      kyro dev
      ```
    - **Production:**
+
      ```bash
      kyro prod
      ```
@@ -106,7 +113,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ---
 
 ## License
-(C) 2025 Octant, Inc. All rights reserved.
+(C) This dashboard is provided free of charge, with no warranties, support, or liability. You are welcome to use, modify, and share this project for any purpose, commercial or non-commercial. Attribution is appreciated but not required. Please respect the spirit of open source—do not sell this project as your own proprietary work.
 
 ---
 
