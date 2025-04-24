@@ -1,0 +1,1 @@
+Kyro doesnt use tests, our code is amazing and "Just works"..

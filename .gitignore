@@ -1,0 +1,11 @@
+node_modules/
+node_modules/
+storage/
+.env
+Kyro.db
+uploads/
+_dist/
+backups/
+bun.lock
+package-lock.json
+.DS_Store
