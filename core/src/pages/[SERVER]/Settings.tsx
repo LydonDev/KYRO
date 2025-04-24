@@ -143,29 +143,12 @@ const ServerSettingsPage = () => {
     return <LoadingSpinner />;
   }
 
+  if (error) {
+    throw new Error(error);
+  }
+
   if (!server) {
-    return (
-      <div className="bg-[#0E0E0F] flex items-center justify-center">
-        <div className="bg-[#0E0E0F] p-8 rounded-lg border border-[#1E1E20] max-w-md mx-auto">
-          <ExclamationCircleIcon className="h-12 w-12 text-[#EF4444] mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-[#FFFFFF] text-center mb-2">
-            Error Loading Server
-          </h2>
-          <p className="text-[#9CA3AF] text-center mb-4">
-            {error || "Server not found"}
-          </p>
-          <div className="flex justify-center">
-            <button
-              onClick={() => navigate("/servers")}
-              className="flex items-center space-x-2 px-4 py-2 rounded-md bg-[#1E1E20] text-[#FFFFFF] border border-[#1E1E20] hover:bg-[#232325] transition-colors"
-            >
-              <ChevronRightIcon className="h-4 w-4" />
-              <span>Return to Servers</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    navigate("/unauthorized");
   }
 
   return (
@@ -236,7 +219,7 @@ const ServerSettingsPage = () => {
                     onClick={handleRename}
                     disabled={
                       isUpdating ||
-                      newName.trim() === server.name ||
+                      newName.trim() === server?.name ||
                       !newName.trim()
                     }
                     isLoading={isUpdating}

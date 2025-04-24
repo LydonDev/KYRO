@@ -1145,30 +1145,14 @@ const FileManager: React.FC = () => {
     );
   }
 
-  // Render error state
-  if (error && !server) {
-    return (
-      <div className="bg-white flex items-center justify-center min-h-screen">
-        <div className="bg-white/80 p-8 rounded-lg border border-[#1E1E20] max-w-md mx-auto">
-          <ExclamationCircleIcon className="h-12 w-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-black text-center mb-2">
-            Error Loading Server
-          </h2>
-          <p className="text-gray-400 text-center mb-4">{error}</p>
-          <div className="flex justify-center">
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => navigate("/servers")}
-              icon={<ChevronRightIcon className="h-4 w-4" />}
-            >
-              Return to Servers
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
+  if (error) {
+    throw new Error(error);
   }
+
+  if (!server) {
+    navigate("/unauthorized");
+  }
+
 
   return (
     <div

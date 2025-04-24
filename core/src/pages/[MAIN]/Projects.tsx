@@ -222,7 +222,7 @@ const ProjectsPage: React.FC = () => {
           {projects.map((project: any) => (
             <Card
               key={project.id}
-              className="bg-[#141415] border border-[#1E1E20]"
+              className="bg-[#0E0E0F] border border-[#1E1E20]"
             >
               <CardHeader>
                 <div className="flex items-start">

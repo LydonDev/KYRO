@@ -13,6 +13,8 @@ import { Badge, Button } from "@/components/UI";
 import { Card } from "@/components/ui/card";
 import { EllipsisVerticalIcon, User } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -90,6 +92,14 @@ const UserContextMenu: React.FC<{
 }> = ({ position, onClose, onEdit, onDelete }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState(position);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -102,7 +112,6 @@ const UserContextMenu: React.FC<{
       }
     };
 
-    // Adjust position to keep menu in viewport
     const adjustPosition = () => {
       if (menuRef.current) {
         const rect = menuRef.current.getBoundingClientRect();
@@ -114,12 +123,10 @@ const UserContextMenu: React.FC<{
         let x = position.x;
         let y = position.y;
 
-        // Adjust horizontal position if menu would overflow
         if (x + rect.width > viewport.width) {
           x = Math.max(0, viewport.width - rect.width - 16); // 16px padding from edge
         }
 
-        // Adjust vertical position if menu would overflow
         if (y + rect.height > viewport.height) {
           y = Math.max(0, viewport.height - rect.height - 16); // 16px padding from edge
         }
@@ -130,7 +137,6 @@ const UserContextMenu: React.FC<{
 
     document.addEventListener('mousedown', handleClickOutside);
 
-    // Use a small delay to ensure the menu has been rendered
     const timer = setTimeout(adjustPosition, 10);
 
     return () => {

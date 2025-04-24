@@ -13,6 +13,8 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { saveAs } from "file-saver";
 import { Button } from "@/components/UI";
 import { Card } from "@/components/ui/card";
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
 
 // Schemas matching backend validation
 const environmentVariableSchema = z.object({
@@ -77,6 +79,16 @@ const containerSchema = z.object({
 type Unit = z.infer<typeof unitSchema>;
 type Container = z.infer<typeof containerSchema>;
 type View = "list" | "create" | "view" | "edit";
+
+const { user } = useAuth();
+const navigate = useNavigate();
+
+// Restrict access to admin only
+useEffect(() => {
+  if (!user || !user.permissions.includes("admin")) {
+    navigate("/unauthorized", { replace: true });
+  }
+}, [user, navigate]);
 
 // Environment Variables Form Component
 const EnvironmentVariableForm: React.FC<{

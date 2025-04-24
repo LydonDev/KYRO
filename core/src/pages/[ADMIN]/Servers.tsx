@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Badge, Button } from "@/components/UI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
@@ -139,6 +141,15 @@ const AdminServersPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>("list");
   const [selectedServer, setSelectedServer] = useState<Server | null>(null);
+    const { user } = useAuth();
+    const navigate = useNavigate();
+  
+    // Restrict access to admin only
+    useEffect(() => {
+      if (!user || !user.permissions.includes("admin")) {
+        navigate("/unauthorized", { replace: true });
+      }
+    }, [user, navigate]);
 
   // Deployment tab state - moved to top level
   const [deploymentTab, setDeploymentTab] = useState<"nodes" | "regions">(

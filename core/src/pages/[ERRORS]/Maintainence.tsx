@@ -1,16 +1,16 @@
-import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/UI'
+import { useNavigate } from 'react-router-dom'
 
-export default function NotFoundError() {
+export default function MaintenanceError() {
   const navigate = useNavigate()
   return (
     <div className='h-svh'>
       <div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>
-        <h1 className='text-[7rem] leading-tight font-bold text-white'>404</h1>
-        <span className='font-medium text-gray-400'>Oops! Page Not Found!</span>
+        <h1 className='text-[7rem] leading-tight font-bold text-white'>503</h1>
+        <span className='font-medium text-gray-400'>Website is under maintenance!</span>
         <p className='text-muted-foreground text-center'>
-          It seems like the page you're looking for <br />
-          does not exist or might have been removed.
+          The site is not available at the moment. <br />
+          We'll be back online shortly.
         </p>
         <div className='mt-6 flex gap-4'>
           <Button 
@@ -21,6 +21,6 @@ export default function NotFoundError() {
           </Button>
         </div>
       </div>
-    </div>  
+    </div>
   )
 }

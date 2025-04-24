@@ -17,6 +17,8 @@ import { Badge, Button } from "@/components/UI";
 import { Card } from "@/components/ui/card";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { motion } from "framer-motion";
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
@@ -162,6 +164,15 @@ const NodeContextMenu: React.FC<{
 }> = ({ position, onClose, onEdit, onDelete }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState(position);
+    const { user } = useAuth();
+    const navigate = useNavigate();
+  
+    // Restrict access to admin only
+    useEffect(() => {
+      if (!user || !user.permissions.includes("admin")) {
+        navigate("/unauthorized", { replace: true });
+      }
+    }, [user, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

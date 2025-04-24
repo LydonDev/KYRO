@@ -133,6 +133,10 @@ export default function Home() {
   const [moveError, setMoveError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  if (error) {
+    throw new Error(error);
+  }
+
   useEffect(() => {
     fetchServers();
   }, []);

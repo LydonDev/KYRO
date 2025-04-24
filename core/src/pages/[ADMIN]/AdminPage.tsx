@@ -6,12 +6,23 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/UI";
 import { useEffect, useState } from "react";
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
 const AdminPage = () => {
   const currentVersion = import.meta.env.VITE_KYRO_VERSION || "0.0.0";
   const [versionStatus, setVersionStatus] = useState<"latest" | "outdated" | "ahead">("latest");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Restrict access to admin only
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const fetchVersion = async () => {

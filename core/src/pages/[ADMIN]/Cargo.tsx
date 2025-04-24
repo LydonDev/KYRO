@@ -413,7 +413,20 @@ const ContainerItemsForm: React.FC<{
   );
 };
 
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
+
 const AdminCargoPage: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Restrict access to admin only
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
+
   const [cargoItems, setCargoItems] = useState<Cargo[]>([]);
   const [containers, setContainers] = useState<CargoContainer[]>([]);
   const [loading, setLoading] = useState(true);

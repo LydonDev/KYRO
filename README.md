@@ -13,7 +13,6 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 - **Role-based permissions** and access control
 - **Server management** (create, update, power actions, etc.)
 - **Project, node, and unit management**
-- **Easy development and production modes**
 
 ---
 

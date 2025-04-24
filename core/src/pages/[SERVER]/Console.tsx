@@ -300,29 +300,12 @@ const ServerConsolePage = () => {
     return <LoadingSpinner />;
   }
 
-  if (error && !server) {
-    return (
-      <div className="bg-[#0E0E0F] flex items-center justify-center min-h-screen">
-        <div className="bg-[#0E0E0F] p-8 rounded-lg border border-[#1E1E20] max-w-md mx-auto">
-          <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-full bg-[#1E1E20]">
-            <AlertCircle className="h-8 w-8 text-red-400" />
-          </div>
-          <h2 className="text-xl font-semibold text-white text-center mb-3">
-            Error Loading Server
-          </h2>
-          <p className="text-[#313135] text-center mb-6 px-4">{error}</p>
-          <div className="flex justify-center">
-            <button
-              onClick={() => navigate("/servers")}
-              className="flex items-center space-x-2 px-4 py-2 rounded-md bg-[#1E1E20] text-white border border-[#232325] hover:bg-[#232325] transition-colors"
-            >
-              <ChevronRight className="h-4 w-4" />
-              <span>Return to Servers</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  if (error) {
+    throw new Error(error);
+  }
+
+  if (!server) {
+    navigate("/unauthorized");
   }
 
   const isServerActive = server?.state?.toLowerCase() === "running";

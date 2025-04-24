@@ -12,6 +12,8 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { Button } from "@/components/UI";
 import { Card } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../[AUTH]/SignIn";
+import { useNavigate } from "react-router-dom";
 
 interface Region {
   id: string;
@@ -253,6 +255,15 @@ const AdminRegionsPage = () => {
     position: { x: number; y: number };
   } | null>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string>("");
+    const { user } = useAuth();
+    const navigate = useNavigate();
+  
+    // Restrict access to admin only
+    useEffect(() => {
+      if (!user || !user.permissions.includes("admin")) {
+        navigate("/unauthorized", { replace: true });
+      }
+    }, [user, navigate]);
 
   console.log(error);
   useEffect(() => {
