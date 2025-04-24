@@ -79,7 +79,7 @@ const devCommand = new Command("dev")
           );
           console.log(
             chalk.hex("#a2b3ff")(
-              `│ ⚙️  ${appName}: http://localhost:8080             │`,
+              `│ ⚙️  ${appName}: http://localhost:8080            │`,
             ),
           );
           console.log(
