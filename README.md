@@ -117,15 +117,39 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 ---
 
-## Questions & Answers
+## Frequently Asked Questions (FAQ)
 
 - **Why is the panel so slow?**
-  - The panel is built with a modern frontend framework (Vite) and a fast backend (Bun). If you're experiencing performance issues, try clearing your browser cache and cookies and running in production mode.
-- **How do i name the panel?**
-  - You can go into all the envs and set VITE_APP_NAME to set the name of the application **THIS WILL ALSO RENAME ALL THE KYRO COMMANDS AND YOU WIL NEED TO MAKE SURE TO STOP EVERYTHING AND ALSO RENAME THE Kyro DATABASE**
-- **Can i install a theme?**
-  - No, Kyro does not currently support Addons or such themes, if you would like to change the theme you will need to do so manually by editing each file.
-- **
+  - Kyro is built with a modern frontend (Vite) and a fast backend (Bun). If you experience performance issues, try clearing your browser cache/cookies, ensure you are running in production mode, and check your system resources. Running on older hardware or with too many background processes may impact speed.
+
+- **How do I change the panel's name?**
+  - Set the `VITE_APP_NAME` variable in all `.env` files to your desired name. **Note:** This will also rename all Kyro commands and require you to stop all running Kyro processes and rename your Kyro database accordingly.
+
+- **Can I install a theme or plugins?**
+  - Not at this time. Kyro does not currently support themes or plugins. To customize the look, you must manually edit the frontend files.
+
+- **How do I set up email verification?**
+  - You must register a resend account for an api key and register a domain and link it to resend. This enables email verification for user registration and password resets.
+
+- **The application won't start. What should I check?**
+  - Ensure all dependencies are installed with `bun install` in each repo (`KRYPTON`, `KYRO`, and `core`). Also, verify your `.env` files are present and correctly configured. Check the logs with `kyro logs` for specific errors.
+
+- **How do I contribute to Kyro?**
+  - Fork the repository, create a new branch for your changes, and submit a pull request. Please ensure your code follows the existing style and includes tests where appropriate.
+
+- **How do I update Kyro to the latest version?**
+  - Pull the latest changes from the repository, reinstall dependencies with `bun install`, and run any new migrations with `kyro migrate --force`.
+
+- **Where can I get help or report bugs?**
+  - Open an issue on the GitHub repository or check the Discussions section for community support.
+
+- **Can I run Kyro in Docker?**
+  - Yes, Docker is supported for running containers. See the installation section for details.
+
+- **Is there a way to clear logs?**
+  - Yes, use the command `kyro logs clear` to clear all Kyro logs.
+
+If your question is not answered here, please refer to the documentation or open an issue on GitHub.
 
 ---
 
