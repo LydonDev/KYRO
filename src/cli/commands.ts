@@ -257,6 +257,21 @@ export const prodCommand = new Command("production")
     });
   });
 
+  export const logsClearCommand = new Command("clear:logs")
+  .description("Clear all log files")
+  .action(() => {
+    const clearLogsDirectory = () => {
+      exec(`rm -rf ./logs`, (err) => {
+        if (err) {
+          console.error(chalk.red("Error clearing logs directory:"), err.message);
+        } else {
+          console.log(chalk.green("Logs directory cleared successfully."));
+        }
+      });
+    };
+    clearLogsDirectory();
+  });
+
 export const logsCommand = new Command("logs")
   .description(`View logs for ${appName}`)
   .action(() => {
@@ -361,18 +376,4 @@ export const logsCommand = new Command("logs")
       console.log(chalk.hex("#a2b3ff")(`│ ⚙️  Logs: ${appUrl}:${port}             │`));
       console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
     });
-  })
-  .command("logs clear")
-  .description("Clear all log files")
-  .action(() => {
-    const clearLogsDirectory = () => {
-      exec(`rm -rf ./logs`, (err) => {
-        if (err) {
-          console.error(chalk.red("Error clearing logs directory:"), err.message);
-        } else {
-          console.log(chalk.green("Logs directory cleared successfully."));
-        }
-      });
-    };
-    clearLogsDirectory();
   });
