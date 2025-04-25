@@ -32,6 +32,10 @@ const stopAllServers = async () => {
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 const localVersion = import.meta.env.VITE_APP_VERSION || "0.0.0";
 const logsDir = import.meta.env.LOGS_DIR || "./logs";
+const appUrl = import.meta.env.VITE_APP_URL || "http://localhost";
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost";
+const appPort = import.meta.env.VITE_APP_PORT || 5173;
+const apiPort = import.meta.env.VITE_API_PORT || 3000;
 
 figlet(appName, (err, data) => {
   if (err) {
@@ -127,8 +131,8 @@ const printBanner = async () => {
   console.log(chalk.hex("#a2b3ff")("│                                            │"));
   console.log(await printVersionStatus());
   console.log(chalk.hex("#a2b3ff")("│                                            │"));
-  console.log(chalk.hex("#a2b3ff")("│ 🔌 API:     http://localhost:3000          │"));
-  console.log(chalk.hex("#a2b3ff")(`│ 🖥️  ${appName}:   http://localhost:5173           │`));
+  console.log(chalk.hex("#a2b3ff")(`│ 🔌 API: ${apiUrl}:${apiPort}              │`));
+  console.log(chalk.hex("#a2b3ff")(`│ 🖥️  ${appName}: ${appUrl}:${appPort}             │`));
   console.log(chalk.hex("#a2b3ff")("│ ⚙️  Krypton: http://localhost:8080          │"));
   console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
 };
@@ -163,68 +167,212 @@ const spawnWithLogs = (proc: { name: string, cmd: string, args: string[], cwd: s
   return child;
 };
 
-export const devCommand = new Command("dev")
+export const devCommand = new Command("development")
   .description(`Run ${appName} in development mode`)
   .action(async () => {
+    const os = require('os');
+
     await stopAllServers();
 
     const processes = [
-      { name: `${appName} Backend`, cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/kyro" },
+      { name: "dist", cmd: "rm", args: ["-rf", "dist"], cwd: "/opt/KYRO/kyro/core" },
       { name: `${appName} Frontend`, cmd: "bun", args: ["run", "dev"], cwd: "/opt/KYRO/kyro/core" },
+      { name: `${appName} Backend`, cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/kyro" },
       { name: "Krypton", cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/krypton" },
     ];
 
     let bannerPrinted = false;
 
+    setTimeout(() => {
+      require('child_process').exec(`${os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open'} ${appUrl}:${appPort}`);
+    }, 1000);
+
     processes.forEach((proc) => {
       const child = spawnWithLogs(proc);
 
       if (proc.name === `${appName} Frontend`) {
-        child.stdout.on("data", async () => {
+        child.stdout.on("data", async (data) => {
           if (!bannerPrinted) {
             bannerPrinted = true;
             await printBanner();
           }
         });
 
+        child.stderr.on("data", (data) => {
+          console.log(chalk.yellow(`${data}`));
+        });
+
         child.on("close", (code) => {
-          if (code !== 0) process.exit(code);
+          if (code !== 0) {
+            console.log(chalk.red(`❌ Frontend process exited with code ${code}`));
+            process.exit(code);
+          }
         });
       }
     });
   });
 
-export const prodCommand = new Command("prod")
-  .description(`Build and run ${appName} in production`)
+export const prodCommand = new Command("production")
+  .description(`Run ${appName} in production mode`)
   .action(async () => {
+    const os = require('os');
+
     await stopAllServers();
 
     const processes = [
-      { name: `${appName} Backend`, cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/kyro" },
+      { name: "dist", cmd: "rm", args: ["-rf", "dist"], cwd: "/opt/KYRO/kyro/core" },
       { name: `${appName} Frontend`, cmd: "bun", args: ["run", "build"], cwd: "/opt/KYRO/kyro/core" },
+      { name: `${appName} Backend`, cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/kyro" },
       { name: "Krypton", cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/krypton" },
     ];
+
+    let bannerPrinted = false;
+
+    setTimeout(() => {
+      require('child_process').exec(`${os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open'} ${appUrl}:${appPort}`);
+    }, 1000);
 
     processes.forEach((proc) => {
       const child = spawnWithLogs(proc);
 
       if (proc.name === `${appName} Frontend`) {
-        child.stdout.on("data", (data) => {
-          console.log(chalk.blue(`[Frontend Build] ${data}`));
+        child.stdout.on("data", async (data) => {
+          if (!bannerPrinted) {
+            bannerPrinted = true;
+            await printBanner();
+          }
         });
 
         child.stderr.on("data", (data) => {
           console.log(chalk.yellow(`${data}`));
         });
 
-        child.on("close", async (code) => {
-          if (code === 0) {
-            await printBanner();
-          } else {
-            console.log(chalk.red(`❌ Frontend build failed with code ${code}`));
+        child.on("close", (code) => {
+          if (code !== 0) {
+            console.log(chalk.red(`❌ Frontend process exited with code ${code}`));
             process.exit(code);
           }
         });
       }
     });
+  });
+
+export const logsCommand = new Command("logs")
+  .description(`View logs for ${appName}`)
+  .action(() => {
+    const http = require('http');
+    const path = require('path');
+    const fs = require('fs');
+    const os = require('os');
+
+    const port = 4321;
+    const logsPath = logsDir;
+    const highlightJsCdn = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+    const highlightCssCdn = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css';
+
+    function getLogFiles() {
+      try {
+        return fs.readdirSync(logsPath).filter((f) => f.endsWith('.log'));
+      } catch {
+        return [];
+      }
+    }
+
+    function serveIndex(res) {
+      const files = getLogFiles();
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>${appName} Logs</title>
+  <link rel="stylesheet" href="${highlightCssCdn}">
+  <style>body{font-family:sans-serif;padding:2em;}pre{background:#222;color:#eee;padding:1em;overflow:auto;}</style>
+</head>
+<body>
+  <h2>${appName} Logs</h2>
+  <ul>
+    ${files.map(f => `<li><a href="/log/${encodeURIComponent(f)}">${f}</a></li>`).join('')}
+  </ul>
+  <hr>
+  <small>Click a log file to view its contents.</small>
+</body>
+</html>`);
+    }
+
+    function serveLogFile(res, fileName) {
+      const safeName = path.basename(fileName);
+      const fullPath = path.join(logsPath, safeName);
+      if (!fs.existsSync(fullPath)) {
+        res.writeHead(404);
+        res.end('Log file not found');
+        return;
+      }
+      fs.readFile(fullPath, 'utf-8', (err, data) => {
+        if (err) {
+          res.writeHead(500);
+          res.end('Error reading file');
+          return;
+        }
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>${safeName}</title>
+  <link rel="stylesheet" href="${highlightCssCdn}">
+  <style>body{font-family:sans-serif;padding:2em;}pre{background:#222;color:#eee;padding:1em;overflow:auto;}</style>
+</head>
+<body>
+  <h3><a href="/">&larr; ${appName} Logs</a> / ${safeName}</h3>
+  <pre class="hljs">${data}</pre>
+  <script src="${highlightJsCdn}"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+</html>`);
+      });
+    }
+
+    setTimeout(() => {
+      require('child_process').exec(`${os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open'} ${appUrl}:${port}`);
+    }, 5000);
+
+    const server = http.createServer((req, res) => {
+      const urlParts = req.url.split('/');
+      const resource = urlParts[1];
+      if (resource === 'log' && urlParts[2]) {
+        serveLogFile(res, urlParts[2]);
+      } else {
+        serveIndex(res);
+      }
+    });
+
+    server.listen(port, () => {
+      const asciiPath = "/opt/KYRO/kyro/_ascii.txt";
+      const ascii = fs.readFileSync(asciiPath, "utf-8");
+      const asciiGradient = gradient("FFFFFF", "#a2b3ff");
+    
+      console.clear();
+      console.log(asciiGradient(ascii));
+      console.log(chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"));
+      console.log(chalk.hex("#a2b3ff")(`│ 🚀 ${appName} Environment                        │`));
+      console.log(chalk.hex("#a2b3ff")("│ 🌟 Launching logs site...                  │"));
+      console.log(chalk.hex("#a2b3ff")("│                                            │"));
+      console.log(chalk.hex("#a2b3ff")(`│ ⚙️  Logs: ${appUrl}:${port}             │`));
+      console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
+    });
+  })
+  .command("logs clear")
+  .description("Clear all log files")
+  .action(() => {
+    const clearLogsDirectory = () => {
+      exec(`rm -rf ./logs`, (err) => {
+        if (err) {
+          console.error(chalk.red("Error clearing logs directory:"), err.message);
+        } else {
+          console.log(chalk.green("Logs directory cleared successfully."));
+        }
+      });
+    };
+    clearLogsDirectory();
   });

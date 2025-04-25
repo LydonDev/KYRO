@@ -27,7 +27,7 @@ app.get("/api/system", (req, res) => {
   });
 });
 
-const frontendPath = resolve(__dirname, "./app/dist");
+const frontendPath = resolve(__dirname, "./core/dist");
 const indexPath = join(frontendPath, "index.html");
 
 const frontendExists =

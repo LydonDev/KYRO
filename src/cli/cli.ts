@@ -23,7 +23,7 @@ import { mkdir, rm, readFile } from "fs/promises";
 import { Database } from "bun:sqlite";
 import { spawn, spawnSync } from "child_process";
 import { Command } from "commander";
-import { devCommand, prodCommand, checkVersionCommand } from "./commands";
+import { devCommand, prodCommand, checkVersionCommand, logsCommand } from "./commands";
 import { sendWelcomeEmail } from "../services/email";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
@@ -80,6 +80,7 @@ const program = new Command();
 program.addCommand(devCommand);
 program.addCommand(prodCommand);
 program.addCommand(checkVersionCommand);
+program.addCommand(logsCommand);
 
 program
   .command("where")
