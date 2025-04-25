@@ -198,7 +198,7 @@ const ForgotPassword: React.FC = () => {
 
         <div className="mt-8">
           <Link
-            to="https://github.com/lydonwastaken"
+            to="https://github.com/lydondev"
             className="inline-flex items-center border-b border-[#1E1E20] pb-1 text-[#9CA3AF]"
           >
             Powered by {appName}

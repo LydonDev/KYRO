@@ -23,7 +23,6 @@ function Navbar() {
   return null;
 }
 
-// Navigation Item component for consistent styling
 const NavItem = ({
   to,
   icon: Icon,
@@ -53,7 +52,6 @@ const NavItem = ({
   );
 };
 
-// Section Header component
 const SectionHeader = ({ label }: { label: string }) => {
   return (
     <div className="px-4 pt-5 pb-1">
@@ -68,16 +66,13 @@ function Sidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
-  // Check if we're on a server-specific page
   const isServerPage =
     location.pathname.startsWith("/servers/") &&
     location.pathname.split("/").length > 3;
   const isAdminPage = location.pathname.startsWith("/admin");
 
-  // Get server ID from path if on a server page
   const serverId = isServerPage ? location.pathname.split("/")[2] : null;
 
-  // Check if user has admin permissions
   // @ts-ignore
   const hasAdminPermission = user?.permissions?.includes("admin") || false;
 
@@ -238,10 +233,9 @@ function Sidebar() {
         </nav>
       </div>
 
-      {/* Logout at bottom */}
       <div className="p-6">
         <Link
-          to="https://github.com/lydonwastaken"
+          to="https://github.com/lydondev"
           className="inline-flex text-xs items-center text-[#9CA3AF] transition hover:text-white border-b border-[#1E1E20] pb-1"
         >
           Powered by {appName}
@@ -265,5 +259,4 @@ function Sidebar() {
   );
 }
 
-// Re-export both components for convenience
 export { Navbar, Sidebar };

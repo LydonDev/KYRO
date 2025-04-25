@@ -24,7 +24,6 @@ const AdminPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Restrict access to admin only
   useEffect(() => {
     if (!user || !user.permissions.includes("admin")) {
       navigate("/unauthorized", { replace: true });
@@ -150,7 +149,7 @@ const AdminPage = () => {
               <span>Get Help</span>
             </a>
             <a
-              href="https://github.com/lydonwastaken"
+              href="https://github.com/lydondev"
               className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
             >
               <svg

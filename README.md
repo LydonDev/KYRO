@@ -126,6 +126,12 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 (C) This dashboard is provided free of charge, with no warranties, support, or liability. You are welcome to use, modify, and share this project for any purpose, commercial or non-commercial. Attribution is appreciated but not required. Please respect the spirit of open source—do not sell this project as your own proprietary work.
 
+## 🌹 Credits
+
+- [Argon](https://github.com/argon-foss)
+- [Pterodactyl](https://github.com/pterodactyl)
+- [Airlink](https://github.com/airlinklabs)
+
 <div align="center">
-  Made with ❤️ by the Kyro Team
+  Made with ❤️ by Lydon Team
 </div>

@@ -82,7 +82,7 @@ export const RegisterPage: React.FC = () => {
 
         <div className="mt-8">
           <Link
-            to="https://github.com/lydonwastaken"
+            to="https://github.com/lydondev"
             className="inline-flex items-center text-gray-400 border-b border-[#1E1E20]"
           >
             Powered by {appName}
