@@ -72,13 +72,13 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    - **Development:**
 
      ```bash
-     kyro dev
+     kyro development
      ```
 
    - **Production:**
 
      ```bash
-     kyro prod
+     kyro production
      ```
 
 6. **Configure Krypton:**
@@ -93,9 +93,10 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ## Usage
 
 - Access the UI at [http://localhost:5173](http://localhost:5173) (default)
-- Use the CLI (`kyro`) for migrations, DB management, and utilities
+- Use the CLI (`kyro --help`) for migrations, DB management, and utilities
 - Authenticate via email (verification required)
 - Manage servers, projects, nodes, units from the web UI or API
+- Logs will be created for kyro backend, frontend and kyro and are viewable with `kyro logs` and clearable with `kyro logs clear`
 
 ---
 
@@ -104,6 +105,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 - **.env** files are required in both `KYRO` and `KRYPTON` directories. Example files are provided as `.env.example`.
 - **RESEND_API_KEY** is required for email verification (set `RESEND_API_KEY` in `.env`).
 - **VITE_APP_NAME** Can be set in enviroment variables to set the name of the application (IE change kyro to wtv you would want)
+
 ---
 
 ## Authentication & Permissions
@@ -115,12 +117,15 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 ---
 
-## CLI Commands
+## Questions & Answers
 
-- `kyro migrate --force` - Run all pending migrations
-- `kyro dev` - Start backend and frontend in development mode
-- `kyro prod` - Build and start in production mode
-- More utilities available via `kyro` CLI (see `src/cli/cli.ts` for details)
+- **Why is the panel so slow?**
+  - The panel is built with a modern frontend framework (Vite) and a fast backend (Bun). If you're experiencing performance issues, try clearing your browser cache and cookies and running in production mode.
+- **How do i name the panel?**
+  - You can go into all the envs and set VITE_APP_NAME to set the name of the application **THIS WILL ALSO RENAME ALL THE KYRO COMMANDS AND YOU WIL NEED TO MAKE SURE TO STOP EVERYTHING AND ALSO RENAME THE Kyro DATABASE**
+- **Can i install a theme?**
+  - No, Kyro does not currently support Addons or such themes, if you would like to change the theme you will need to do so manually by editing each file.
+- **
 
 ---
 
