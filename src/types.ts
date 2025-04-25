@@ -1,8 +1,8 @@
 export interface User {
   id: string;
   username: string;
-  password: string; // hashed!
-  permissions: string[]; // Array of permission strings
+  password: string;
+  permissions: string[]; 
 }
 
 export interface AuthResponse {

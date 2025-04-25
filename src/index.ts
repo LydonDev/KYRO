@@ -1,5 +1,5 @@
 /*
- * Kyro version v1.0.0-dev (Revenant)
+ * Kyro version v1.0.0-dev 
  * (c) 2025 - 2025 Lydon
  */
 
@@ -16,11 +16,9 @@ const __dirname = process.cwd();
 
 app.use(express.json());
 
-// API routes
 const routersDir = join(__dirname, "src", "routers");
 app.use(loadRouters(routersDir));
 
-// System API route
 app.get("/api/system", (req, res) => {
   res.json({
     name: appName,
@@ -29,26 +27,21 @@ app.get("/api/system", (req, res) => {
   });
 });
 
-// Validate and serve frontend
 const frontendPath = resolve(__dirname, "./app/dist");
 const indexPath = join(frontendPath, "index.html");
 
-// Check if frontend exists and has the required structure
 const frontendExists =
   existsSync(frontendPath) && statSync(frontendPath).isDirectory();
 const indexExists = existsSync(indexPath) && statSync(indexPath).isFile();
 
 if (frontendExists && indexExists) {
-  // Serve static assets
   app.use(express.static(frontendPath));
 
-  // Serve index.html for client-side routing
   app.get("*", (req, res) => {
     if (req.path.startsWith("/api")) return;
     res.sendFile(indexPath);
   });
 } else {
-  // Fallback for non-API routes when frontend is missing
   app.get("*", (req, res) => {
     if (req.path.startsWith("/api")) return;
     res.status(404).send(`
@@ -84,9 +77,7 @@ if (frontendExists && indexExists) {
   });
 }
 
-// Start server
 app.listen(PORT, () => {
-  // Create a box for startup message
   const serverUrl = `http://localhost:${PORT}`;
   const boxWidth = Math.max(serverUrl.length + 24, 45);
 });

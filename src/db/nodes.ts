@@ -1,4 +1,3 @@
-// src/db/nodes.ts
 import { randomUUID } from "crypto";
 import { DatabaseContext, Node } from "./types";
 import { parseDate, toBoolean } from "./utils";
@@ -41,7 +40,6 @@ export function createNodesRepository({ db }: DatabaseContext) {
 
       const nodes = rows.map(parseNodeRow);
 
-      // Load region information if available
       for (const node of nodes) {
         if (node.regionId) {
           const regionRow = db
@@ -69,7 +67,6 @@ export function createNodesRepository({ db }: DatabaseContext) {
 
       const node = parseNodeRow(row);
 
-      // Load region information if available
       if (node.regionId) {
         const regionRow = db
           .prepare("SELECT * FROM regions WHERE id = ?")

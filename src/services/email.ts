@@ -3,7 +3,6 @@ import { EMAIL_CONFIG } from "../config";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
-// Initialize Resend with API key or a no-op implementation if key is not provided
 const resend = EMAIL_CONFIG.RESEND_API_KEY
   ? new Resend(EMAIL_CONFIG.RESEND_API_KEY)
   : ({
@@ -17,7 +16,6 @@ const resend = EMAIL_CONFIG.RESEND_API_KEY
       },
     } as unknown as Resend);
 
-// Common styles for email content
 const styles = {
   paragraph:
     "margin-top: 0; margin-bottom: 16px; color: #d4d4d4; font-size: 16px;",
@@ -27,7 +25,6 @@ const styles = {
     "margin-top: 0; margin-bottom: 16px; color: #ffffff; font-size: 24px; font-weight: bold; text-align: center; letter-spacing: 5px;",
 };
 
-// Create a reusable email template function
 const createEmailTemplate = (
   heading: string,
   content: string,
@@ -35,7 +32,6 @@ const createEmailTemplate = (
   buttonLink?: string,
   logoUrl?: string,
 ) => {
-  // Button section (optional)
   const buttonSection =
     buttonText && buttonLink
       ? `<div style="text-align: center;">

@@ -13,7 +13,6 @@ import { db } from "../db";
 
 let dataDirectory = "storage/";
 
-// Configure multer for file uploads
 const upload = multer({
   storage: multer.diskStorage({
     destination: "./uploads/cargo",
@@ -22,11 +21,10 @@ const upload = multer({
     },
   }),
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB limit
+    fileSize: 100 * 1024 * 1024, 
   },
 });
 
-// Validation schemas
 const cargoPropertiesSchema = z.object({
   hidden: z.boolean().optional(),
   readonly: z.boolean().optional(),
@@ -61,7 +59,6 @@ const createContainerSchema = z.object({
 const router = Router();
 router.use(authMiddleware);
 
-// Helper function to check admin permissions
 const checkPermission =
   (permission: string) => (req: any, res: any, next: any) => {
     if (!hasPermission(req.user.permissions, permission)) {
@@ -70,7 +67,6 @@ const checkPermission =
     next();
   };
 
-// Helper to calculate file hash
 async function calculateFileHash(filePath: string): Promise<string> {
   const hash = createHash("sha256");
   const content = await fs.readFile(filePath);
@@ -78,7 +74,6 @@ async function calculateFileHash(filePath: string): Promise<string> {
   return hash.digest("hex");
 }
 
-// Helper to validate remote URL
 async function validateRemoteUrl(
   url: string,
 ): Promise<{ size: number; mimeType: string }> {
@@ -100,7 +95,6 @@ async function validateRemoteUrl(
 
 router.get("/container", checkPermission("admin"), async (req, res) => {
   try {
-    // Remove any cargo validation that might be causing the error
     const containers = await db.cargo.findManyContainers();
     res.json(containers);
   } catch (error) {
@@ -109,7 +103,6 @@ router.get("/container", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Upload local cargo
 router.post(
   "/upload",
   checkPermission("admin"),
@@ -123,7 +116,6 @@ router.post(
       const data = createLocalCargoSchema.parse(JSON.parse(req.body.data));
       const hash = await calculateFileHash(req.file.path);
 
-      // Check for duplicate by hash
       const existing = await db.cargo.findManyCargo({
         where: { hash },
       });
@@ -133,7 +125,6 @@ router.post(
         return res.status(400).json({ error: "File already exists" });
       }
 
-      // Move file to permanent storage
       const storageDir = path.join(
         dataDirectory,
         "cargo",
@@ -165,12 +156,10 @@ router.post(
   },
 );
 
-// Create remote cargo
 router.post("/remote", checkPermission("admin"), async (req, res) => {
   try {
     const data = createRemoteCargoSchema.parse(req.body);
 
-    // Validate remote URL
     const { size, mimeType } = await validateRemoteUrl(data.remoteUrl);
 
     const cargo = await db.cargo.createCargo({
@@ -192,7 +181,6 @@ router.post("/remote", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// List all cargo
 router.get("/", checkPermission("admin"), async (req, res) => {
   try {
     const cargo = await db.cargo.findManyCargo();
@@ -203,7 +191,6 @@ router.get("/", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Get specific cargo
 router.get("/:id", checkPermission("admin"), async (req, res) => {
   try {
     const cargo = await db.cargo.findCargo(req.params.id);
@@ -217,7 +204,6 @@ router.get("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Download cargo file
 router.get("/:id/download", checkPermission("admin"), async (req, res) => {
   try {
     const cargo = await db.cargo.findCargo(req.params.id);
@@ -226,11 +212,9 @@ router.get("/:id/download", checkPermission("admin"), async (req, res) => {
     }
 
     if (cargo.type === "remote") {
-      // For remote cargo, redirect to the remote URL
       return res.redirect(cargo.remoteUrl!);
     }
 
-    // For local cargo, serve the file
     const filePath = path.join(
       dataDirectory,
       "cargo",
@@ -252,7 +236,6 @@ router.get("/:id/download", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Update cargo properties
 router.patch("/:id", checkPermission("admin"), async (req, res) => {
   try {
     const cargo = await db.cargo.findCargo(req.params.id);
@@ -279,7 +262,6 @@ router.patch("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Delete cargo
 router.delete("/:id", checkPermission("admin"), async (req, res) => {
   try {
     const cargo = await db.cargo.findCargo(req.params.id);
@@ -287,7 +269,6 @@ router.delete("/:id", checkPermission("admin"), async (req, res) => {
       return res.status(404).json({ error: "Cargo not found" });
     }
 
-    // Check if cargo is used in any containers
     const containers = await db.cargo.findManyContainers({
       where: {
         items: {
@@ -304,7 +285,6 @@ router.delete("/:id", checkPermission("admin"), async (req, res) => {
     }
 
     if (cargo.type === "local") {
-      // Delete the file
       const filePath = path.join(
         dataDirectory,
         "cargo",
@@ -322,12 +302,10 @@ router.delete("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Create container
 router.post("/containers", checkPermission("admin"), async (req, res) => {
   try {
     const data = createContainerSchema.parse(req.body);
 
-    // Verify all cargo items exist
     for (const item of data.items) {
       const cargo = await db.cargo.findCargo(item.cargoId);
       if (!cargo) {
@@ -348,7 +326,6 @@ router.post("/containers", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Get specific container
 router.get("/containers/:id", checkPermission("admin"), async (req, res) => {
   try {
     const container = await db.cargo.findContainer(req.params.id);
@@ -362,12 +339,10 @@ router.get("/containers/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Update container
 router.patch("/containers/:id", checkPermission("admin"), async (req, res) => {
   try {
     const data = createContainerSchema.partial().parse(req.body);
 
-    // If updating items, verify all cargo exists
     if (data.items) {
       for (const item of data.items) {
         const cargo = await db.cargo.findCargo(item.cargoId);
@@ -390,10 +365,8 @@ router.patch("/containers/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Delete container
 router.delete("/containers/:id", checkPermission("admin"), async (req, res) => {
   try {
-    // Check if container is assigned to any units
     const container = await db.cargo.findContainer(req.params.id);
     if (!container) {
       return res.status(404).json({ error: "Container not found" });
@@ -407,7 +380,6 @@ router.delete("/containers/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Assign container to unit
 router.post(
   "/containers/:containerId/units/:unitId",
   checkPermission("admin"),
@@ -425,7 +397,6 @@ router.post(
   },
 );
 
-// Remove container from unit
 router.delete(
   "/containers/:containerId/units/:unitId",
   checkPermission("admin"),

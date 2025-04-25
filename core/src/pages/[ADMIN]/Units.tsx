@@ -80,15 +80,6 @@ type Unit = z.infer<typeof unitSchema>;
 type Container = z.infer<typeof containerSchema>;
 type View = "list" | "create" | "view" | "edit";
 
-const { user } = useAuth();
-const navigate = useNavigate();
-
-// Restrict access to admin only
-useEffect(() => {
-  if (!user || !user.permissions.includes("admin")) {
-    navigate("/unauthorized", { replace: true });
-  }
-}, [user, navigate]);
 
 // Environment Variables Form Component
 const EnvironmentVariableForm: React.FC<{
@@ -585,6 +576,15 @@ const ContainerList: React.FC<{
 };
 
 const AdminUnitsPage: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Restrict access to admin only
+  useEffect(() => {
+    if (!user || !user.permissions.includes("admin")) {
+      navigate("/unauthorized", { replace: true });
+    }
+  }, [user, navigate]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

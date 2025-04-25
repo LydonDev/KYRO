@@ -39,8 +39,6 @@ const ServerSettingsPage = () => {
     type: "success" | "error";
   } | null>(null);
 
-  // WebSocket and power control states
-
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {

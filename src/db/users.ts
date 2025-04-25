@@ -1,5 +1,3 @@
-// src/db/users.ts
-
 import { randomUUID } from "crypto";
 import { DatabaseContext, User, QueryOptions } from "./types";
 import { buildWhereClause, buildOrderByClause, parseDate } from "./utils";
@@ -11,7 +9,7 @@ const parseUserRow = (row: any): User => ({
   permissions: JSON.parse(row.permissions),
   createdAt: parseDate(row.createdAt),
   updatedAt: parseDate(row.updatedAt),
-  isEmailVerified: row.isEmailVerified === 1, // Convert SQLite integer to boolean
+  isEmailVerified: row.isEmailVerified === 1, 
 });
 
 export function createUsersRepository({ db }: DatabaseContext) {
@@ -67,7 +65,6 @@ export function createUsersRepository({ db }: DatabaseContext) {
       permissions?: string[],
     ): Promise<User> => {
       console.log("Starting createUser transaction...");
-      // Begin transaction
       db.prepare("BEGIN TRANSACTION").run();
 
       try {
@@ -93,14 +90,13 @@ export function createUsersRepository({ db }: DatabaseContext) {
           email,
           password: hashedPassword,
           permissions: userPermissions,
-          isEmailVerified: false, // New users start with unverified email
+          isEmailVerified: false, 
           createdAt: new Date(),
           updatedAt: new Date(),
         };
 
         console.log("Inserting user into database...");
 
-        // Ensure permissions is properly serialized as JSON string
         const permissionsJson = JSON.stringify(user.permissions);
 
         db.prepare(
@@ -121,7 +117,6 @@ export function createUsersRepository({ db }: DatabaseContext) {
         );
         console.log("User inserted successfully");
 
-        // Create default project for the user
         console.log("Creating default project for user...");
         const defaultProject = {
           id: randomUUID(),
@@ -148,14 +143,12 @@ export function createUsersRepository({ db }: DatabaseContext) {
         );
         console.log("Default project created successfully");
 
-        // Commit transaction
         console.log("Committing transaction...");
         db.prepare("COMMIT").run();
         console.log("Transaction committed");
 
         return user;
       } catch (error) {
-        // Rollback on error
         console.error("Error in createUser, rolling back transaction:", error);
         db.prepare("ROLLBACK").run();
         console.log("Transaction rolled back");
@@ -213,20 +206,16 @@ export function createUsersRepository({ db }: DatabaseContext) {
       }
     },
 
-    // Verification code functions
     createVerificationCode: async (userId: string): Promise<string> => {
-      // Generate a random 6-digit code
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + 24); // Code expires in 24 hours
+      expiresAt.setHours(expiresAt.getHours() + 24); 
 
       try {
-        // Delete any existing codes for this user
         db.prepare("DELETE FROM verification_codes WHERE userId = ?").run(
           userId,
         );
 
-        // Insert the new code
         db.prepare(
           `
           INSERT INTO verification_codes (
@@ -264,12 +253,10 @@ export function createUsersRepository({ db }: DatabaseContext) {
           return false;
         }
 
-        // Delete the code after successful verification
         db.prepare("DELETE FROM verification_codes WHERE id = ?").run(
           verificationCode.id,
         );
 
-        // Update user as verified if requested
         if (markEmailAsVerified) {
           db.prepare(
             "UPDATE users SET isEmailVerified = 1, updatedAt = ? WHERE id = ?",

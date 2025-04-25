@@ -21,7 +21,6 @@ export const RegisterPage: React.FC = () => {
     setIsLoading(true);
     setError("");
 
-    // Validate passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       setIsLoading(false);
@@ -41,15 +40,12 @@ export const RegisterPage: React.FC = () => {
         throw new Error(data.error);
       }
 
-      // Store token and user verification data
       localStorage.setItem("token", data.token);
 
-      // Check if verification is required
       if (data.requiresVerification && data.userId) {
         localStorage.setItem("requiresVerification", "true");
         localStorage.setItem("userId", data.userId);
 
-        // Redirect to verification page
         navigate("/verify-email", {
           state: {
             userId: data.userId,
@@ -58,7 +54,6 @@ export const RegisterPage: React.FC = () => {
           },
         });
       } else {
-        // No verification required, go to servers
         navigate("/servers");
       }
     } catch (error) {

@@ -1,4 +1,3 @@
-// src/routers/users.ts
 import { Router } from "express";
 import { hash, compare } from "bcrypt";
 import { db } from "../db";
@@ -12,7 +11,6 @@ import {
 
 const router = Router();
 
-// Get all users (admin only)
 router.get(
   "/",
   authMiddleware,
@@ -29,7 +27,6 @@ router.get(
   },
 );
 
-// Get single user (admin only)
 router.get(
   "/:id",
   authMiddleware,
@@ -40,7 +37,6 @@ router.get(
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      // Remove sensitive data
       const { password, ...sanitizedUser } = user;
       res.json(sanitizedUser);
     } catch (err) {
@@ -49,7 +45,6 @@ router.get(
   },
 );
 
-// Create user (admin only)
 router.post(
   "/",
   authMiddleware,
@@ -82,16 +77,13 @@ router.post(
         permissions,
       );
 
-      // Send welcome email
       try {
         await sendWelcomeEmail(email, username);
         console.log("Welcome email sent to:", email);
       } catch (emailErr) {
         console.error("Failed to send welcome email:", emailErr);
-        // Continue with user creation even if email fails
       }
 
-      // Remove sensitive data
       const { password: _, ...sanitizedUser } = user;
       res.status(201).json(sanitizedUser);
     } catch (err) {
@@ -100,7 +92,6 @@ router.post(
   },
 );
 
-// Update user (admin only)
 router.patch(
   "/:id",
   authMiddleware,
@@ -117,7 +108,6 @@ router.patch(
 
     try {
       const user = await db.users.updateUser({ id: req.params.id }, updates);
-      // Remove sensitive data
       const { password: _, ...sanitizedUser } = user;
       res.json(sanitizedUser);
     } catch (err) {
@@ -126,7 +116,6 @@ router.patch(
   },
 );
 
-// Delete user (admin only)
 router.delete(
   "/:id",
   authMiddleware,
@@ -141,9 +130,6 @@ router.delete(
   },
 );
 
-// Profile routes for authenticated users
-
-// Get current user profile
 router.get("/me", authMiddleware, async (req, res) => {
   try {
     const user = await db.users.findUnique({ id: req.user!.id });
@@ -151,7 +137,6 @@ router.get("/me", authMiddleware, async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Remove sensitive data
     const { password, ...sanitizedUser } = user;
     res.json(sanitizedUser);
   } catch (err) {
@@ -159,7 +144,6 @@ router.get("/me", authMiddleware, async (req, res) => {
   }
 });
 
-// Update username
 router.post("/update-username", authMiddleware, async (req, res) => {
   const { username } = req.body;
   const userId = req.user!.id;
@@ -169,7 +153,6 @@ router.post("/update-username", authMiddleware, async (req, res) => {
   }
 
   try {
-    // Check if username is already taken by another user
     const existingUser = await db.users.getUserByUsername(username);
     if (existingUser && existingUser.id !== userId) {
       return res.status(400).json({ error: "Username already exists" });
@@ -177,7 +160,6 @@ router.post("/update-username", authMiddleware, async (req, res) => {
 
     const user = await db.users.updateUser({ id: userId }, { username });
 
-    // Remove sensitive data
     const { password: _, ...sanitizedUser } = user;
     res.json(sanitizedUser);
   } catch (err) {
@@ -185,7 +167,6 @@ router.post("/update-username", authMiddleware, async (req, res) => {
   }
 });
 
-// Change password
 router.post("/change-password", authMiddleware, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   const userId = req.user!.id;
@@ -197,23 +178,19 @@ router.post("/change-password", authMiddleware, async (req, res) => {
   }
 
   try {
-    // Get current user with password
     const user = await db.users.findUnique({ id: userId });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Verify current password
     const validPassword = await compare(currentPassword, user.password);
     if (!validPassword) {
       return res.status(401).json({ error: "Current password is incorrect" });
     }
 
-    // Hash new password and update
     const hashedPassword = await hash(newPassword, 10);
     await db.users.updateUser({ id: userId }, { password: hashedPassword });
 
-    // Send a notification about the password change
     try {
       await sendNotificationEmail(
         user.email,
@@ -229,140 +206,6 @@ router.post("/change-password", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error("Error changing password:", err);
     res.status(500).json({ error: "Failed to update password" });
-  }
-});
-
-// Request email change
-router.post("/request-email-change", authMiddleware, async (req, res) => {
-  const { newEmail } = req.body;
-  const userId = req.user!.id;
-
-  if (!newEmail || !newEmail.trim()) {
-    return res.status(400).json({ error: "New email is required" });
-  }
-
-  try {
-    // Check if email is already taken by another user
-    const existingEmail = await db.users.getUserByEmail(newEmail);
-    if (existingEmail) {
-      return res.status(400).json({ error: "Email already exists" });
-    }
-
-    // Get current user
-    const user = await db.users.findUnique({ id: userId });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Store the pending email change in temp storage
-    const verificationCode = await db.users.createVerificationCode(userId);
-
-    // Store the new email in a pending_email_changes table
-    await db.db
-      .prepare(
-        `
-      INSERT OR REPLACE INTO pending_email_changes (
-        userId, newEmail, createdAt
-      ) VALUES (?, ?, ?)
-    `,
-      )
-      .run(userId, newEmail, new Date().toISOString());
-
-    // Send verification code to the new email
-    await sendVerificationCodeEmail(newEmail, user.username, verificationCode);
-
-    res.json({ success: true, message: "Verification code sent to new email" });
-  } catch (err) {
-    console.error("Error requesting email change:", err);
-    res.status(500).json({ error: "Failed to process email change request" });
-  }
-});
-
-// Verify email change
-router.post("/verify-email-change", authMiddleware, async (req, res) => {
-  const { code } = req.body;
-  const userId = req.user!.id;
-
-  if (!code) {
-    return res.status(400).json({ error: "Verification code is required" });
-  }
-
-  try {
-    // Verify the code
-    const isValid = await db.users.verifyCode(userId, code, false);
-
-    if (!isValid) {
-      return res
-        .status(400)
-        .json({ error: "Invalid or expired verification code" });
-    }
-
-    // Get the pending email change
-    const pendingChange = db.db
-      .prepare("SELECT newEmail FROM pending_email_changes WHERE userId = ?")
-      .get(userId) as { newEmail: string } | undefined;
-
-    if (!pendingChange) {
-      return res.status(400).json({ error: "No pending email change found" });
-    }
-
-    // Get current user
-    const user = await db.users.findUnique({ id: userId });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const oldEmail = user.email;
-    const newEmail = pendingChange.newEmail;
-
-    // Update the user's email
-    await db.users.updateUser(
-      { id: userId },
-      {
-        email: newEmail,
-        isEmailVerified: true, // Mark as verified since we verified the new email
-      },
-    );
-
-    // Remove the pending change
-    db.db
-      .prepare("DELETE FROM pending_email_changes WHERE userId = ?")
-      .run(userId);
-
-    // Send notification to old email
-    try {
-      await sendNotificationEmail(
-        oldEmail,
-        user.username,
-        "Email Address Changed",
-        `Your email address has been changed from ${oldEmail} to ${newEmail}. If you did not make this change, please contact support immediately.`,
-      );
-    } catch (emailErr) {
-      console.error(
-        "Failed to send email change notification to old email:",
-        emailErr,
-      );
-    }
-
-    // Send confirmation to new email
-    try {
-      await sendNotificationEmail(
-        newEmail,
-        user.username,
-        "Email Address Confirmed",
-        "Your new email address has been confirmed and is now associated with your account.",
-      );
-    } catch (emailErr) {
-      console.error(
-        "Failed to send email change confirmation to new email:",
-        emailErr,
-      );
-    }
-
-    res.json({ success: true, message: "Email changed successfully" });
-  } catch (err) {
-    console.error("Error verifying email change:", err);
-    res.status(500).json({ error: "Failed to verify email change" });
   }
 });
 

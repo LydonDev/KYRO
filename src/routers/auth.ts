@@ -52,23 +52,18 @@ router.post("/register", async (req, res) => {
       const user = await db.users.createUser(username, email, hashedPassword);
       console.log("User created successfully:", user.id);
 
-      // Create a verification code
       try {
         const verificationCode = await db.users.createVerificationCode(user.id);
 
-        // Send welcome email
         await sendWelcomeEmail(email, username);
 
-        // Send verification code email
         await sendVerificationCodeEmail(email, username, verificationCode);
 
         console.log("Welcome and verification emails sent to:", email);
       } catch (emailErr) {
         console.error("Failed to send emails:", emailErr);
-        // Continue with registration even if emails fail
       }
 
-      // Create a temporary token that expires in 1 hour for verification
       const token = jwt.sign(
         {
           username,
@@ -79,7 +74,6 @@ router.post("/register", async (req, res) => {
         { expiresIn: "1h" },
       );
 
-      // Include the requiresVerification flag in the response
       res.json({
         token,
         permissions: user.permissions,
@@ -107,14 +101,12 @@ router.post("/verify-email", async (req, res) => {
         .json({ error: "User ID and verification code are required" });
     }
 
-    // Validate code format
     if (!/^\d{6}$/.test(code)) {
       return res
         .status(400)
         .json({ error: "Invalid verification code format" });
     }
 
-    // Verify the code
     const isValid = await db.users.verifyCode(userId, code);
 
     if (!isValid) {
@@ -123,14 +115,12 @@ router.post("/verify-email", async (req, res) => {
         .json({ error: "Invalid or expired verification code" });
     }
 
-    // Get the user to create a proper token
     const user = await db.users.findUnique({ id: userId });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Create a proper token now that the email is verified
     const token = jwt.sign({ username: user.username }, JWT_SECRET, {
       expiresIn: "24h",
     });
@@ -148,17 +138,14 @@ router.post("/verify-email", async (req, res) => {
 
 router.post("/resend-verification", authMiddleware, async (req, res) => {
   try {
-    // Check if the user is already verified
     if (req.user!.isEmailVerified) {
       return res.status(400).json({ error: "Email already verified" });
     }
 
-    // Generate a new verification code
     const verificationCode = await db.users.createVerificationCode(
       req.user!.id,
     );
 
-    // Resend the verification email
     await sendVerificationCodeEmail(
       req.user!.email,
       req.user!.username,
@@ -182,11 +169,9 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    // Try to find user by username first, then by email if not found
     let user = await db.users.getUserByUsername(username);
 
     if (!user) {
-      // Try to find by email
       user = await db.users.getUserByEmail(username);
     }
 
@@ -199,10 +184,8 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Check if email is verified
     const requiresVerification = !user.isEmailVerified;
 
-    // If verification is required, send a limited token
     const tokenPayload = requiresVerification
       ? { username: user.username, userId: user.id, requiresVerification: true }
       : { username: user.username };
@@ -213,7 +196,6 @@ router.post("/login", async (req, res) => {
       expiresIn: tokenExpiry,
     });
 
-    // If verification is required, generate a new code and send email
     if (requiresVerification) {
       try {
         const verificationCode = await db.users.createVerificationCode(user.id);
@@ -224,7 +206,6 @@ router.post("/login", async (req, res) => {
         );
       } catch (emailErr) {
         console.error("Failed to send verification email:", emailErr);
-        // Continue with login even if email fails
       }
     }
 
@@ -260,11 +241,9 @@ router.post("/forgot-password", async (req, res) => {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    // Find user by email
     const user = await db.users.getUserByEmail(email);
 
     if (!user) {
-      // For security reasons, always return success even if email doesn't exist
       return res.json({
         success: true,
         message:
@@ -272,10 +251,8 @@ router.post("/forgot-password", async (req, res) => {
       });
     }
 
-    // Generate a verification code
     const verificationCode = await db.users.createVerificationCode(user.id);
 
-    // Send verification code email
     await sendNotificationEmail(
       email,
       user.username,
@@ -304,15 +281,13 @@ router.post("/verify-reset-code", async (req, res) => {
         .json({ error: "User ID and verification code are required" });
     }
 
-    // Validate code format
     if (!/^\d{6}$/.test(code)) {
       return res
         .status(400)
         .json({ error: "Invalid verification code format" });
     }
 
-    // Verify the code
-    const isValid = await db.users.verifyCode(userId, code, false); // Don't mark email as verified
+    const isValid = await db.users.verifyCode(userId, code, false);
 
     if (!isValid) {
       return res
@@ -320,7 +295,6 @@ router.post("/verify-reset-code", async (req, res) => {
         .json({ error: "Invalid or expired verification code" });
     }
 
-    // Create a temporary token for password reset
     const resetToken = jwt.sign(
       { userId, purpose: "password-reset" },
       JWT_SECRET,
@@ -354,20 +328,16 @@ router.post("/reset-password", async (req, res) => {
         .json({ error: "Password must be at least 8 characters long" });
     }
 
-    // Find the user
     const user = await db.users.findUnique({ id: userId });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Hash the new password
     const hashedPassword = await hash(password, 10);
 
-    // Update the user's password
     await db.users.updateUser({ id: userId }, { password: hashedPassword });
 
-    // Send password changed notification
     await sendNotificationEmail(
       user.email,
       user.username,

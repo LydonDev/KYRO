@@ -1,4 +1,3 @@
-// Panel: src/db/servers.ts
 import { randomUUID } from "crypto";
 import { DatabaseContext, Server, QueryOptions } from "./types";
 import { buildWhereClause, buildOrderByClause, parseDate } from "./utils";
@@ -243,17 +242,13 @@ export function createServersRepository({ db }: DatabaseContext) {
       return server;
     },
 
-    // src/db/servers.ts - fixed create function
     create: async function (
       data: Omit<Server, "id" | "createdAt" | "updatedAt">,
     ): Promise<Server> {
-      // If no projectId is specified, we need to handle it differently
       let projectId = data.projectId;
 
       if (!projectId) {
         try {
-          // Access the projects repository from the db context
-          // This assumes db.projects is defined in your database context
           if (
             db.projects &&
             typeof db.projects.getOrCreateDefaultProject === "function"
@@ -263,8 +258,6 @@ export function createServersRepository({ db }: DatabaseContext) {
             );
             projectId = defaultProject.id;
           } else {
-            // Fallback approach if projects repository isn't available
-            // This will query the database directly to find the default project
             const defaultProject = db
               .prepare(
                 `
@@ -278,7 +271,6 @@ export function createServersRepository({ db }: DatabaseContext) {
             if (defaultProject) {
               projectId = defaultProject.id;
             } else {
-              // Create a default project if it doesn't exist
               const newProjectId = randomUUID();
               db.prepare(
                 `
@@ -298,7 +290,6 @@ export function createServersRepository({ db }: DatabaseContext) {
           }
         } catch (error) {
           console.error("Failed to get default project:", error);
-          // Continue without a project ID if we can't get the default project
         }
       }
 

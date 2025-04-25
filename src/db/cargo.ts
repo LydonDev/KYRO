@@ -2,7 +2,6 @@ import { randomUUID } from "crypto";
 import { DatabaseContext, QueryOptions } from "./types";
 import { buildWhereClause, buildOrderByClause, parseDate } from "./utils";
 
-// Types
 export interface Cargo {
   id: string;
   name: string;
@@ -34,7 +33,6 @@ export interface CargoContainer {
   updatedAt: Date;
 }
 
-// Helper functions to parse database rows
 const parseCargoRow = (row: any): Cargo => ({
   id: row.id,
   name: row.name,
@@ -60,7 +58,6 @@ const parseCargoContainerRow = (row: any): CargoContainer => ({
 
 export function createCargoRepository({ db }: DatabaseContext) {
   const repository = {
-    // Cargo CRUD operations
     findManyCargo: async (options?: QueryOptions<Cargo>): Promise<Cargo[]> => {
       const { clause: whereClause, params: whereParams } = buildWhereClause(
         "cargo",
@@ -159,7 +156,6 @@ export function createCargoRepository({ db }: DatabaseContext) {
       }
     },
 
-    // Container CRUD operations
     findManyContainers: async (
       options?: QueryOptions<CargoContainer>,
     ): Promise<CargoContainer[]> => {
@@ -257,7 +253,6 @@ export function createCargoRepository({ db }: DatabaseContext) {
       }
     },
 
-    // Unit association operations
     assignContainerToUnit: async (
       unitId: string,
       containerId: string,

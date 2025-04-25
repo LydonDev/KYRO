@@ -9,3 +9,4 @@ backups/
 bun.lock
 package-lock.json
 .DS_Store
+logs/

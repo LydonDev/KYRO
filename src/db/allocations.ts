@@ -68,7 +68,6 @@ export function createAllocationsRepository({ db }: DatabaseContext) {
         "id" | "assigned" | "serverId" | "createdAt" | "updatedAt"
       >,
     ): Promise<Allocation> => {
-      // Verify unique constraint
       const existing = await repository.findFirst({
         where: {
           nodeId: data.nodeId,

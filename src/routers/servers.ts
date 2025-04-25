@@ -1,5 +1,3 @@
-// Panel: src/routers/servers.ts
-
 import { Router } from "express";
 import { z } from "zod";
 import { hasPermission } from "../permissions";
@@ -11,7 +9,6 @@ import { authMiddleware, checkPermission } from "../middleware/auth";
 
 const router = Router();
 
-// Types
 interface CargoFile {
   id: string;
   url: string;
@@ -45,7 +42,6 @@ interface DaemonServerConfig {
   cargo?: CargoFile[];
 }
 
-// Validation schemas
 const createServerSchema = z.object({
   name: z.string().min(1).max(100),
   nodeId: z.string().uuid(),
@@ -65,8 +61,6 @@ const updateServerSchema = z.object({
   cpuPercent: z.number().min(1).max(100).optional(),
   unitId: z.string().uuid().optional(),
   projectId: z.string().uuid().optional(),
-  // Note: We don't allow changing nodeId or allocationId here
-  // as that would require server transfer
 });
 
 async function makeDaemonRequest(
@@ -89,7 +83,7 @@ async function makeDaemonRequest(
       url,
       data,
       headers: {
-        "X-API-Key": node.connectionKey, // This matches the middleware in Krypton
+        "X-API-Key": node.connectionKey, 
       },
       timeout: 10000,
     });
@@ -104,7 +98,6 @@ async function makeDaemonRequest(
 }
 
 async function checkServerAccess(req: any, serverId: string) {
-  // First, get the server with all necessary relations
   const server = await db.servers.findUnique({
     where: { id: serverId },
     include: { node: true, allocation: true, unit: true },
@@ -125,7 +118,6 @@ async function checkServerAccess(req: any, serverId: string) {
     throw new Error("Access denied");
   }
 
-  // Get current status from daemon
   try {
     const status = await makeDaemonRequest(
       "get",
@@ -172,7 +164,6 @@ async function generateCargoUrls(server: any, unit: any): Promise<CargoFile[]> {
       if (!cargo) continue;
 
       if (cargo.type === "local") {
-        // Generate a signed URL that expires in 15 minutes
         const expiresAt = Math.floor(Date.now() / 1000) + 900;
         const signature = createHash("sha256")
           .update(
@@ -189,7 +180,6 @@ async function generateCargoUrls(server: any, unit: any): Promise<CargoFile[]> {
           properties: cargo.properties,
         });
       } else if (cargo.type === "remote") {
-        // For remote cargo, use the remote URL directly
         cargoFiles.push({
           id: cargo.id,
           url: cargo.remoteUrl!,
@@ -203,13 +193,10 @@ async function generateCargoUrls(server: any, unit: any): Promise<CargoFile[]> {
   return cargoFiles;
 }
 
-// PUBLIC ROUTES
 router.get("/:serverId/cargo-files", async (req, res) => {
   try {
     const { serverId } = req.params;
     const { token } = req.query;
-
-    // If there's a token, validate it (daemon request)
     if (token) {
       const server = await db.servers.findUnique({
         where: { id: serverId },
@@ -219,12 +206,10 @@ router.get("/:serverId/cargo-files", async (req, res) => {
         return res.status(404).json({ error: "Server not found" });
       }
 
-      // Verify the token matches the server's validation token
       if (server.validationToken !== token) {
         return res.status(403).json({ error: "Invalid token" });
       }
     } else {
-      // Otherwise, require authentication (admin panel request)
       if (!req.user) {
         return res.status(401).json({ error: "Unauthorized" });
       }
@@ -234,7 +219,6 @@ router.get("/:serverId/cargo-files", async (req, res) => {
         return res.status(404).json({ error: "Server not found" });
       }
 
-      // Check if user has permission or is server owner
       const isAdmin = hasPermission(req.user.permissions, "admin.servers.view");
       const isOwner = server.userId === req.user.id;
 
@@ -243,7 +227,6 @@ router.get("/:serverId/cargo-files", async (req, res) => {
       }
     }
 
-    // Get the server with its unit
     const server = await db.servers.findUnique({
       where: { id: serverId },
     });
@@ -252,24 +235,19 @@ router.get("/:serverId/cargo-files", async (req, res) => {
       return res.status(404).json({ error: "Server not found" });
     }
 
-    // Get all containers assigned to this unit
     const unitContainers = await db.units.getUnitCargoContainers(server.unitId);
 
-    // Prepare the cargo files list
     const cargoFiles: CargoFile[] = [];
 
-    // For each container, get its cargo items
     for (const container of unitContainers) {
       if (container.items && Array.isArray(container.items)) {
-        // For each item in the container, get the cargo details
         for (const item of container.items) {
           const cargo = await db.cargo.findCargo(item.cargoId);
 
           if (cargo) {
-            // Add to the cargo files list
             cargoFiles.push({
               id: cargo.id,
-              url: `${req.protocol}://${req.headers.host}/api/cargo/${cargo.id}/download`, // Full URL for daemon
+              url: `${req.protocol}://${req.headers.host}/api/cargo/${cargo.id}/download`,
               targetPath: item.targetPath,
               properties: cargo.properties || {
                 hidden: false,
@@ -289,12 +267,10 @@ router.get("/:serverId/cargo-files", async (req, res) => {
   }
 });
 
-// Add a ship cargo endpoint to manually trigger cargo shipping to a server
 router.post("/:serverId/cargo/ship", authMiddleware, async (req, res) => {
   try {
     const { serverId } = req.params;
 
-    // Verify server exists
     const server = await db.servers.findUnique({
       where: { id: serverId },
       include: { node: true, unit: true },
@@ -304,7 +280,6 @@ router.post("/:serverId/cargo/ship", authMiddleware, async (req, res) => {
       return res.status(404).json({ error: "Server not found" });
     }
 
-    // Check permissions
     if (!hasPermission(req.user?.permissions, "admin")) {
       return res.status(403).json({ error: "Insufficient permissions" });
     }
@@ -317,11 +292,9 @@ router.post("/:serverId/cargo/ship", authMiddleware, async (req, res) => {
       return res.status(400).json({ error: "Server has no unit assigned" });
     }
 
-    // Get all unit containers and their cargo files
     const unitContainers = await db.cargo.getUnitContainers(server.unitId);
     const cargoFiles: CargoFile[] = [];
 
-    // For each container, get its cargo items
     for (const container of unitContainers) {
       if (container.items) {
         for (const item of container.items) {
@@ -339,7 +312,6 @@ router.post("/:serverId/cargo/ship", authMiddleware, async (req, res) => {
       }
     }
 
-    // Send cargo files to daemon
     const daemonUrl = `http://${server.node.address}:${server.node.daemonPort}/api/servers/${serverId}/cargo/ship`;
 
     try {
@@ -419,7 +391,6 @@ router.get("/:internalId/config", async (req, res) => {
       return res.status(404).json({ error: "Server not found" });
     }
 
-    // Generate cargo URLs
     const cargoFiles = await generateCargoUrls(server, server.unit);
 
     const config: DaemonServerConfig = {
@@ -449,13 +420,11 @@ router.get("/:internalId/config", async (req, res) => {
   }
 });
 
-// Panel side
 router.get("/:internalId/validate/:token", async (req, res) => {
   try {
     const { internalId } = req.params;
     const validationToken = req.params.token;
 
-    // Debug logging
     console.log("Validation request received:", {
       internalId,
       validationToken,
@@ -472,7 +441,6 @@ router.get("/:internalId/validate/:token", async (req, res) => {
       return res.status(404).json({ error: "Server not found" });
     }
 
-    // Check if validationToken matches
     if (server.validationToken !== validationToken) {
       console.log("Token mismatch:", {
         expected: server.validationToken,
@@ -481,7 +449,6 @@ router.get("/:internalId/validate/:token", async (req, res) => {
       return res.status(403).json({ error: "Invalid validation token" });
     }
 
-    // Return the format expected by the daemon
     res.json({
       validated: true,
       server: {
@@ -502,13 +469,10 @@ router.get("/:internalId/validate/:token", async (req, res) => {
   }
 });
 
-// AUTHENTICATED ROUTES
 router.use(authMiddleware);
 
-// ADMIN ROUTES
 router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
   try {
-    // Modified schema to make nodeId and allocationId optional when regionId is provided
     const createServerSchema = z
       .object({
         name: z.string().min(1).max(100),
@@ -533,15 +497,12 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
     let nodeId = data.nodeId;
     let allocationId = data.allocationId;
 
-    // If regionId is provided, find the best node in that region
     if (data.regionId) {
-      // Check if region exists
       const region = await db.regions.findUnique({ id: data.regionId });
       if (!region) {
         return res.status(404).json({ error: "Region not found" });
       }
 
-      // Check if region is at capacity
       const isAtCapacity = await db.regions.isRegionAtCapacity(data.regionId);
       if (isAtCapacity) {
         return res
@@ -549,7 +510,6 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
           .json({ error: "Region has reached its server limit" });
       }
 
-      // Find the best node in this region (or fallback if configured)
       nodeId = await db.regions.findBestNodeInRegion(data.regionId);
 
       if (!nodeId) {
@@ -558,7 +518,6 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
         });
       }
 
-      // If no allocation was specified, find an available one on this node
       if (!allocationId) {
         const allocation = await db.allocations.findFirst({
           where: { nodeId, assigned: false },
@@ -573,14 +532,12 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
         allocationId = allocation.id;
       }
     } else {
-      // Regular node-based creation, but with allocation auto-assignment if needed
       if (!nodeId) {
         return res
           .status(400)
           .json({ error: "NodeId is required when regionId is not provided" });
       }
 
-      // If no allocation was specified, we'll automatically find one
       if (!allocationId) {
         const allocation = await db.allocations.findFirst({
           where: { nodeId, assigned: false },
@@ -596,7 +553,6 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
       }
     }
 
-    // Verify node exists and is online
     const node = await db.nodes.findUnique({ id: nodeId });
     if (!node) {
       return res.status(404).json({ error: "Node not found" });
@@ -605,7 +561,6 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
       return res.status(400).json({ error: "Node is offline" });
     }
 
-    // Verify allocation exists and is available
     const allocation = await db.allocations.findUnique({ id: allocationId });
     if (!allocation) {
       return res.status(404).json({ error: "Allocation not found" });
@@ -619,16 +574,13 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
         .json({ error: "Allocation does not belong to selected node" });
     }
 
-    // Verify unit exists
     const unit = await db.units.findUnique({ id: data.unitId });
     if (!unit) {
       return res.status(404).json({ error: "Unit not found" });
     }
 
-    // Mark allocation as assigned
     await db.allocations.update({ id: allocation.id }, { assigned: true });
 
-    // Create server in database with validation token
     const server = await db.servers.create({
       ...data,
       nodeId,
@@ -640,7 +592,6 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
     });
 
     try {
-      // Send create request to daemon
       const daemonResponse = await makeDaemonRequest(
         "post",
         node,
@@ -666,7 +617,6 @@ router.post("/", checkPermission(Permissions.ADMIN), async (req: any, res) => {
 
       res.status(201).json(server);
     } catch (error) {
-      // Cleanup on failure
       await db.allocations.update({ id: allocation.id }, { assigned: false });
       await db.servers.delete({ id: server.id });
       throw error;
@@ -688,7 +638,6 @@ router.patch(
       const { id } = req.params;
       const updateData = updateServerSchema.parse(req.body);
 
-      // Get the current server data
       const server = await db.servers.findUnique({
         where: { id },
         include: {
@@ -706,13 +655,11 @@ router.patch(
         return res.status(400).json({ error: "Server has no node assigned" });
       }
 
-      // Check if unit is changing
       let unitChanged = false;
       let unitData = server.unit;
 
       if (updateData.unitId && updateData.unitId !== server.unitId) {
         unitChanged = true;
-        // Get the new unit details
         unitData = await db.units.findUnique({ id: updateData.unitId });
 
         if (!unitData) {
@@ -720,14 +667,12 @@ router.patch(
         }
       }
 
-      // Set server to updating state
       await updateServerState(server.id, "updating");
 
-      // Prepare data for the daemon
       const daemonUpdateData = {
         serverId: server.internalId,
         name: updateData.name || server.name,
-        memoryLimit: (updateData.memoryMiB || server.memoryMiB) * 1024 * 1024, // Convert to bytes
+        memoryLimit: (updateData.memoryMiB || server.memoryMiB) * 1024 * 1024, 
         cpuLimit: Math.floor(
           ((updateData.cpuPercent || server.cpuPercent) * 1024) / 100,
         ),
@@ -739,7 +684,6 @@ router.patch(
         dockerImage: unitData!.dockerImage,
       };
 
-      // Send update request to daemon
       await makeDaemonRequest(
         "patch",
         server.node,
@@ -747,12 +691,11 @@ router.patch(
         daemonUpdateData,
       );
 
-      // Update the server in the database
       const updatedServer = await db.servers.update(
         { id: server.id },
         {
           ...updateData,
-          state: "running", // Reset state after update
+          state: "running", 
         },
       );
 
@@ -774,10 +717,8 @@ router.post(
     try {
       const server = await checkServerAccess(req, req.params.id);
 
-      // Generate fresh cargo URLs
       const cargoFiles = await generateCargoUrls(server, server.unit);
 
-      // Send cargo update to daemon
       await makeDaemonRequest(
         "post",
         server.node!,
@@ -808,7 +749,6 @@ router.delete(
       const server = await checkServerAccess(req, id);
 
       try {
-        // Delete server on daemon
         await makeDaemonRequest(
           "delete",
           server.node!,
@@ -828,8 +768,6 @@ router.delete(
         console.error("Failed to delete server on daemon:", error);
       }
 
-      // Free up the allocation
-
       res.status(204).send();
     } catch (error: any) {
       if (error.message === "Server not found") {
@@ -844,7 +782,6 @@ router.delete(
   },
 );
 
-// USER ROUTES
 router.get("/", checkPermission(Permissions.USER), async (req: any, res) => {
   try {
     const isAdmin = hasPermission(req.user.permissions, Permissions.ADMIN);
@@ -860,7 +797,6 @@ router.get("/", checkPermission(Permissions.USER), async (req: any, res) => {
       },
     });
 
-    // Fetch status from daemons
     const serversWithStatus = await Promise.all(
       servers.map(async (server) => {
         try {
@@ -875,7 +811,7 @@ router.get("/", checkPermission(Permissions.USER), async (req: any, res) => {
             status,
             node: {
               ...server.node,
-              connectionKey: undefined, // Redact connectionKey
+              connectionKey: undefined, 
             },
           };
         } catch (error) {
@@ -884,7 +820,7 @@ router.get("/", checkPermission(Permissions.USER), async (req: any, res) => {
             status: { state: "unknown" },
             node: {
               ...server.node,
-              connectionKey: undefined, // Redact connectionKey
+              connectionKey: undefined, 
             },
           };
         }
@@ -905,7 +841,7 @@ router.get("/:id", checkPermission(Permissions.USER), async (req: any, res) => {
       ...server,
       node: {
         ...server.node,
-        connectionKey: undefined, // Redact connectionKey
+        connectionKey: undefined, 
       },
     });
   } catch (error: any) {
@@ -947,7 +883,6 @@ router.post(
         `/api/v1/servers/${server.internalId}/power/${action}`,
       );
 
-      // Get updated state from daemon
       try {
         const status = await makeDaemonRequest(
           "get",
@@ -1005,7 +940,6 @@ router.post(
   },
 );
 
-// Update server name
 router.patch(
   "/:id",
   checkPermission(Permissions.USER),
@@ -1025,7 +959,6 @@ router.patch(
 
       const server = await checkServerAccess(req, id);
 
-      // Update server name in database
       await db.servers.update({
         where: { id },
         data: { name },

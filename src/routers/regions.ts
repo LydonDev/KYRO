@@ -1,4 +1,3 @@
-// src/routers/regions.ts
 import { Router } from "express";
 import { z } from "zod";
 import { hasPermission } from "../permissions";
@@ -9,7 +8,6 @@ import { Permissions } from "../permissions";
 const router = Router();
 router.use(authMiddleware);
 
-// Validation schemas
 const createRegionSchema = z.object({
   name: z.string().min(1).max(100),
   identifier: z
@@ -24,7 +22,6 @@ const createRegionSchema = z.object({
 
 const updateRegionSchema = createRegionSchema.partial();
 
-// Middleware to check admin permissions
 function checkAdminPermission(req: any, res: any, next: any) {
   if (!hasPermission(req.user.permissions, Permissions.ADMIN)) {
     return res.status(403).json({ error: "Insufficient permissions" });
@@ -32,18 +29,14 @@ function checkAdminPermission(req: any, res: any, next: any) {
   next();
 }
 
-// REGION ROUTES
 router.get("/", async (req, res) => {
   try {
     const regions = await db.regions.findMany();
 
-    // Count servers in each region
     const regionsWithStats = await Promise.all(
       regions.map(async (region) => {
-        // Get all node IDs in this region
         const nodeIds = region.nodes.map((node) => node.id);
 
-        // Count servers if there are nodes in the region
         let serverCount = 0;
         if (nodeIds.length > 0) {
           const nodeIdsString = nodeIds.map((id) => `'${id}'`).join(",");
@@ -86,7 +79,6 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ error: "Region not found" });
     }
 
-    // Count servers in the region
     const nodeIds = region.nodes.map((node) => node.id);
 
     let serverCount = 0;
@@ -125,7 +117,6 @@ router.post("/", checkAdminPermission, async (req, res) => {
   try {
     const validatedData = createRegionSchema.parse(req.body);
 
-    // Check if a region with this identifier already exists
     const existingRegion = await db.regions.findByIdentifier({
       identifier: validatedData.identifier,
     });
@@ -136,7 +127,6 @@ router.post("/", checkAdminPermission, async (req, res) => {
         .json({ error: "Region with this identifier already exists" });
     }
 
-    // If fallbackRegionId is provided, check if it exists
     if (validatedData.fallbackRegionId) {
       const fallbackRegion = await db.regions.findUnique({
         id: validatedData.fallbackRegionId,
@@ -169,7 +159,6 @@ router.patch("/:id", checkAdminPermission, async (req, res) => {
       return res.status(404).json({ error: "Region not found" });
     }
 
-    // If identifier is being updated, check for duplicates
     if (
       validatedData.identifier &&
       validatedData.identifier !== existingRegion.identifier
@@ -185,7 +174,6 @@ router.patch("/:id", checkAdminPermission, async (req, res) => {
       }
     }
 
-    // If fallbackRegionId is provided, check if it exists and isn't this region
     if (validatedData.fallbackRegionId) {
       if (validatedData.fallbackRegionId === req.params.id) {
         return res
@@ -225,7 +213,6 @@ router.delete("/:id", checkAdminPermission, async (req, res) => {
       return res.status(404).json({ error: "Region not found" });
     }
 
-    // Attempt to delete - this will throw an error if there are nodes or if used as fallback
     await db.regions.delete({ id: req.params.id });
 
     res.status(204).send();
@@ -250,9 +237,6 @@ router.delete("/:id", checkAdminPermission, async (req, res) => {
   }
 });
 
-// ADDITIONAL REGION ENDPOINTS
-
-// Endpoint to get available allocations in a region
 router.get("/:id/allocations", async (req, res) => {
   try {
     const region = await db.regions.findUnique({ id: req.params.id });
@@ -261,14 +245,12 @@ router.get("/:id/allocations", async (req, res) => {
       return res.status(404).json({ error: "Region not found" });
     }
 
-    // Get all node IDs in this region
     const nodeIds = region.nodes.map((node) => node.id);
 
     if (nodeIds.length === 0) {
       return res.json([]);
     }
 
-    // Find all unassigned allocations on these nodes
     const nodeIdsString = nodeIds.map((id) => `'${id}'`).join(",");
     const allocations = db.db
       .prepare(
@@ -279,7 +261,6 @@ router.get("/:id/allocations", async (req, res) => {
       )
       .all() as any[];
 
-    // Add node information to each allocation
     const allocationsWithNodes = await Promise.all(
       allocations.map(async (allocation: any) => {
         const node = await db.nodes.findUnique({ id: allocation.nodeId });

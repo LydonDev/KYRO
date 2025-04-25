@@ -4,7 +4,6 @@ import { JWT_SECRET } from "../config";
 import { db } from "../db";
 import { Permission, hasPermission } from "../permissions";
 
-// Enhance type definitions for better safety
 declare global {
   namespace Express {
     interface Request {
@@ -27,10 +26,6 @@ interface JWTPayload {
   iat?: number;
 }
 
-/**
- * Authentication middleware
- * Verifies JWT and attaches user data to request
- */
 export const authMiddleware = async (
   req: Request,
   res: Response,
@@ -50,7 +45,6 @@ export const authMiddleware = async (
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
 
-      // Check token expiration explicitly
       if (decoded.exp && decoded.exp < Date.now() / 1000) {
         return res.status(401).json({ error: "Token has expired" });
       }
@@ -61,7 +55,6 @@ export const authMiddleware = async (
         return res.status(401).json({ error: "User no longer exists" });
       }
 
-      // Attach full user data to request
       req.user = {
         id: user.id,
         username: user.username,
@@ -85,10 +78,6 @@ export const authMiddleware = async (
   }
 };
 
-/**
- * Permission check middleware - original style
- * Used by node/server/unit routers
- */
 export const checkPermission =
   (permission: string) => (req: Request, res: Response, next: NextFunction) => {
     if (!req.user?.permissions) {
@@ -105,10 +94,6 @@ export const checkPermission =
     next();
   };
 
-/**
- * Permission check middleware - new style
- * Used by auth router
- */
 export const requirePermission =
   (permission: string) => (req: Request, res: Response, next: NextFunction) => {
     if (!req.user?.permissions) {

@@ -102,9 +102,8 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ## Configuration
 
 - **.env** files are required in both `KYRO` and `KRYPTON` directories. Example files are provided as `.env.example`.
-- **Resend API Key** is required for email verification (set `RESEND_API_KEY` in `.env`).
-- **APP_URL** should be set for correct email links.
-
+- **RESEND_API_KEY** is required for email verification (set `RESEND_API_KEY` in `.env`).
+- **VITE_APP_NAME** Can be set in enviroment variables to set the name of the application (IE change kyro to wtv you would want)
 ---
 
 ## Authentication & Permissions

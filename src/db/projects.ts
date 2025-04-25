@@ -1,4 +1,3 @@
-// src/db/projects.ts
 import { randomUUID } from "crypto";
 import { DatabaseContext, Project, QueryOptions } from "./types";
 import { buildWhereClause, buildOrderByClause, parseDate } from "./utils";
@@ -103,7 +102,6 @@ export function createProjectsRepository({ db }: DatabaseContext) {
       }
     },
 
-    // Get project with servers count
     getProjectWithServerCount: async (
       projectId: string,
     ): Promise<(Project & { serverCount: number }) | null> => {
@@ -129,7 +127,6 @@ export function createProjectsRepository({ db }: DatabaseContext) {
       };
     },
 
-    // Get all projects for a user with server counts
     getUserProjectsWithServerCount: async (
       userId: string,
     ): Promise<(Project & { serverCount: number })[]> => {
@@ -154,7 +151,6 @@ export function createProjectsRepository({ db }: DatabaseContext) {
       }));
     },
 
-    // Get or create default project for a user
     getOrCreateDefaultProject: async (userId: string): Promise<Project> => {
       const defaultProject = db
         .prepare(
@@ -170,7 +166,6 @@ export function createProjectsRepository({ db }: DatabaseContext) {
         return parseProjectRow(defaultProject);
       }
 
-      // Create default project
       return await repository.create({
         name: "Default",
         description: "Default project",

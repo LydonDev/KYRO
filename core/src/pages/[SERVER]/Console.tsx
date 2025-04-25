@@ -151,7 +151,6 @@ const ServerConsolePage = () => {
       return;
     }
 
-    // Close any existing WebSocket connection before creating a new one
     if (wsRef.current) {
       wsRef.current.close();
     }
@@ -262,14 +261,12 @@ const ServerConsolePage = () => {
         }),
       );
 
-      // Log successful send
       setMessages((prev) => [
         ...prev,
         "\x1b[32m$ \x1b[0m" + command + "\x1b[0m",
       ]);
       setCommand("");
     } catch (error) {
-      // Log any errors
       setMessages((prev) => [
         ...prev,
         `\x1b[31m[System] Failed to send command: ${error}\x1b[0m`,
@@ -300,8 +297,12 @@ const ServerConsolePage = () => {
     return <LoadingSpinner />;
   }
 
+  // Did this because the websocket would cause the error boundary error and just fuck the page so dont touch this
+
   if (error) {
-    throw new Error(error);
+    setTimeout(() => {
+      setError(null);
+    }, 2000);
   }
 
   if (!server) {

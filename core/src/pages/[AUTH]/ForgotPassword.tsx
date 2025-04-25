@@ -17,12 +17,10 @@ const ForgotPassword: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // Create refs for each input
   const inputRefs = Array(6)
     .fill(0)
     .map(() => React.createRef<HTMLInputElement>());
 
-  // Handle input change for verification code
   const handleChange = (index: number, value: string) => {
     if (isNaN(Number(value))) return;
 
@@ -30,23 +28,19 @@ const ForgotPassword: React.FC = () => {
     newCode[index] = value;
     setCode(newCode);
 
-    // Auto-focus to next input
     if (value && index < 5) {
       inputRefs[index + 1].current?.focus();
     }
   };
 
-  // Handle backspace for verification code
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace") {
       if (!code[index] && index > 0) {
-        // Focus previous input if current is empty
         inputRefs[index - 1].current?.focus();
       }
     }
   };
 
-  // Send reset password email
   const handleSendResetEmail = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -83,11 +77,9 @@ const ForgotPassword: React.FC = () => {
     }
   };
 
-  // Verify reset code
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate all fields are filled
     if (code.some((digit) => !digit)) {
       setError("Please enter all digits of the verification code");
       return;
@@ -128,7 +120,6 @@ const ForgotPassword: React.FC = () => {
     }
   };
 
-  // Reset password
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -176,7 +167,6 @@ const ForgotPassword: React.FC = () => {
 
       setSuccess(true);
 
-      // Redirect after short delay
       setTimeout(() => {
         navigate("/login");
       }, 2000);

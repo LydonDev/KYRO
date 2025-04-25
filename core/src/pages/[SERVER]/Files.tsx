@@ -39,7 +39,6 @@ import {
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { Button } from "../../components/UI";
 
-// Types
 interface Node {
   id: string;
   name: string;
@@ -106,7 +105,6 @@ interface FileTypeInfo {
   viewable: boolean;
 }
 
-// Utility functions
 const formatBytes = (bytes: number | undefined, decimals = 2): string => {
   if (!bytes || bytes === 0) return "0 Bytes";
   const k = 1024;
@@ -125,7 +123,6 @@ const formatDate = (date: number): string => {
   });
 };
 
-// File type configuration
 const fileTypes: Record<string, FileTypeInfo> = {
   "text/": {
     icon: DocumentTextIcon,
@@ -194,7 +191,6 @@ const fileTypes: Record<string, FileTypeInfo> = {
 };
 
 const getFileTypeInfo = (mime: string): FileTypeInfo => {
-  // Check for .properties files by extension
   if (
     mime.endsWith(".properties") ||
     mime === "text/x-java-properties" ||
@@ -203,7 +199,6 @@ const getFileTypeInfo = (mime: string): FileTypeInfo => {
     return fileTypes[".properties"];
   }
 
-  // Check filename extension for common file types that might have incorrect MIME types
   const fileExtension = mime.split(".").pop()?.toLowerCase();
   if (fileExtension === "properties") {
     return fileTypes[".properties"];
@@ -222,10 +217,8 @@ const canExtractFile = (mime: string): boolean => {
   ].includes(mime);
 };
 
-// Maximum size for viewable files (10MB)
 const MAX_VIEWABLE_FILE_SIZE = 10 * 1024 * 1024;
 
-// Toast component
 const Toast: React.FC<{ toast: Toast }> = ({ toast }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -243,7 +236,6 @@ const Toast: React.FC<{ toast: Toast }> = ({ toast }) => (
   </motion.div>
 );
 
-// Custom checkbox component
 const Checkbox: React.FC<{
   checked: boolean;
   onChange: () => void;
@@ -266,7 +258,6 @@ const Checkbox: React.FC<{
   </label>
 );
 
-// Context menu
 const ContextMenu: React.FC<{
   file: FileEntry;
   position: { x: number; y: number };
@@ -288,7 +279,6 @@ const ContextMenu: React.FC<{
       }
     };
 
-    // Adjust position to keep menu in viewport
     const adjustPosition = () => {
       if (menuRef.current) {
         const rect = menuRef.current.getBoundingClientRect();
@@ -300,14 +290,12 @@ const ContextMenu: React.FC<{
         let x = position.x;
         let y = position.y;
 
-        // Adjust horizontal position if menu would overflow
         if (x + rect.width > viewport.width) {
-          x = Math.max(0, viewport.width - rect.width - 16); // 16px padding from edge
+          x = Math.max(0, viewport.width - rect.width - 16); 
         }
 
-        // Adjust vertical position if menu would overflow
         if (y + rect.height > viewport.height) {
-          y = Math.max(0, viewport.height - rect.height - 16); // 16px padding from edge
+          y = Math.max(0, viewport.height - rect.height - 16); 
         }
 
         setMenuPosition({ x, y });
@@ -316,7 +304,6 @@ const ContextMenu: React.FC<{
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Use a small delay to ensure the menu has been rendered
     const timer = setTimeout(adjustPosition, 10);
 
     return () => {
@@ -390,12 +377,10 @@ const ContextMenu: React.FC<{
   );
 };
 
-// Main component
 const FileManager: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Core state
   const [server, setServer] = useState<ServerDetails | null>(null);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   const [files, setFiles] = useState<FileEntry[]>([]);
@@ -406,7 +391,6 @@ const FileManager: React.FC = () => {
     [key: string]: boolean;
   }>({});
 
-  // UI state
   const [modal, setModal] = useState<Modal | null>(null);
   const [contextMenu, setContextMenu] = useState<{
     file: FileEntry;
@@ -418,14 +402,11 @@ const FileManager: React.FC = () => {
   const [dropZoneActive, setDropZoneActive] = useState(false);
   const [showHidden, setShowHidden] = useState(false);
 
-  // Refs
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const dragCounterRef = useRef(0);
 
-  // Computed values
   const currentFullPath = useMemo(() => currentPath.join("/"), [currentPath]);
 
-  // Fetch server details
   useEffect(() => {
     const token = localStorage.getItem("token");
     const fetchServerDetails = async () => {
@@ -460,7 +441,6 @@ const FileManager: React.FC = () => {
     fetchServerDetails();
   }, [id]);
 
-  // Toast handler
   const showToast = useCallback(
     (message: string, type: Toast["type"] = "success") => {
       const id = Math.random().toString(36);
@@ -572,7 +552,6 @@ const FileManager: React.FC = () => {
     [server, currentFullPath, showHidden, showToast],
   );
 
-  // File operations
   const handleFileAction = useCallback(
     async (action: string, file: FileEntry) => {
       if (!server) return;
@@ -581,7 +560,6 @@ const FileManager: React.FC = () => {
         switch (action) {
           case "edit": {
             const fileType = getFileTypeInfo(file.mime);
-            // Special case for .properties files - always allow editing
             const canEdit =
               fileType.canEdit || file.name.endsWith(".properties");
             if (!canEdit) {
@@ -1040,7 +1018,6 @@ const FileManager: React.FC = () => {
     [server, currentFullPath, showToast],
   );
 
-  // Drag and drop handlers
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -1073,7 +1050,6 @@ const FileManager: React.FC = () => {
     [handleUpload],
   );
 
-  // Select all files
   const toggleSelectAll = useCallback(() => {
     if (selectedFiles.size === files.length) {
       setSelectedFiles(new Set());
@@ -1082,7 +1058,6 @@ const FileManager: React.FC = () => {
     }
   }, [files, selectedFiles.size]);
 
-  // Handle toggle single file selection
   const toggleFileSelection = useCallback((fileName: string) => {
     setSelectedFiles((prev) => {
       const newSelected = new Set(prev);
@@ -1102,29 +1077,23 @@ const FileManager: React.FC = () => {
   }, [server, currentPath, fetchFiles]);
 
   useEffect(() => {
-    // If search is not empty, execute search
     if (search.trim().length > 2) {
       const debounce = setTimeout(() => {
         searchFiles(search);
       }, 500);
       return () => clearTimeout(debounce);
     } else if (server && search.trim().length === 0 && currentPath.length > 0) {
-      // If search is cleared and we're not at the root, fetch files for current path
       fetchFiles();
     }
   }, [search, server, currentPath, searchFiles, fetchFiles]);
 
-  // Sort and filter files
   const sortedFiles = useMemo(() => {
     return [...files].sort((a, b) => {
-      // Folders first
       if (a.isFile !== b.isFile) return a.isFile ? 1 : -1;
-      // Then alphabetically
       return a.name.localeCompare(b.name);
     });
   }, [files]);
 
-  // Path navigation handlers
   const navigateToPath = useCallback((path: string[]) => {
     setCurrentPath(path);
     setSearch("");
@@ -1136,7 +1105,6 @@ const FileManager: React.FC = () => {
     }
   }, [currentPath, navigateToPath]);
 
-  // Render loading state
   if (!server && loading) {
     return (
       <div className="bg-white flex items-center justify-center min-h-screen">
@@ -1517,24 +1485,24 @@ const FileManager: React.FC = () => {
                           <FileIcon
                             className={`w-4 h-4 ${
                               !file.isFile
-                                ? "text-[#8146ab]" // Folder icon color - Argon Purple
+                                ? "text-[#8146ab]" 
                                 : file.mime.startsWith("image/")
-                                  ? "text-[#F59E0B]" // Image files
+                                  ? "text-[#F59E0B]" 
                                   : file.mime.startsWith("text/") ||
                                       file.mime.includes("javascript") ||
                                       file.mime.includes("json")
-                                    ? "text-[#10B981]" // Text/code files
+                                    ? "text-[#10B981]" 
                                     : file.mime.includes("pdf")
-                                      ? "text-[#EF4444]" // PDF files
+                                      ? "text-[#EF4444]" 
                                       : file.mime.startsWith("audio/")
-                                        ? "text-[#F59E0B]" // Audio files
+                                        ? "text-[#F59E0B]" 
                                         : file.mime.startsWith("video/")
-                                          ? "text-[#EF4444]" // Video files
+                                          ? "text-[#EF4444]"
                                           : file.mime.includes("zip") ||
                                               file.mime.includes("tar") ||
                                               file.mime.includes("compress")
-                                            ? "text-[#F59E0B]" // Archive files
-                                            : "text-[#9CA3AF]" // Default
+                                            ? "text-[#F59E0B]" 
+                                            : "text-[#9CA3AF]"
                             }`}
                           />
                           <div className="flex flex-col">

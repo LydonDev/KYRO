@@ -28,14 +28,12 @@ const VerifyEmail: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Access verification info from location state or localStorage
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     const requiresVerification =
       localStorage.getItem("requiresVerification") === "true";
 
-    // If we have location state, use that
     if (location.state?.userId) {
       setVerificationState({
         userId: location.state.userId,
@@ -43,31 +41,26 @@ const VerifyEmail: React.FC = () => {
         requiresVerification: location.state.requiresVerification,
       });
     } else if (userId && token && requiresVerification) {
-      // Otherwise use localStorage
       setVerificationState({
         userId,
         token,
         requiresVerification,
       });
     } else {
-      // If no verification data, redirect to login
       navigate("/login");
     }
   }, [location, navigate]);
 
-  // Create refs for each input
   const inputRefs = Array(6)
     .fill(0)
     .map(() => React.createRef<HTMLInputElement>());
 
-  // Auto-submit when all inputs are filled
   useEffect(() => {
     if (code.every((digit) => digit !== "") && !isLoading) {
       handleSubmit();
     }
   }, [code]);
 
-  // Handle input change
   const handleChange = (index: number, value: string) => {
     if (isNaN(Number(value))) return;
 
@@ -75,28 +68,23 @@ const VerifyEmail: React.FC = () => {
     newCode[index] = value;
     setCode(newCode);
 
-    // Auto-focus to next input
     if (value && index < 5) {
       inputRefs[index + 1].current?.focus();
     }
   };
 
-  // Handle backspace
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace") {
       if (!code[index] && index > 0) {
-        // Focus previous input if current is empty
         inputRefs[index - 1].current?.focus();
       }
     }
   };
 
-  // Handle paste event
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text").trim();
 
-    // Check if pasted content is numeric and has expected length
     if (/^\d+$/.test(pastedData)) {
       const digits = pastedData.split("").slice(0, 6);
       const newCode = [...code];
@@ -109,7 +97,6 @@ const VerifyEmail: React.FC = () => {
 
       setCode(newCode);
 
-      // Focus the appropriate input after paste
       if (digits.length < 6) {
         inputRefs[digits.length].current?.focus();
       } else {
@@ -118,11 +105,9 @@ const VerifyEmail: React.FC = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    // Validate all fields are filled
     if (code.some((digit) => !digit)) {
       setError("Please enter all digits of the verification code");
       return;
@@ -154,14 +139,12 @@ const VerifyEmail: React.FC = () => {
         throw new Error(data.error || "Failed to verify email");
       }
 
-      // Update token with new verified token
       localStorage.setItem("token", data.token);
       localStorage.removeItem("requiresVerification");
       localStorage.removeItem("userId");
 
       setSuccess(true);
 
-      // Redirect after short delay
       setTimeout(() => {
         navigate("/servers");
       }, 2000);
@@ -172,7 +155,6 @@ const VerifyEmail: React.FC = () => {
     }
   };
 
-  // Handle resend verification code
   const handleResendCode = async () => {
     if (!verificationState.token || !verificationState.userId) return;
 
@@ -196,7 +178,6 @@ const VerifyEmail: React.FC = () => {
       setResendSuccess(true);
       setError("");
 
-      // Clear success message after delay
       setTimeout(() => {
         setResendSuccess(false);
       }, 5000);
@@ -211,14 +192,12 @@ const VerifyEmail: React.FC = () => {
     }
   };
 
-  // If verification not required, redirect to servers
   if (!verificationState.requiresVerification) {
     return <Navigate to="/servers" />;
   }
 
   return (
     <div className="min-h-screen flex bg-[#0E0E0F]">
-      {/* Left panel */}
       <div className="w-2/5 p-10 flex flex-col justify-center border-r border-[#1E1E20]">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-white">{appName}</h1>
@@ -234,7 +213,6 @@ const VerifyEmail: React.FC = () => {
         </div>
       </div>
 
-      {/* Right panel */}
       <div className="w-3/5 flex items-center justify-center bg-[#0E0E0F]">
         <div className="w-full max-w-md p-8 bg-[#0E0E0F] border border-[#1E1E20] rounded-xl">
           <h2 className="text-2xl font-semibold mb-1 text-white">

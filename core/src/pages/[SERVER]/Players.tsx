@@ -37,55 +37,53 @@ interface ServerDetails {
   status: ServerStatus;
 }
 
-const navigate = useNavigate();
-const [error, setError] = useState<string | null>(null);
-const [server, setServer] = useState<ServerDetails | null>(null);
-const { id } = useParams();
+export default function Players() {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [server, setServer] = useState<ServerDetails | null>(null);
+  const { id } = useParams();
 
-useEffect(() => {
-  const fetchServer = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `/api/servers/${id}?include[node]=true&include[status]=true`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+  useEffect(() => {
+    const fetchServer = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `/api/servers/${id}?include[node]=true&include[status]=true`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      if (!response.ok) throw new Error("Failed to fetch server");
-      const data = await response.json();
+        if (!response.ok) throw new Error("Failed to fetch server");
+        const data = await response.json();
 
-      if (!data.node?.fqdn || !data.node?.port) {
-        throw new Error("Server node information is missing");
+        if (!data.node?.fqdn || !data.node?.port) {
+          throw new Error("Server node information is missing");
+        }
+
+        setServer(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
       }
+    };
 
-      setServer(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+    fetchServer();
+  }, [id]);
+
+  useEffect(() => {
+    if (!server && !error) return;
+
+    if (error || (server && (!server.node?.fqdn || !server.node?.port))) {
+      navigate("/unauthorized");
     }
-  };
+  }, [server, error, navigate]);
 
-  fetchServer();
-}, [id]);
-
-if (error) {
-  throw new Error(error);
-}
-
-if (!server) {
-  navigate("/unauthorized");
-}
-
-export default function Backups() {
   return (
     <div className="bg-[#0E0E0F] min-h-screen p-6">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">
-        {/* Header */}
         <div className="mb-6">
-          {/* Breadcrumb */}
           <div className="flex items-center text-sm text-gray-400 mb-4">
             <button
               onClick={() => navigate("/servers")}
@@ -104,10 +102,11 @@ export default function Backups() {
             <span className="text-white font-medium">Players</span>
           </div>
 
-          {/* Title and Controls Row */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-white mr-4">Players</h1>
+              <h1 className="text-xl font-semibold text-white mr-4">
+                Players
+              </h1>
             </div>
           </div>
         </div>

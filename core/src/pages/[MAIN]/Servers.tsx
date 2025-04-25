@@ -31,7 +31,6 @@ interface Server {
   userId: string;
 }
 
-// Server Move Project Dialog
 interface ServerMoveDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -57,7 +56,6 @@ const ServerMoveDialog: React.FC<ServerMoveDialogProps> = ({
 
   useEffect(() => {
     if (isOpen && projects.length > 0) {
-      // Default to the first project that's not the current one
       const otherProject = projects.find((p) => p.id !== currentProjectId);
       if (otherProject) {
         setSelectedProjectId(otherProject.id);
@@ -82,20 +80,16 @@ const ServerMoveDialog: React.FC<ServerMoveDialogProps> = ({
         onMove(selectedProjectId);
       }}
     >
-      <div className="mb-6">
-        <p className="text-sm text-gray-400 mb-4">
-          Move <span className="font-medium text-gray-300">{server.name}</span>{" "}
-          to another project
-        </p>
+      <div>
 
-        <div className="mb-6">
-          <label className="block text-xs font-medium text-gray-400 mb-1">
+        <div>
+          <label className="text-sm font-medium text-[#FFFFFF]">
             Select Project
           </label>
           <select
             value={selectedProjectId}
             onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="w-full px-3 py-2 text-sm bg-[#111111] border border-[#333333] rounded-md text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#444444]"
+            className="mt-2 w-full px-3 py-2 text-sm bg-[#0E0E0F] border border-[#1E1E20] rounded-md text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-[#232325]"
           >
             {projects.map((project) => (
               <option
@@ -109,12 +103,6 @@ const ServerMoveDialog: React.FC<ServerMoveDialogProps> = ({
             ))}
           </select>
         </div>
-      </div>
-
-      <div className="flex justify-end space-x-3">
-        <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
-          Cancel
-        </Button>
       </div>
     </FormDialog>
   );
@@ -141,9 +129,7 @@ export default function Home() {
     fetchServers();
   }, []);
 
-  // Filter servers by current project
   useEffect(() => {
-    // Show all servers regardless of project
     setFilteredServers(servers);
   }, [servers]);
 
@@ -164,7 +150,6 @@ export default function Home() {
       setIsSubmitting(true);
       await moveServerToProject(selectedServer.id, projectId);
 
-      // Update the local server list
       setServers((prevServers) =>
         prevServers.map((server) =>
           server.id === selectedServer.id ? { ...server, projectId } : server,
@@ -175,7 +160,6 @@ export default function Home() {
       setSelectedServer(null);
       setSuccessMessage(`Server moved to project successfully`);
 
-      // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccessMessage(null);
       }, 3000);

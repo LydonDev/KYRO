@@ -20,7 +20,6 @@ const __dirname = dirname(__filename);
 const PROJECT_ROOT = join(__dirname, "..");
 const MIGRATIONS_DIR = join(PROJECT_ROOT, "migrations");
 
-// Environment detection
 const isMigrationCommand =
   process.argv.includes("bolt") && process.argv.includes("migrate");
 
@@ -38,11 +37,9 @@ export class DB {
   constructor(dbPath: string = `${appName}.db`) {
     this.db = new Database(dbPath);
 
-    // Skip validation if we're running a migration command
     if (!isMigrationCommand) {
       this.validateSchema();
     } else {
-      // For migration commands, just ensure migrations table exists
       this.db.exec(`
         CREATE TABLE IF NOT EXISTS migrations (
           id TEXT PRIMARY KEY,
@@ -54,7 +51,6 @@ export class DB {
 
     const context = { db: this.db };
 
-    // Only initialize repositories if we're not running migrations or if schema is valid
     if (isMigrationCommand || this.isSchemaValid()) {
       this.users = createUsersRepository(context);
       this.nodes = createNodesRepository(context);
@@ -99,7 +95,6 @@ export class DB {
   }
 
   private validateSchema() {
-    // Check if required tables exist
     const requiredTables = [
       "users",
       "nodes",
@@ -127,7 +122,6 @@ export class DB {
       (t) => !existingTableNames.has(t),
     );
 
-    // Check if migrations table exists
     const hasMigrationsTable = existingTableNames.has("migrations");
 
     if (missingTables.length > 0) {
@@ -138,7 +132,6 @@ export class DB {
         console.error(chalk.red(`- ${table}`));
       });
 
-      // Check if migrations directory exists and contains the initial migration
       const initialMigrationExists = this.checkInitialMigration();
 
       if (initialMigrationExists) {
@@ -159,8 +152,6 @@ export class DB {
 
       process.exit(1);
     } else if (!hasMigrationsTable) {
-      // If all tables exist but migrations table doesn't, it means the schema was
-      // created using the old method instead of migrations
       console.warn(
         chalk.yellow(
           "\nWarning: Database exists but wasn't created using migrations.",
@@ -173,7 +164,6 @@ export class DB {
         ),
       );
 
-      // Create migrations table
       this.db.exec(`
         CREATE TABLE IF NOT EXISTS migrations (
           id TEXT PRIMARY KEY,

@@ -4,6 +4,7 @@ import {
   CheckIcon,
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/solid";
+import { PlusIcon } from "lucide-react";
 
 // Standardized Modal Component
 interface ModalProps {
@@ -66,14 +67,14 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 bg-[#0E0E0F]/80 z-50 flex items-center justify-center p-4 transition-all duration-200 ease-in-out ${isClosing ? "opacity-0" : "opacity-100"}`}
+      className={`fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 transition-all duration-200 ease-in-out ${isClosing ? "opacity-0" : "opacity-100"}`}
     >
       <div
         ref={modalRef}
-        className={`bg-[#141415] border border-[#1E1E20] rounded-md w-full ${maxWidth} transition-all duration-200 ${isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100"}`}
+        className={`bg-[#0E0E0F] border border-[#1E1E20] rounded-md w-full ${maxWidth} transition-all duration-200 ${isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100"}`}
       >
-        <div className="flex justify-between items-center px-6 py-4">
-          <h3 className="text-lg font-medium text-[#FFFFFF]">{title}</h3>
+        <div className="flex justify-between items-center px-6 mt-6">
+          <h3 className="text-lg font-semibold leading-none tracking-tight text-[#FFFFFF]">{title}</h3>
         </div>
         <div className="px-6 py-5">{children}</div>
       </div>
@@ -125,7 +126,7 @@ export const Alert: React.FC<AlertProps> = ({ type, message, onDismiss }) => {
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className={`p-2 ${textColor} hover:bg-black/30 cursor-pointer rounded-md`}
+          className={`p-2 ${textColor} cursor-pointer rounded-md`}
         >
           <XMarkIcon className="w-4 h-4" />
         </button>
@@ -223,11 +224,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <p className="text-sm text-gray-400">{message}</p>
       </div>
       <div className="flex justify-end space-x-3">
-        <Button variant="secondary" onClick={onClose} disabled={isSubmitting}>
+        <Button onClick={onClose} disabled={isSubmitting}>
           Cancel
         </Button>
         <Button
-          variant={variant === "danger" ? "danger" : "primary"}
+          variant={variant === "danger" ? "danger" : "secondary"}
           onClick={onConfirm}
           disabled={isSubmitting}
           isLoading={isSubmitting}
@@ -276,13 +277,15 @@ export const FormDialog: React.FC<FormDialogProps> = ({
       >
         <div className="space-y-4 mb-6">{children}</div>
         <div className="flex justify-end space-x-3 pt-2">
-          <Button variant="secondary" onClick={onClose} disabled={isSubmitting}>
+          <Button onClick={onClose} disabled={isSubmitting}>
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
             isLoading={isSubmitting}
+            variant="secondary"
+            icon={<PlusIcon className="w-4 h-4" />}
           >
             {submitText}
           </Button>
@@ -330,7 +333,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
       {isOpen && (
         <div
-          className={`absolute z-10 mt-2 w-48 rounded-md bg-[#111111] border border-[#333333] ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          className={`absolute z-10 mt-2 w-48 rounded-md bg-[#0E0E0F] border border-[#1E1E20] ring-1 ring-black ring-opacity-5 focus:outline-none ${
             align === "right" ? "right-0" : "left-0"
           }`}
         >

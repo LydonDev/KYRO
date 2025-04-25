@@ -1,4 +1,3 @@
-// src/db/regions.ts
 import { randomUUID } from "crypto";
 import { DatabaseContext, Region } from "./types";
 import { parseDate } from "./utils";
@@ -25,7 +24,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
       const rows = db.prepare(query).all(...values) as any[];
       const regions = rows.map(parseRegionRow);
 
-      // Load nodes for each region
       for (const region of regions) {
         const nodeRows = db
           .prepare(
@@ -56,7 +54,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
 
       const region = parseRegionRow(row);
 
-      // Load fallback region if exists
       if (region.fallbackRegionId) {
         const fallbackRow = db
           .prepare("SELECT * FROM regions WHERE id = ?")
@@ -66,7 +63,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
         }
       }
 
-      // Load nodes for this region
       const nodeRows = db
         .prepare(
           `
@@ -99,7 +95,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
 
       const region = parseRegionRow(row);
 
-      // Load fallback region if exists
       if (region.fallbackRegionId) {
         const fallbackRow = db
           .prepare("SELECT * FROM regions WHERE id = ?")
@@ -109,7 +104,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
         }
       }
 
-      // Load nodes for this region
       const nodeRows = db
         .prepare(
           `
@@ -198,7 +192,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
     },
 
     delete: async ({ id }: { id: string }): Promise<void> => {
-      // First check if any nodes are assigned to this region
       const nodeCount = db
         .prepare("SELECT COUNT(*) as count FROM nodes WHERE regionId = ?")
         .get(id) as { count: number };
@@ -207,7 +200,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
         throw new Error("Cannot delete region with assigned nodes");
       }
 
-      // Check if any other regions use this as a fallback region
       const fallbackCount = db
         .prepare(
           "SELECT COUNT(*) as count FROM regions WHERE fallbackRegionId = ?",
@@ -226,23 +218,19 @@ export function createRegionsRepository({ db }: DatabaseContext) {
       }
     },
 
-    // Function to find the best node in a region for a new server
     findBestNodeInRegion: async (regionId: string): Promise<string | null> => {
       const region = await repository.findUnique({ id: regionId });
       if (!region) return null;
 
-      // First, get all online nodes in this region
       const onlineNodes = region.nodes.filter((node) => node.isOnline);
 
       if (onlineNodes.length === 0) {
-        // If no nodes are online in this region, check fallback region if configured
         if (region.fallbackRegionId) {
           return repository.findBestNodeInRegion(region.fallbackRegionId);
         }
         return null;
       }
 
-      // Get server count for each node
       const nodeServerCounts = await Promise.all(
         onlineNodes.map(async (node) => {
           const result = db
@@ -255,7 +243,6 @@ export function createRegionsRepository({ db }: DatabaseContext) {
         }),
       );
 
-      // Find the node with the fewest servers
       const bestNode = nodeServerCounts.sort(
         (a, b) => a.serverCount - b.serverCount,
       )[0];
@@ -263,15 +250,12 @@ export function createRegionsRepository({ db }: DatabaseContext) {
       return bestNode.nodeId;
     },
 
-    // Check if a region has reached its server limit
     isRegionAtCapacity: async (regionId: string): Promise<boolean> => {
       const region = await repository.findUnique({ id: regionId });
       if (!region) return true;
 
-      // If no server limit is set, the region is not at capacity
       if (!region.serverLimit) return false;
 
-      // Count servers across all nodes in this region
       const nodeIds = region.nodes.map((node) => `'${node.id}'`).join(",");
 
       if (nodeIds.length === 0) return true;

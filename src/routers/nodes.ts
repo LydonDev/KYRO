@@ -1,5 +1,3 @@
-// Panel: src/routers/nodes.ts
-
 import { Router } from "express";
 import { z } from "zod";
 import { hasPermission } from "../permissions";
@@ -10,7 +8,6 @@ import net from "net";
 const router = Router();
 router.use(authMiddleware);
 
-// Validation schemas
 const createNodeSchema = z.object({
   name: z.string().min(1).max(100),
   fqdn: z
@@ -38,11 +35,10 @@ const createAllocationRangeSchema = z.object({
 
 const updateNodeSchema = createNodeSchema.partial();
 
-// Helper function to check if a node is online
 async function checkNodeStatus(fqdn: string, port: number): Promise<boolean> {
   return new Promise((resolve) => {
     const socket = new net.Socket();
-    const timeout = 5000; // 5 second timeout
+    const timeout = 5000; 
 
     socket.setTimeout(timeout);
 
@@ -65,7 +61,6 @@ async function checkNodeStatus(fqdn: string, port: number): Promise<boolean> {
   });
 }
 
-// Middleware to check admin permissions
 function checkPermission(permission: string) {
   return (req: any, res: any, next: any) => {
     if (!hasPermission(req.user.permissions, permission)) {
@@ -75,7 +70,6 @@ function checkPermission(permission: string) {
   };
 }
 
-// Node Region Assignment
 router.patch("/:id/region", checkPermission("admin"), async (req, res) => {
   try {
     const schema = z.object({
@@ -90,7 +84,6 @@ router.patch("/:id/region", checkPermission("admin"), async (req, res) => {
       return res.status(404).json({ error: "Node not found" });
     }
 
-    // If regionId is provided, verify that the region exists
     if (regionId) {
       const region = await db.regions.findUnique({ id: regionId });
       if (!region) {
@@ -98,7 +91,6 @@ router.patch("/:id/region", checkPermission("admin"), async (req, res) => {
       }
     }
 
-    // Update the node's region
     const updatedNode = await db.nodes.update(
       { id: req.params.id },
       { regionId },
@@ -114,18 +106,15 @@ router.patch("/:id/region", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Add this endpoint to list all nodes in a region
 router.get("/region/:regionId", checkPermission("admin"), async (req, res) => {
   try {
     const { regionId } = req.params;
 
-    // Verify region exists
     const region = await db.regions.findUnique({ id: regionId });
     if (!region) {
       return res.status(404).json({ error: "Region not found" });
     }
 
-    // Find all nodes in this region
     const nodes = await db.nodes.findMany({
       where: { regionId },
     });
@@ -137,7 +126,6 @@ router.get("/region/:regionId", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Node Routes
 router.get("/", checkPermission("admin"), async (req, res) => {
   try {
     const nodes = await db.nodes.findMany();
@@ -151,7 +139,6 @@ router.get("/", checkPermission("admin"), async (req, res) => {
           await db.nodes.update({ id: node.id }, { isOnline, lastChecked });
         }
 
-        // Get allocations for each node
         const allocations = await db.allocations.findMany({
           where: { nodeId: node.id },
         });
@@ -187,7 +174,6 @@ router.get("/:id", checkPermission("admin"), async (req, res) => {
       await db.nodes.update({ id: node.id }, { isOnline, lastChecked });
     }
 
-    // Get allocations for the node
     const allocations = await db.allocations.findMany({
       where: { nodeId: node.id },
     });
@@ -298,7 +284,6 @@ router.delete("/:id", checkPermission("admin"), async (req, res) => {
       });
     }
 
-    // Delete all allocations for this node
     const allocations = await db.allocations.findMany({
       where: { nodeId: node.id },
     });
@@ -315,7 +300,6 @@ router.delete("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Allocation Routes
 router.post("/:id/allocations", checkPermission("admin"), async (req, res) => {
   try {
     const node = await db.nodes.findUnique({ id: req.params.id });
@@ -323,11 +307,9 @@ router.post("/:id/allocations", checkPermission("admin"), async (req, res) => {
       return res.status(404).json({ error: "Node not found" });
     }
 
-    // Handle single allocation
     if ("port" in req.body) {
       const validatedData = createAllocationSchema.parse(req.body);
 
-      // Check if port is already allocated
       const existingAllocation = await db.allocations.findFirst({
         where: {
           nodeId: node.id,
@@ -349,7 +331,6 @@ router.post("/:id/allocations", checkPermission("admin"), async (req, res) => {
 
       res.status(201).json(allocation);
     }
-    // Handle port range
     else if ("portRange" in req.body) {
       const validatedData = createAllocationRangeSchema.parse(req.body);
       const { portRange, ...rest } = validatedData;
@@ -360,7 +341,6 @@ router.post("/:id/allocations", checkPermission("admin"), async (req, res) => {
 
       const allocations: any[] = [];
       for (let port = portRange.start; port <= portRange.end; port++) {
-        // Check if port is already allocated
         const existingAllocation = await db.allocations.findFirst({
           where: {
             nodeId: node.id,

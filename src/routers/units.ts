@@ -1,5 +1,3 @@
-// Panel: src/routers/units.ts
-
 import { Router } from "express";
 import { z } from "zod";
 import { hasPermission } from "../permissions";
@@ -7,16 +5,13 @@ import { db } from "../db";
 import multer from "multer";
 import { authMiddleware } from "../middleware/auth";
 
-// Setup multer for file uploads
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 5 * 1024 * 1024, 
   },
 });
 
-// Schema for environment variables
-// These get processed by the daemon using %VARIABLE_NAME% syntax
 const environmentVariableSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
@@ -24,23 +19,20 @@ const environmentVariableSchema = z.object({
   required: z.boolean().default(false),
   userViewable: z.boolean().default(true),
   userEditable: z.boolean().default(false),
-  rules: z.string(), // Validation rules like 'required|string|max:20'
+  rules: z.string(),
 });
 
-// Schema for config files that will be written during installation
 const configFileSchema = z.object({
-  path: z.string().min(1), // Path relative to /home/container
-  content: z.string(), // File content
+  path: z.string().min(1),
+  content: z.string(),
 });
 
-// Schema for installation process
 const installScriptSchema = z.object({
-  dockerImage: z.string(), // Docker image used for installation
-  entrypoint: z.string().default("bash"), // Entrypoint for running install script
-  script: z.string(), // The actual installation script
+  dockerImage: z.string(),
+  entrypoint: z.string().default("bash"),
+  script: z.string(),
 });
 
-// Main unit schema
 const unitSchema = z.object({
   name: z.string().min(1).max(100),
   shortName: z
@@ -64,7 +56,6 @@ const unitSchema = z.object({
 const router = Router();
 router.use(authMiddleware);
 
-// Middleware to check admin permissions
 const checkPermission =
   (permission: string) => (req: any, res: any, next: any) => {
     if (!hasPermission(req.user.permissions, permission)) {
@@ -73,7 +64,6 @@ const checkPermission =
     next();
   };
 
-// List all units
 router.get("/", checkPermission("admin"), async (req, res) => {
   try {
     const units = await db.units.findMany({
@@ -86,7 +76,6 @@ router.get("/", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Get specific unit
 router.get("/:id", checkPermission("admin"), async (req, res) => {
   try {
     const unit = await db.units.findUnique({ id: req.params.id });
@@ -102,12 +91,10 @@ router.get("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Create unit
 router.post("/", checkPermission("admin"), async (req, res) => {
   try {
     const data = unitSchema.parse(req.body);
 
-    // Validate that shortName is unique
     const existing = await db.units.findFirst({
       where: { shortName: data.shortName },
     });
@@ -116,7 +103,6 @@ router.post("/", checkPermission("admin"), async (req, res) => {
       return res.status(400).json({ error: "Short name must be unique" });
     }
 
-    // Create the unit
     const unit = await db.units.create({
       ...data,
       configFiles: data.configFiles || [],
@@ -134,12 +120,10 @@ router.post("/", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Update unit
 router.patch("/:id", checkPermission("admin"), async (req, res) => {
   try {
     const data = unitSchema.partial().parse(req.body);
 
-    // If shortName is being updated, check uniqueness
     if (data.shortName) {
       const existing = await db.units.findFirst({
         where: { shortName: data.shortName },
@@ -162,10 +146,8 @@ router.patch("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Delete unit
 router.delete("/:id", checkPermission("admin"), async (req, res) => {
   try {
-    // Check if unit is in use by any servers
     const servers = await db.servers.findMany({
       where: { unitId: req.params.id },
     });
@@ -184,7 +166,6 @@ router.delete("/:id", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Export unit configuration
 router.get("/:id/export", checkPermission("admin"), async (req, res) => {
   try {
     const unit = await db.units.findUnique({ id: req.params.id });
@@ -213,7 +194,6 @@ router.get("/:id/export", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Import unit configuration
 router.post(
   "/import",
   checkPermission("admin"),
@@ -227,7 +207,6 @@ router.post(
       const fileContent = req.file.buffer.toString("utf-8");
       const data = unitSchema.parse(JSON.parse(fileContent));
 
-      // Generate unique shortName if needed
       let shortName = data.shortName;
       let counter = 1;
 
@@ -255,7 +234,6 @@ router.post(
   },
 );
 
-// Get all cargo containers assigned to a unit
 router.get("/:id/containers", checkPermission("admin"), async (req, res) => {
   try {
     const unit = await db.units.findUnique({ id: req.params.id });
@@ -272,7 +250,6 @@ router.get("/:id/containers", checkPermission("admin"), async (req, res) => {
   }
 });
 
-// Assign a cargo container to a unit
 router.post(
   "/:unitId/containers/:containerId",
   checkPermission("admin"),
@@ -280,19 +257,16 @@ router.post(
     try {
       const { unitId, containerId } = req.params;
 
-      // Verify unit exists
       const unit = await db.units.findUnique({ id: unitId });
       if (!unit) {
         return res.status(404).json({ error: "Unit not found" });
       }
 
-      // Verify container exists
       const container = await db.cargo.findContainer(containerId);
       if (!container) {
         return res.status(404).json({ error: "Container not found" });
       }
 
-      // Assign container to unit
       await db.units.assignCargoContainer(unitId, containerId);
 
       res.status(204).send();
@@ -303,7 +277,6 @@ router.post(
   },
 );
 
-// Remove a cargo container from a unit
 router.delete(
   "/:unitId/containers/:containerId",
   checkPermission("admin"),
@@ -311,13 +284,11 @@ router.delete(
     try {
       const { unitId, containerId } = req.params;
 
-      // Verify unit exists
       const unit = await db.units.findUnique({ id: unitId });
       if (!unit) {
         return res.status(404).json({ error: "Unit not found" });
       }
 
-      // Remove container from unit
       await db.units.removeCargoContainer(unitId, containerId);
 
       res.status(204).send();

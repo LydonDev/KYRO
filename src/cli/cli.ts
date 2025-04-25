@@ -23,18 +23,15 @@ import { mkdir, rm, readFile } from "fs/promises";
 import { Database } from "bun:sqlite";
 import { spawn, spawnSync } from "child_process";
 import { Command } from "commander";
-import { devCommand, prodCommand } from "./dev";
+import { devCommand, prodCommand, checkVersionCommand } from "./commands";
 import { sendWelcomeEmail } from "../services/email";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
-// Get application root path (resolving symlinks for global installation)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-// CLI is in src/cli/cli.ts, so go up two levels to reach project root
 const PROJECT_ROOT = join(__dirname, "..", "..");
 
-// Helper function to recursively list files
 function listFilesRecursively(dir: string): string[] {
   let results: string[] = [];
   const list = readdirSync(dir);
@@ -53,20 +50,16 @@ function listFilesRecursively(dir: string): string[] {
   return results;
 }
 
-// Import the DB and Permissions from their original paths
 let db;
 let Permissions;
 
 try {
-  // Dynamic imports to avoid path issues
   const { DB } = await import(join(PROJECT_ROOT, "src", "db.ts"));
   Permissions = (await import(join(PROJECT_ROOT, "src", "permissions.ts")))
     .Permissions;
 
-  // Initialize DB with the correct path
   class HelloDB extends DB {
     constructor() {
-      // Pass custom database path to parent constructor
       super(join(PROJECT_ROOT, `${appName}.db`));
     }
   }
@@ -86,6 +79,7 @@ const program = new Command();
 
 program.addCommand(devCommand);
 program.addCommand(prodCommand);
+program.addCommand(checkVersionCommand);
 
 program
   .command("where")
@@ -117,13 +111,11 @@ program
     }
   });
 
-// Setup CLI metadata
 program
   .name(appName)
   .description(`${appName} CLI for management`)
   .version("v1.0.0-dev (Revenant)");
 
-// User Create Command
 program
   .command("user:create")
   .description("Create a new user")
@@ -137,7 +129,6 @@ program
   .option("--send-welcome", "Send a welcome email to the new user", false)
   .action(async (options) => {
     try {
-      // If options are not provided, prompt for them
       const answers = await inquirer.prompt([
         {
           type: "input",
@@ -196,7 +187,6 @@ program
             )
         : answers.permissions.reduce((acc, perm) => acc | perm, 0);
 
-      // Check if user already exists
       const existingUser = await db.users.getUserByUsername(username);
       if (existingUser) {
         console.error(chalk.red(`Error: User '${username}' already exists`));
@@ -209,7 +199,6 @@ program
         process.exit(1);
       }
 
-      // Hash password and create user
       const hashedPassword = await hash(password, 10);
       const user = await db.users.createUser(
         username,
@@ -226,7 +215,6 @@ program
         chalk.green(`Permissions: ${formatPermissions(user.permissions)}`),
       );
 
-      // Send welcome email if requested
       if (sendWelcome) {
         try {
           console.log(chalk.yellow("Sending welcome email..."));
@@ -250,7 +238,6 @@ program
     }
   });
 
-// User Delete Command
 program
   .command("user:delete")
   .description("Delete a user")
@@ -313,7 +300,6 @@ program
     }
   });
 
-// User Modify Command
 program
   .command("user:modify")
   .description("Modify an existing user")
@@ -359,7 +345,6 @@ program
 
       const updates: any = {};
 
-      // If no specific modification options are provided, prompt for what to change
       if (!options.newUsername && !options.password && !options.permissions) {
         const { modifications } = await inquirer.prompt([
           {
@@ -387,7 +372,6 @@ program
         }
       }
 
-      // Prompt for new username if requested
       if (options.newUsername === true) {
         const { newUsername } = await inquirer.prompt([
           {
@@ -404,7 +388,6 @@ program
         updates.username = options.newUsername;
       }
 
-      // Prompt for new password if requested
       if (options.password) {
         const { newPassword } = await inquirer.prompt([
           {
@@ -421,7 +404,6 @@ program
         updates.password = await hash(newPassword, 10);
       }
 
-      // Handle permissions
       if (options.permissions === true) {
         const { newPermissions } = await inquirer.prompt([
           {
@@ -468,15 +450,10 @@ program
     }
   });
 
-// =========== BOLT COMMANDS ===========
-// Bolt - Database Management System
-
-// Create a bolt command group
 const boltCommand = program
   .command("bolt")
   .description(`${appName} database management system`);
 
-// Bolt SQL command - Interactive SQL shell
 boltCommand
   .command("sql")
   .description(`Start an interactive SQL shell for the ${appName} database`)
@@ -490,7 +467,6 @@ boltCommand
     }
 
     if (options.query) {
-      // Execute a single query and print results
       try {
         const db = new Database(dbPath);
         const results = db.query(options.query).all();
@@ -501,7 +477,6 @@ boltCommand
         process.exit(1);
       }
     } else {
-      // Start interactive SQL shell
       console.log(chalk.blue(`=== ${appName} Bolt SQL Shell ===`));
       console.log(chalk.blue(`Connected to database: ${dbPath}`));
       console.log(chalk.blue('Enter SQL commands or "exit" to quit'));
@@ -509,7 +484,6 @@ boltCommand
 
       const db = new Database(dbPath);
 
-      // Simple REPL for SQL
       const repl = async () => {
         try {
           const { sql } = await inquirer.prompt([
@@ -544,7 +518,6 @@ boltCommand
             console.error(chalk.red(`SQL Error: ${error.message}`));
           }
 
-          // Continue REPL
           await repl();
         } catch (error) {
           console.error(chalk.red(`Error: ${error.message}`));
@@ -556,7 +529,6 @@ boltCommand
     }
   });
 
-// Bolt Migrate command - Database migration
 boltCommand
   .command("migrate")
   .description(`${appName} database migrations`)
@@ -567,14 +539,12 @@ boltCommand
   .action(async (options) => {
     const migrationsDir = join(PROJECT_ROOT, "migrations");
 
-    // Check if migrations directory exists
     if (!existsSync(migrationsDir)) {
       console.log(
         chalk.yellow(
           `Migrations directory not found. Creating at ${migrationsDir}`,
         ),
       );
-      // Create migrations directory correctly
       try {
         await mkdir(migrationsDir, { recursive: true });
         console.log(
@@ -588,7 +558,6 @@ boltCommand
       }
     }
 
-    // Create a new migration file
     if (options.create) {
       const timestamp = new Date()
         .toISOString()
@@ -605,14 +574,12 @@ boltCommand
 import { Database } from 'bun:sqlite';
 
 export function up(db: Database) {
-  // Write your migration code here
   db.exec(\`
     -- Your SQL to apply changes
   \`);
 }
 
 export function down(db: Database) {
-  // Write your rollback code here
   db.exec(\`
     -- Your SQL to rollback changes
   \`);
@@ -624,12 +591,10 @@ export function down(db: Database) {
       process.exit(0);
     }
 
-    // List migrations
     if (options.list) {
       const dbPath = join(PROJECT_ROOT, `${appName}.db`);
       const db = new Database(dbPath);
 
-      // Create migrations table if it doesn't exist
       db.exec(`
         CREATE TABLE IF NOT EXISTS migrations (
           id TEXT PRIMARY KEY,
@@ -638,13 +603,11 @@ export function down(db: Database) {
         );
       `);
 
-      // Get applied migrations
       const applied = db.query(`SELECT id FROM migrations`).all() as {
         id: string;
       }[];
       const appliedIds = new Set(applied.map((m) => m.id));
 
-      // Get migration files
       const migrationFiles = listFilesRecursively(migrationsDir)
         .filter((file) => file.endsWith(".ts"))
         .map((file) => {
@@ -680,12 +643,10 @@ export function down(db: Database) {
       process.exit(0);
     }
 
-    // Run migrations
     if (options.run || options.force) {
       const dbPath = join(PROJECT_ROOT, `${appName}.db`);
       const db = new Database(dbPath);
 
-      // Create migrations table if it doesn't exist
       db.exec(`
         CREATE TABLE IF NOT EXISTS migrations (
           id TEXT PRIMARY KEY,
@@ -694,13 +655,11 @@ export function down(db: Database) {
         );
       `);
 
-      // Get applied migrations
       const applied = db.query(`SELECT id FROM migrations`).all() as {
         id: string;
       }[];
       const appliedIds = new Set(applied.map((m) => m.id));
 
-      // Get migration files
       const migrationFiles = listFilesRecursively(migrationsDir)
         .filter((file) => file.endsWith(".ts"))
         .map((file) => {
@@ -722,7 +681,6 @@ export function down(db: Database) {
         })
         .sort((a, b) => a.id.localeCompare(b.id));
 
-      // Filter pending migrations unless --force flag is used
       const migrationsToRun = options.force
         ? migrationFiles
         : migrationFiles.filter((m) => !m.applied);
@@ -736,7 +694,6 @@ export function down(db: Database) {
         chalk.blue(`Running ${migrationsToRun.length} migrations...`),
       );
 
-      // Run migrations in sequence
       for (const migration of migrationsToRun) {
         try {
           console.log(chalk.blue(`Applying migration: ${migration.name}...`));
@@ -749,8 +706,6 @@ export function down(db: Database) {
             );
           }
 
-          // Execute the migration script
-          // We need to import and run the migration file
           const migrationModule = await import(migration.path);
 
           if (typeof migrationModule.up !== "function") {
@@ -761,7 +716,6 @@ export function down(db: Database) {
 
           migrationModule.up(db);
 
-          // Record migration as applied
           if (!migration.applied) {
             db.exec(
               `
@@ -793,7 +747,6 @@ export function down(db: Database) {
       process.exit(0);
     }
 
-    // If no options provided, show help
     if (!options.create && !options.list && !options.run && !options.force) {
       console.log(
         chalk.yellow(
@@ -804,7 +757,6 @@ export function down(db: Database) {
     }
   });
 
-// Bolt backup command - Database backup
 boltCommand
   .command("backup")
   .description(`${appName} database backup`)
@@ -817,7 +769,6 @@ boltCommand
       process.exit(1);
     }
 
-    // Generate backup filename with timestamp if not specified
     const timestamp = new Date()
       .toISOString()
       .replace(/[:.]/g, "-")
@@ -830,7 +781,6 @@ boltCommand
     );
     const backupPath = options.output || defaultBackupPath;
 
-    // Create backups directory if it doesn't exist
     const backupsDir = join(PROJECT_ROOT, "backups");
     if (!existsSync(backupsDir)) {
       console.log(
@@ -848,7 +798,6 @@ boltCommand
     }
 
     try {
-      // Copy the database file
       await Bun.write(backupPath, Bun.file(dbPath));
       console.log(
         chalk.green(`Database backup created successfully: ${backupPath}`),
@@ -860,7 +809,6 @@ boltCommand
     }
   });
 
-// Bolt info command - Database information
 boltCommand
   .command("info")
   .description(`${appName} database information`)
@@ -875,11 +823,9 @@ boltCommand
     try {
       const db = new Database(dbPath);
 
-      // Get database size
       const stats = Bun.file(dbPath).size;
       const size = formatBytes(stats);
 
-      // Get table information
       const tables = db
         .query(
           `
@@ -901,7 +847,6 @@ boltCommand
         };
       });
 
-      // Display information
       console.log(chalk.blue(`=== ${appName} Database Information ===`));
       console.log(chalk.blue(`Database file: ${dbPath}`));
       console.log(chalk.blue(`Database size: ${size}`));
@@ -919,13 +864,10 @@ boltCommand
     }
   });
 
-// =========== UNIT COMMANDS ===========
-// Unit command group
 const unitCommand = program
   .command("unit")
   .description(`Manage ${appName} units`);
 
-// List units
 unitCommand
   .command("list")
   .description("List all units")
@@ -959,7 +901,6 @@ unitCommand
     }
   });
 
-// Get unit details
 unitCommand
   .command("get")
   .description("Get unit details")
@@ -1052,8 +993,8 @@ unitCommand
     }
   });
 
-// Create unit
-unitCommand
+
+  unitCommand
   .command("create")
   .description("Create a new unit")
   .option("-f, --file <path>", "JSON file containing unit configuration")
@@ -1063,7 +1004,6 @@ unitCommand
       let unitData;
 
       if (options.file) {
-        // Read from file
         if (!existsSync(options.file)) {
           console.error(chalk.red(`File not found: ${options.file}`));
           process.exit(1);
@@ -1077,7 +1017,6 @@ unitCommand
           process.exit(1);
         }
       } else if (options.interactive) {
-        // Interactive mode
         unitData = await promptUnitDetails();
       } else {
         console.error(
@@ -1088,7 +1027,6 @@ unitCommand
         process.exit(1);
       }
 
-      // Check if shortName already exists
       const existing = await db.units.findFirst({
         where: { shortName: unitData.shortName },
       });
@@ -1102,7 +1040,6 @@ unitCommand
         process.exit(1);
       }
 
-      // Create the unit
       const unit = await db.units.create(unitData);
 
       console.log(chalk.green(`Unit '${unit.name}' created successfully!`));
@@ -1114,7 +1051,6 @@ unitCommand
     }
   });
 
-// Delete unit
 unitCommand
   .command("delete")
   .description("Delete a unit")
@@ -1159,7 +1095,6 @@ unitCommand
         process.exit(1);
       }
 
-      // Check if unit is in use by any servers
       const servers = await db.servers.findMany({
         where: { unitId: unit.id },
       });
@@ -1197,7 +1132,6 @@ unitCommand
     }
   });
 
-// Export unit
 unitCommand
   .command("export")
   .description("Export a unit to JSON")
@@ -1242,7 +1176,6 @@ unitCommand
         process.exit(1);
       }
 
-      // Prepare export data (omitting ID and timestamps)
       const exportData = {
         name: unit.name,
         shortName: unit.shortName,
@@ -1255,10 +1188,8 @@ unitCommand
         startup: unit.startup,
       };
 
-      // Determine output path
       const outputPath = options.output || `${unit.shortName}.json`;
 
-      // Write to file
       writeFileSync(outputPath, JSON.stringify(exportData, null, 2));
 
       console.log(chalk.green(`Unit '${unit.name}' exported to ${outputPath}`));
@@ -1268,7 +1199,6 @@ unitCommand
     }
   });
 
-// Import unit
 unitCommand
   .command("import")
   .description("Import a unit from JSON")
@@ -1276,7 +1206,6 @@ unitCommand
   .action(async (options) => {
     try {
       if (!options.file) {
-        // Prompt for file path
         const { filePath } = await inquirer.prompt([
           {
             type: "input",
@@ -1289,11 +1218,9 @@ unitCommand
         options.file = filePath;
       }
 
-      // Read and parse file
       const fileContent = readFileSync(options.file, "utf-8");
       const unitData = JSON.parse(fileContent);
 
-      // Check if shortName already exists
       const existing = await db.units.findFirst({
         where: { shortName: unitData.shortName },
       });
@@ -1307,7 +1234,6 @@ unitCommand
           ),
         );
 
-        // Generate a unique shortName by appending a number
         let counter = 1;
         while (
           await db.units.findFirst({
@@ -1351,7 +1277,6 @@ unitCommand
         }
       }
 
-      // Create the unit
       const unit = await db.units.create({
         ...unitData,
         shortName,
@@ -1366,7 +1291,6 @@ unitCommand
     }
   });
 
-// Seed units command
 unitCommand
   .command("seed")
   .description("Import units from local units directory")
@@ -1378,20 +1302,17 @@ unitCommand
     console.log(chalk.blue(`Loading units from local path: ${unitsPath}`));
 
     try {
-      // Check if units directory exists
       if (!existsSync(unitsPath)) {
         console.error(chalk.red(`Units directory not found: ${unitsPath}`));
         process.exit(1);
       }
 
-      // Find master.yaml file
       const masterYamlPath = join(unitsPath, "master.yaml");
       if (!existsSync(masterYamlPath)) {
         console.error(chalk.red(`master.yaml not found in ${unitsPath}`));
         process.exit(1);
       }
 
-      // Read and parse master.yaml
       console.log(chalk.blue(`Reading master.yaml...`));
       let masterYaml;
       try {
@@ -1401,7 +1322,6 @@ unitCommand
         process.exit(1);
       }
 
-      // Parse YAML
       const yaml = require("js-yaml");
       let masterConfig;
       try {
@@ -1418,7 +1338,6 @@ unitCommand
         process.exit(1);
       }
 
-      // Process each image
       const totalImages = masterConfig.images.length;
       console.log(chalk.blue(`Found ${totalImages} units to import`));
 
@@ -1432,21 +1351,17 @@ unitCommand
           chalk.blue(`Processing [${i + 1}/${totalImages}] ${image.name}...`),
         );
 
-        // Load unit JSON file
         const jsonPath = image.src;
         const fullJsonPath = join(unitsPath, jsonPath);
 
         try {
-          // Check if JSON file exists
           if (!existsSync(fullJsonPath)) {
             throw new Error(`Unit JSON file not found: ${fullJsonPath}`);
           }
 
-          // Read JSON
           const unitJson = await readFile(fullJsonPath, "utf8");
           const unitData = JSON.parse(unitJson);
 
-          // Check if unit already exists
           const existingUnit = await db.units.findFirst({
             where: { shortName: unitData.shortName },
           });
@@ -1462,7 +1377,6 @@ unitCommand
           }
 
           if (existingUnit && options.force) {
-            // Update existing unit
             console.log(
               chalk.yellow(
                 `Updating existing unit '${unitData.name}' (${unitData.shortName})...`,
@@ -1473,7 +1387,6 @@ unitCommand
               chalk.green(`Unit '${unitData.name}' updated successfully`),
             );
           } else {
-            // Create new unit
             const newUnit = await db.units.create(unitData);
             console.log(
               chalk.green(`Unit '${newUnit.name}' imported successfully`),
@@ -1489,7 +1402,6 @@ unitCommand
         }
       }
 
-      // Print summary
       console.log(chalk.blue(`=== Import Summary ===`));
       console.log(
         chalk.green(`Successfully imported/updated: ${successCount}`),
@@ -1506,13 +1418,10 @@ unitCommand
     }
   });
 
-// =========== CARGO COMMANDS ===========
-// Cargo command group
 const cargoCommand = program
   .command("cargo")
   .description(`Manage ${appName} cargo`);
 
-// List cargo
 cargoCommand
   .command("list")
   .description("List all cargo items")
@@ -1547,7 +1456,6 @@ cargoCommand
     }
   });
 
-// Get cargo details
 cargoCommand
   .command("get")
   .description("Get cargo details")
@@ -1616,7 +1524,6 @@ cargoCommand
     }
   });
 
-// Upload local cargo
 cargoCommand
   .command("upload")
   .description("Upload a local file as cargo")
@@ -1625,7 +1532,6 @@ cargoCommand
   .option("-d, --description <description>", "Cargo description")
   .action(async (options) => {
     try {
-      // Prompt for file if not provided
       if (!options.file) {
         const { filePath } = await inquirer.prompt([
           {
@@ -1638,20 +1544,17 @@ cargoCommand
         options.file = filePath;
       }
 
-      // Validate file exists
       if (!existsSync(options.file)) {
         console.error(chalk.red(`File not found: ${options.file}`));
         process.exit(1);
       }
 
-      // Get file stats
       const stats = statSync(options.file);
       if (!stats.isFile()) {
         console.error(chalk.red(`Not a file: ${options.file}`));
         process.exit(1);
       }
 
-      // Prompt for name and description if not provided
       const fileName = options.file.split("/").pop() || "unknown";
 
       if (!options.name) {
@@ -1680,12 +1583,10 @@ cargoCommand
         options.description = description;
       }
 
-      // Calculate hash
       console.log(chalk.blue("Calculating file hash..."));
       const fileBuffer = readFileSync(options.file);
       const hash = createHash("sha256").update(fileBuffer).digest("hex");
 
-      // Check for duplicate by hash
       const existing = await db.cargo.findManyCargo({
         where: { hash },
       });
@@ -1699,10 +1600,8 @@ cargoCommand
         process.exit(1);
       }
 
-      // Determine MIME type
       const mimeType = mime.lookup(options.file) || "application/octet-stream";
 
-      // Create storage directory
       const storageDir = join(
         PROJECT_ROOT,
         "storage",
@@ -1711,12 +1610,10 @@ cargoCommand
       );
       await mkdir(storageDir, { recursive: true });
 
-      // Copy file to storage
       console.log(chalk.blue("Copying file to storage..."));
       const storagePath = join(storageDir, hash);
       await Bun.write(storagePath, fileBuffer);
 
-      // Create cargo record
       const cargoData = {
         name: options.name,
         description: options.description,
@@ -1739,7 +1636,6 @@ cargoCommand
     }
   });
 
-// Add remote cargo
 cargoCommand
   .command("remote-add")
   .description("Add a remote URL as cargo")
@@ -1748,7 +1644,6 @@ cargoCommand
   .option("-d, --description <description>", "Cargo description")
   .action(async (options) => {
     try {
-      // Prompt for URL if not provided
       if (!options.url) {
         const { url } = await inquirer.prompt([
           {
@@ -1768,7 +1663,6 @@ cargoCommand
         options.url = url;
       }
 
-      // Validate URL
       console.log(chalk.blue("Validating remote URL..."));
       let size, mimeType;
       try {
@@ -1786,7 +1680,6 @@ cargoCommand
         if (size === 0) {
           console.log(chalk.yellow("Warning: Could not determine file size"));
 
-          // Try with a GET request to get the size
           const getResponse = await fetch(options.url);
           const buffer = await getResponse.arrayBuffer();
           size = buffer.byteLength;
@@ -1798,11 +1691,9 @@ cargoCommand
         process.exit(1);
       }
 
-      // Extract filename from URL for default name
       const urlObj = new URL(options.url);
       const fileName = urlObj.pathname.split("/").pop() || "remote-file";
 
-      // Prompt for name and description if not provided
       if (!options.name) {
         const { name } = await inquirer.prompt([
           {
@@ -1829,7 +1720,6 @@ cargoCommand
         options.description = description;
       }
 
-      // Create cargo record
       const cargoData = {
         name: options.name,
         description: options.description,
@@ -1856,7 +1746,6 @@ cargoCommand
     }
   });
 
-// Delete cargo
 cargoCommand
   .command("delete")
   .description("Delete a cargo item")
@@ -1896,7 +1785,6 @@ cargoCommand
         process.exit(1);
       }
 
-      // Check if cargo is used in any containers
       const containers = await db.cargo.findManyContainers({
         where: {
           items: {
@@ -1933,9 +1821,7 @@ cargoCommand
         }
       }
 
-      // Delete the cargo item
       if (cargoItem.type === "local") {
-        // Delete the file
         const filePath = join(
           PROJECT_ROOT,
           "storage",
@@ -1960,7 +1846,6 @@ cargoCommand
     }
   });
 
-// Download cargo
 cargoCommand
   .command("download")
   .description("Download a cargo item")
@@ -2000,7 +1885,6 @@ cargoCommand
         process.exit(1);
       }
 
-      // Determine output filename
       let outputPath = options.output;
       if (!outputPath) {
         const defaultName = cargoItem.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -2024,7 +1908,6 @@ cargoCommand
         );
       }
 
-      // Download the file
       if (cargoItem.type === "remote") {
         console.log(chalk.blue(`Downloading from URL: ${cargoItem.remoteUrl}`));
 
@@ -2038,7 +1921,6 @@ cargoCommand
         const fileBuffer = await response.arrayBuffer();
         await Bun.write(outputPath, Buffer.from(fileBuffer));
       } else {
-        // Copy local file
         const sourcePath = join(
           PROJECT_ROOT,
           "storage",
@@ -2064,11 +1946,8 @@ cargoCommand
     }
   });
 
-// =========== CONTAINER COMMANDS ===========
-// Containers subcommand group
 cargoCommand.command("containers").description("Manage cargo containers");
 
-// List containers
 cargoCommand
   .command("containers:list")
   .description("List all cargo containers")
@@ -2101,7 +1980,6 @@ cargoCommand
     }
   });
 
-// Get container details
 cargoCommand
   .command("containers:get")
   .description("Get container details")
@@ -2159,7 +2037,6 @@ cargoCommand
         if (container.items.length === 0) {
           console.log(chalk.yellow("  No items in this container"));
         } else {
-          // Fetch cargo details for each item
           for (const item of container.items) {
             const cargo = await db.cargo.findCargo(item.cargoId);
             if (cargo) {
@@ -2182,7 +2059,6 @@ cargoCommand
     }
   });
 
-// Create container
 cargoCommand
   .command("containers:create")
   .description("Create a new cargo container")
@@ -2191,7 +2067,6 @@ cargoCommand
   .option("-i, --interactive", "Add items interactively")
   .action(async (options) => {
     try {
-      // Prompt for container details if not provided
       if (!options.name) {
         const { name } = await inquirer.prompt([
           {
@@ -2217,10 +2092,8 @@ cargoCommand
         options.description = description;
       }
 
-      // Create container with empty items
       let items = [];
 
-      // Add items interactively if requested
       if (options.interactive) {
         const cargoItems = await db.cargo.findManyCargo();
 
@@ -2244,7 +2117,6 @@ cargoCommand
           let addMore = true;
 
           while (addMore) {
-            // Select cargo item
             const { cargoId } = await inquirer.prompt([
               {
                 type: "list",
@@ -2257,7 +2129,6 @@ cargoCommand
               },
             ]);
 
-            // Get target path
             const { targetPath } = await inquirer.prompt([
               {
                 type: "input",
@@ -2265,7 +2136,6 @@ cargoCommand
                 message: "Enter target path (relative to /home/container):",
                 validate: (input) => {
                   if (input.length === 0) return "Path cannot be empty";
-                  // Check for absolute path starting with /
                   if (input.startsWith("/")) {
                     return "Please enter a relative path (without leading /)";
                   }
@@ -2274,13 +2144,11 @@ cargoCommand
               },
             ]);
 
-            // Add item to list
             items.push({
               cargoId,
               targetPath,
             });
 
-            // Ask if user wants to add more items
             const { continueAdding } = await inquirer.prompt([
               {
                 type: "confirm",
@@ -2295,7 +2163,6 @@ cargoCommand
         }
       }
 
-      // Create the container
       const containerData = {
         name: options.name,
         description: options.description,
@@ -2315,7 +2182,6 @@ cargoCommand
     }
   });
 
-// Update container
 cargoCommand
   .command("containers:update")
   .description("Update a cargo container")
@@ -2358,20 +2224,16 @@ cargoCommand
         process.exit(1);
       }
 
-      // Prepare update data
       const updateData: any = {};
 
-      // Update name if provided
       if (options.name) {
         updateData.name = options.name;
       }
 
-      // Update description if provided
       if (options.description) {
         updateData.description = options.description;
       }
 
-      // Handle adding items
       if (options.addItems) {
         const cargoItems = await db.cargo.findManyCargo();
 
@@ -2386,7 +2248,6 @@ cargoCommand
         const newItems = [...container.items];
 
         while (addMore) {
-          // Select cargo item
           const { cargoId } = await inquirer.prompt([
             {
               type: "list",
@@ -2399,7 +2260,6 @@ cargoCommand
             },
           ]);
 
-          // Get target path
           const { targetPath } = await inquirer.prompt([
             {
               type: "input",
@@ -2407,7 +2267,6 @@ cargoCommand
               message: "Enter target path (relative to /home/container):",
               validate: (input) => {
                 if (input.length === 0) return "Path cannot be empty";
-                // Check for absolute path starting with /
                 if (input.startsWith("/")) {
                   return "Please enter a relative path (without leading /)";
                 }
@@ -2416,13 +2275,11 @@ cargoCommand
             },
           ]);
 
-          // Add item to list
           newItems.push({
             cargoId,
             targetPath,
           });
 
-          // Ask if user wants to add more items
           const { continueAdding } = await inquirer.prompt([
             {
               type: "confirm",
@@ -2438,9 +2295,7 @@ cargoCommand
         updateData.items = newItems;
       }
 
-      // Handle removing items
       if (options.removeItems && container.items.length > 0) {
-        // Get cargo details for display
         const itemsWithDetails = await Promise.all(
           container.items.map(async (item) => {
             const cargo = await db.cargo.findCargo(item.cargoId);
@@ -2464,7 +2319,6 @@ cargoCommand
         ]);
 
         if (itemsToRemove.length > 0) {
-          // Create new items array without the removed items
           const newItems = container.items.filter(
             (_, index) => !itemsToRemove.includes(index),
           );
@@ -2472,7 +2326,6 @@ cargoCommand
         }
       }
 
-      // Update container if changes were made
       if (Object.keys(updateData).length > 0) {
         await db.cargo.updateContainer(container.id, updateData);
         console.log(
@@ -2487,7 +2340,6 @@ cargoCommand
     }
   });
 
-// Delete container
 cargoCommand
   .command("containers:delete")
   .description("Delete a cargo container")
@@ -2553,13 +2405,9 @@ cargoCommand
     }
   });
 
-// =========== HELPER FUNCTIONS ===========
-
-// Helper function to prompt for unit details when creating a unit interactively
 async function promptUnitDetails() {
   const unitData: any = {};
 
-  // Basic information
   const basicInfo = await inquirer.prompt([
     {
       type: "input",
@@ -2603,7 +2451,6 @@ async function promptUnitDetails() {
 
   Object.assign(unitData, basicInfo);
 
-  // Environment variables
   unitData.environmentVariables = [];
 
   const { addEnvVars } = await inquirer.prompt([
@@ -2680,7 +2527,6 @@ async function promptUnitDetails() {
     }
   }
 
-  // Config files
   unitData.configFiles = [];
 
   const { addConfigFiles } = await inquirer.prompt([
@@ -2726,7 +2572,6 @@ async function promptUnitDetails() {
     }
   }
 
-  // Installation script
   const installScript = await inquirer.prompt([
     {
       type: "input",
@@ -2749,7 +2594,6 @@ async function promptUnitDetails() {
 
   unitData.installScript = installScript;
 
-  // Startup settings
   const { userEditable } = await inquirer.prompt([
     {
       type: "confirm",
@@ -2764,8 +2608,6 @@ async function promptUnitDetails() {
   return unitData;
 }
 
-// =========== DEPLOY COMMAND ===========
-// Deploy Command
 program
   .command("deploy")
   .description(`Deploy ${appName} with UI`)
@@ -2780,7 +2622,6 @@ program
   )
   .option("-c, --config <path>", "Path to saved configuration")
   .action(async (options) => {
-    // Load config if provided
     let config: any = {};
     const configDir = join(PROJECT_ROOT, "src/cli");
     const defaultConfigPath = join(configDir, "deploy.json");
@@ -2800,7 +2641,6 @@ program
       }
     }
 
-    // Set defaults from config
     options = {
       ...config,
       ...options,
@@ -2842,7 +2682,6 @@ program
 
     console.log(chalk.green(`Found ${appName}-ui at ${uiPath}!`));
 
-    // Install dependencies
     console.log(chalk.blue(`Installing modules (bun install)...`));
     const installResult = spawnSync("bun", ["install"], {
       cwd: uiPath,
@@ -2856,7 +2695,6 @@ program
       process.exit(1);
     }
 
-    // Determine deployment type
     let deploymentType = options.local
       ? "local"
       : options.domain
@@ -2879,10 +2717,8 @@ program
       deploymentType = deployment;
     }
 
-    // Set API port
     const apiPort = options.port || config.port || 3000;
 
-    // Configure based on deployment type
     let apiUrl;
     let sslPath;
     let webPort;
@@ -2910,7 +2746,6 @@ program
         domain = domainAnswer;
       }
 
-      // Check SSL certificates
       let hasSSL = options.sslPath || config.sslPath;
 
       if (!hasSSL && !options.force) {
@@ -2957,7 +2792,6 @@ program
             process.exit(1);
           }
 
-          // Check for key and cert files
           const hasKey = existsSync(join(sslPath, "privkey.pem"));
           const hasCert = existsSync(join(sslPath, "fullchain.pem"));
 
@@ -2995,7 +2829,6 @@ program
       process.exit(1);
     }
 
-    // Build for production
     console.log(chalk.blue(`Building for production...`));
     const buildResult = spawnSync("bun", ["run", "build"], {
       cwd: uiPath,
@@ -3054,7 +2887,6 @@ program
 
     console.log(chalk.green(`Done copying files!`));
 
-    // Save configuration if requested
     const saveConfig = async () => {
       const config = {
         port: apiPort,
@@ -3089,10 +2921,8 @@ program
       await saveConfig();
     }
 
-    // Start servers
     console.log(chalk.blue(`Starting servers...`));
 
-    // Start API server
     console.log(chalk.blue(`Starting API server on port ${apiPort}...`));
 
     const apiProcess = spawn("bun", ["run", "start"], {
@@ -3104,30 +2934,24 @@ program
       },
     });
 
-    // Start web server with proxy
     if (deploymentType === "local") {
       console.log(
         chalk.blue(`Starting web server with API proxy on port ${webPort}...`),
       );
 
-      // Create a web server with API proxy using Bun
       const server = Bun.serve({
         port: webPort,
         async fetch(req) {
           const url = new URL(req.url);
           const path = url.pathname;
 
-          // Proxy API requests to the API server
           if (path.startsWith("/api/")) {
-            // Create a new request to forward to the API server
             const apiUrl = new URL(path, `http://localhost:${apiPort}`);
 
-            // Copy search params
             url.searchParams.forEach((value, key) => {
               apiUrl.searchParams.append(key, value);
             });
 
-            // Forward the request to the API server
             try {
               const apiResponse = await fetch(apiUrl, {
                 method: req.method,
@@ -3135,7 +2959,6 @@ program
                 body: req.body,
               });
 
-              // Create a new response with the API response
               return new Response(apiResponse.body, {
                 status: apiResponse.status,
                 statusText: apiResponse.statusText,
@@ -3151,10 +2974,8 @@ program
             }
           }
 
-          // Serve static files for non-API requests
           let filePath = path;
 
-          // Default to index.html for root or client-side routing paths without file extensions
           if (
             filePath === "/" ||
             (!filePath.includes(".") && !filePath.endsWith("/"))
@@ -3162,20 +2983,16 @@ program
             filePath = "/index.html";
           }
 
-          // Try to serve the file from _dist
           const fullPath = join(distDir, filePath);
 
           if (existsSync(fullPath) && statSync(fullPath).isFile()) {
             return new Response(Bun.file(fullPath));
           }
 
-          // If we're here and the path doesn't have an extension, it might be a client-side route
-          // Serve index.html for client-side routing
           if (!path.includes(".")) {
             return new Response(Bun.file(join(distDir, "index.html")));
           }
 
-          // 404 if file not found
           return new Response("Not Found", { status: 404 });
         },
       });
@@ -3190,23 +3007,18 @@ program
         chalk.green(`You can access ${appName} at http://localhost:${webPort}`),
       );
     } else {
-      // Production deployment with domain
       console.log(chalk.blue(`Setting up production server with API proxy...`));
 
       let server;
 
-      // Check if we have SSL
       if (sslPath) {
-        // SSL configuration for HTTPS
         try {
           const keyFile = join(sslPath, "privkey.pem");
           const certFile = join(sslPath, "fullchain.pem");
 
-          // Read SSL files
           const key = readFileSync(keyFile, "utf-8");
           const cert = readFileSync(certFile, "utf-8");
 
-          // Create HTTPS server
           server = Bun.serve({
             port: 443,
             tls: {
@@ -3217,17 +3029,13 @@ program
               const url = new URL(req.url);
               const path = url.pathname;
 
-              // Proxy API requests to the API server
               if (path.startsWith("/api/")) {
-                // Create a new request to forward to the API server
                 const apiUrl = new URL(path, `http://localhost:${apiPort}`);
 
-                // Copy search params
                 url.searchParams.forEach((value, key) => {
                   apiUrl.searchParams.append(key, value);
                 });
 
-                // Forward the request to the API server
                 try {
                   const apiResponse = await fetch(apiUrl, {
                     method: req.method,
@@ -3235,7 +3043,6 @@ program
                     body: req.body,
                   });
 
-                  // Create a new response with the API response
                   return new Response(apiResponse.body, {
                     status: apiResponse.status,
                     statusText: apiResponse.statusText,
@@ -3251,10 +3058,8 @@ program
                 }
               }
 
-              // Serve static files for non-API requests
               let filePath = path;
 
-              // Default to index.html for root or client-side routing paths
               if (
                 filePath === "/" ||
                 (!filePath.includes(".") && !filePath.endsWith("/"))
@@ -3262,25 +3067,20 @@ program
                 filePath = "/index.html";
               }
 
-              // Try to serve the file from _dist
               const fullPath = join(distDir, filePath);
 
               if (existsSync(fullPath) && statSync(fullPath).isFile()) {
                 return new Response(Bun.file(fullPath));
               }
 
-              // If we're here and the path doesn't have an extension, it might be a client-side route
-              // Serve index.html for client-side routing
               if (!path.includes(".")) {
                 return new Response(Bun.file(join(distDir, "index.html")));
               }
 
-              // 404 if file not found
               return new Response("Not Found", { status: 404 });
             },
           });
 
-          // Also set up HTTP to HTTPS redirect on port 80
           Bun.serve({
             port: 80,
             fetch(req) {
@@ -3305,11 +3105,9 @@ program
           );
           console.log(chalk.yellow(`Falling back to HTTP server...`));
 
-          // Fall back to HTTP
           setupHttpServer();
         }
       } else {
-        // HTTP only setup
         setupHttpServer();
       }
 
@@ -3320,17 +3118,13 @@ program
             const url = new URL(req.url);
             const path = url.pathname;
 
-            // Proxy API requests to the API server
             if (path.startsWith("/api/")) {
-              // Create a new request to forward to the API server
               const apiUrl = new URL(path, `http://localhost:${apiPort}`);
 
-              // Copy search params
               url.searchParams.forEach((value, key) => {
                 apiUrl.searchParams.append(key, value);
               });
 
-              // Forward the request to the API server
               try {
                 const apiResponse = await fetch(apiUrl, {
                   method: req.method,
@@ -3338,7 +3132,6 @@ program
                   body: req.body,
                 });
 
-                // Create a new response with the API response
                 return new Response(apiResponse.body, {
                   status: apiResponse.status,
                   statusText: apiResponse.statusText,
@@ -3354,10 +3147,8 @@ program
               }
             }
 
-            // Serve static files for non-API requests
             let filePath = path;
 
-            // Default to index.html for root or client-side routing paths
             if (
               filePath === "/" ||
               (!filePath.includes(".") && !filePath.endsWith("/"))
@@ -3365,20 +3156,16 @@ program
               filePath = "/index.html";
             }
 
-            // Try to serve the file from _dist
             const fullPath = join(distDir, filePath);
 
             if (existsSync(fullPath) && statSync(fullPath).isFile()) {
               return new Response(Bun.file(fullPath));
             }
 
-            // If we're here and the path doesn't have an extension, it might be a client-side route
-            // Serve index.html for client-side routing
             if (!path.includes(".")) {
               return new Response(Bun.file(join(distDir, "index.html")));
             }
 
-            // 404 if file not found
             return new Response("Not Found", { status: 404 });
           },
         });
@@ -3398,11 +3185,9 @@ program
       );
     }
 
-    // Handle graceful shutdown
     const cleanup = () => {
       console.log(chalk.blue("\nShutting down servers..."));
 
-      // Kill the API process
       if (apiProcess && !apiProcess.killed) {
         apiProcess.kill();
       }
@@ -3410,15 +3195,12 @@ program
       process.exit(0);
     };
 
-    // Listen for termination signals
     process.on("SIGINT", cleanup);
     process.on("SIGTERM", cleanup);
 
-    // Keep the process running
     await new Promise(() => {});
   });
 
-// Helper function to format permissions
 function formatPermissions(permissionBitmap: number): string {
   return Object.entries(Permissions)
     .filter(
@@ -3429,7 +3211,6 @@ function formatPermissions(permissionBitmap: number): string {
     .join(", ");
 }
 
-// Helper function to format bytes
 function formatBytes(bytes: number, decimals = 2) {
   if (bytes === 0) return "0 Bytes";
 
@@ -3442,10 +3223,8 @@ function formatBytes(bytes: number, decimals = 2) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
-// Parse command line arguments
 program.parse();
 
-// Show help if no arguments provided
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }

@@ -1146,7 +1146,7 @@ const [showEditModal, setShowEditModal] = useState(false);
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-[#0E0E0F]">
+          <tbody className="divide-y divide-[#1E1E20] bg-[#0E0E0F]">
             {sortedRegions.map((region) => {
               const countryName =
                 countryOptions.find(

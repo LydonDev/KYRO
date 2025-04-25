@@ -15,7 +15,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-// Dialog for creating/editing projects
 interface ProjectDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -126,7 +125,6 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
   );
 };
 
-// Main Projects Page Component
 const ProjectsPage: React.FC = () => {
   const {
     projects,
@@ -143,7 +141,6 @@ const ProjectsPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  // Handler for creating a project
   const handleCreateProject = async (name: string, description: string) => {
     setIsSubmitting(true);
     setActionError(null);
@@ -158,7 +155,6 @@ const ProjectsPage: React.FC = () => {
     }
   };
 
-  // Handler for updating a project
   const handleUpdateProject = async (name: string, description: string) => {
     if (!currentProject) return;
 
@@ -175,7 +171,6 @@ const ProjectsPage: React.FC = () => {
     }
   };
 
-  // Handler for deleting a project
   const handleDeleteProject = async () => {
     if (!currentProject) return;
 

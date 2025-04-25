@@ -1,10 +1,7 @@
-// Panel: src/db/units.ts
-
 import { randomUUID } from "crypto";
 import { DatabaseContext, Unit, QueryOptions } from "./types";
 import { buildWhereClause, buildOrderByClause, parseDate } from "./utils";
 
-// Helper function to parse database rows into Unit objects
 const parseUnitRow = (row: any): Unit => ({
   id: row.id,
   name: row.name,
@@ -114,7 +111,6 @@ export function createUnitsRepository({ db }: DatabaseContext) {
       const updated = {
         ...current,
         ...data,
-        // Ensure arrays have defaults if not provided in update
         configFiles: data.configFiles || current.configFiles,
         environmentVariables:
           data.environmentVariables || current.environmentVariables,
@@ -154,7 +150,6 @@ export function createUnitsRepository({ db }: DatabaseContext) {
       }
     },
 
-    // Get cargo containers for a unit
     getUnitCargoContainers: async (unitId: string) => {
       const rows = db
         .prepare(
@@ -177,7 +172,6 @@ export function createUnitsRepository({ db }: DatabaseContext) {
       }));
     },
 
-    // Assign a cargo container to a unit
     assignCargoContainer: async (unitId: string, containerId: string) => {
       db.prepare(
         `
@@ -187,7 +181,6 @@ export function createUnitsRepository({ db }: DatabaseContext) {
       ).run(unitId, containerId);
     },
 
-    // Remove a cargo container from a unit
     removeCargoContainer: async (unitId: string, containerId: string) => {
       db.prepare(
         `

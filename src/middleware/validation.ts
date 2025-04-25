@@ -1,11 +1,6 @@
-// src/middleware/validation.ts
-
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
-/**
- * Middleware factory for validating request body against a Zod schema
- */
 export function validateRequest(schema: z.ZodType<any, any>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
