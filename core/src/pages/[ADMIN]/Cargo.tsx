@@ -1426,8 +1426,7 @@ const AdminCargoPage: React.FC = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="bg-stone-950">
-      <div className="p-6">
+    <div className="card min-h-screen bg-stone-950">
         {error && (
           <div className="mb-4 space-y-2">
             <div className="bg-red-500/10 border border-red-500/20 rounded-md p-4 flex items-start">
@@ -1699,7 +1698,6 @@ const AdminCargoPage: React.FC = () => {
         {view === "container-edit" && renderContainerForm("edit")}
         {view === "container-view" && renderContainerDetails()}
       </div>
-    </div>
   );
 };
 

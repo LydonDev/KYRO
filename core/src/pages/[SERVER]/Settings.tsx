@@ -150,7 +150,7 @@ const ServerSettingsPage = () => {
   }
 
   return (
-    <div className="bg-stone-950 p-6">
+    <div className="card bg-stone-950 p-6 min-h-screen">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">
         {/* Header */}
         <div className="mb-6">

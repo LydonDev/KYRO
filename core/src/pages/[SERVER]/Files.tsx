@@ -1123,7 +1123,7 @@ const FileManager: React.FC = () => {
 
   return (
     <div
-      className="bg-stone-950 min-h-screen p-6"
+      className="card bg-stone-950 min-h-screen p-6"
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDragOver={handleDrag}

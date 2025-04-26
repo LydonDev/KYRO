@@ -113,7 +113,38 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.card {
+  background-color: oklch(14.7% 0.004 49.25);
+  border: 1px solid rgb(28 25 23);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 1335px;
+  margin-left: 25px;
+  
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+
+  transform: scaleY(0.97);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Chrome, Safari and Opera */
 *::-webkit-scrollbar {

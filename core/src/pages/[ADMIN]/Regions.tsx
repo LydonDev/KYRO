@@ -1238,7 +1238,7 @@ const AdminRegionsPage = () => {
   // Context menu is rendered at the root level
 
   return (
-    <div className="min-h-screen bg-stone-950">
+    <div className="card min-h-screen bg-stone-950">
       {/* Context Menu */}
       <AnimatePresence>
         {contextMenu && (
@@ -1266,7 +1266,7 @@ const AdminRegionsPage = () => {
           />
         )}
       </AnimatePresence>
-      <div className="p-6">
+      <div className="h-min-screen">
         {/* Global Alerts */}
         {alerts.length > 0 && (
           <div className="mb-4 space-y-2">

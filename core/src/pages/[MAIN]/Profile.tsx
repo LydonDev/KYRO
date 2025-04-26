@@ -1,6 +1,6 @@
 export default function Profile() {
   return (
-    <div className="flex flex-col p-6 bg-stone-950 min-h-screen">
+    <div className="card flex flex-col p-6 bg-stone-950 min-h-screen">
       <div className="mb-10">
         <h1 className="text-2xl font-semibold text-white">Profile</h1>
         <p className="text-sm text-gray-400">Manage your profile</p>

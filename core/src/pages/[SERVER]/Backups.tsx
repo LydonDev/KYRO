@@ -81,7 +81,7 @@ export default function Backups() {
   }, [server, error, navigate]);
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="card min-h-screen p-6">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">
         <div className="mb-6">
           <div className="flex items-center text-sm text-gray-400 mb-4">

@@ -1838,8 +1838,7 @@ const AdminNodesPage = () => {
   }
 
   return (
-    <div className="bg-stone-950">
-      <div className="p-6">
+    <div className="card bg-stone-950 min-h-screen">
         {/* Global Alerts */}
         {alerts.length > 0 && (
           <div className="mb-4 space-y-2">
@@ -1854,7 +1853,7 @@ const AdminNodesPage = () => {
           </div>
         )}
 
-        <div className="transition-all duration-200 ease-in-out stone-950 w-full h-screen flex flex-col">
+        <div className="transition-all duration-200 ease-in-out flex flex-col">
           {view === "list" && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -1919,7 +1918,6 @@ const AdminNodesPage = () => {
 
           {view === "view" && renderNodeView()}
         </div>
-      </div>
 
       {/* Context Menu */}
       {contextMenu && (

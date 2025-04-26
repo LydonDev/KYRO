@@ -325,7 +325,7 @@ const ServerConsolePage = () => {
   const ip = server?.node && parsed ? `${server.node.fqdn}:${parsed.port}` : "";
 
   return (
-    <div className="bg-stone-950 min-h-screen p-6">
+    <div className="card bg-stone-950 min-h-screen p-6">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">
         {/* Header */}
         <div className="mb-6">

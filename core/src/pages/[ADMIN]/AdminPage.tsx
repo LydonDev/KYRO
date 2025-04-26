@@ -71,8 +71,7 @@ const AdminPage = () => {
   }, [currentVersion]);
 
   return (
-    <div>
-      <div className="p-6">
+      <div className="card p-6 min-h-screen">
         <div className="space-y-6">
           <div>
             <h1 className="text-lg font-semibold text-white">Overview</h1>
@@ -175,7 +174,6 @@ const AdminPage = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

@@ -1404,8 +1404,7 @@ const AdminUnitsPage: React.FC = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="min-h-screen bg-stone-950">
-      <div className="p-6">
+    <div className="card min-h-screen bg-stone-950">
         {view === "list" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -1494,7 +1493,6 @@ const AdminUnitsPage: React.FC = () => {
         {view === "edit" && renderUnitForm("edit")}
         {view === "view" && renderUnitDetails()}
       </div>
-    </div>
   );
 };
 

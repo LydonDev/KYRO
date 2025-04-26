@@ -81,7 +81,7 @@ export default function Mods() {
   }, [server, error, navigate]);
 
   return (
-    <div className="p-6">
+    <div className="card p-6">
       <div className="flex flex-col">
         <div className="mb-6">
           <div className="flex items-center text-sm text-gray-400 mb-4">

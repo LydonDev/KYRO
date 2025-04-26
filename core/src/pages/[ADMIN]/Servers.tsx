@@ -1056,8 +1056,8 @@ const AdminServersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-stone-950">
-      <div className="p-6">
+    <div className="card min-h-screen bg-stone-950">
+      <div>
         <div className="transition-all duration-200 ease-in-out">
           {view === "list" && (
             <div className="space-y-6">

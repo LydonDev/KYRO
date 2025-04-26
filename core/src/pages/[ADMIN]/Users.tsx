@@ -872,8 +872,7 @@ const AdminUsersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-stone-950">
-      <div className="p-6">
+    <div className="card min-h-screen bg-stone-950">
         {/* Global Alerts */}
         {alerts.length > 0 && (
           <div className="mb-4 space-y-2">
@@ -943,7 +942,6 @@ const AdminUsersPage = () => {
 
           {view === "view" && renderUserView()}
         </div>
-      </div>
       {contextMenu && (
         <UserContextMenu
           position={contextMenu.position}

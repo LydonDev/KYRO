@@ -5,7 +5,6 @@ import {
   CubeIcon,
   CommandLineIcon,
   FolderIcon,
-  ServerStackIcon,
   ArchiveBoxIcon,
   HomeModernIcon,
   ArrowsPointingOutIcon,
@@ -14,7 +13,8 @@ import {
   CogIcon,
   PuzzlePieceIcon,
   ArrowLeftOnRectangleIcon,
-} from "@heroicons/react/24/solid";
+  SparklesIcon,
+} from "@heroicons/react/24/outline";
 import { useAuth } from "../pages/[AUTH]/SignIn";
 import { DatabaseIcon, Hammer, UserCircleIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -41,7 +41,7 @@ const NavItem = ({
       to={to}
       className={`flex items-center h-8 ml-2 text-sm font-medium rounded-sm transition active:scale-95 duration-200 ${
         isActive
-          ? "shadow-sm px-2 bg-stone-900 border border-stone-900 text-white rounded-sm "
+          ? "shadow-sm px-2 bg-stone-800 border border-stone-700 text-white rounded-sm "
           : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF] rounded-sm"
       }`}
     >
@@ -126,8 +126,8 @@ function Sidebar() {
   const hasAdminPermission = user?.permissions?.includes("admin") || false;
 
   return (
-    <div className="fixed inset-y-0 left-0 w-56 bg-stone-950 flex flex-col border-r border-stone-900">
-      <div className="h-14 flex items-center p-1 border-b border-stone-900 backdrop-blur">
+    <div className="fixed inset-y-0 left-0 w-56 flex flex-col">
+      <div className="h-14 flex items-center p-1">
         <Link
           to="/servers"
           className="h-12 flex items-center w-full px-4 hover:bg-stone-900 rounded-lg active:scale-95 transition"
@@ -140,8 +140,8 @@ function Sidebar() {
         <nav className="p-1 mt-2 pr-3 space-y-0.5">
           <NavItem
             to="/servers"
-            icon={ServerStackIcon}
-            label="Servers"
+            icon={SparklesIcon}
+            label="Overview"
             isActive={location.pathname === "/servers"}
           />
 

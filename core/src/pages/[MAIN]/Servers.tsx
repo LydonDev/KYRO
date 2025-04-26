@@ -100,7 +100,7 @@ export default function Home() {
   }
 
   return (
-    <div className="p-6 bg-stone-950 min-h-screen">
+    <div className="card p-6 bg-stone-950 min-h-screen">
       <div className="w-full mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
