@@ -39,14 +39,24 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 2. **Install dependencies in each repo:**
    ```bash
    cd KRYPTON
+   bun add .
+   bun link
    bun install
    cd ../KYRO
+   bun add .
+   bun link
    bun install
    ```
-3. **Configure environment:**
+3. **Database Setup**
+   ```bash
+   kyro user:create
+   ```
+   ```bash
+   kyro unit seed
+   kyro bolt migrate --force
+   ```
+4. **Configure environment:**
    - Copy `.env.example` to `.env` in each repo and fill in required values (see docs for details).
-4. **(Optional) Prepare Docker:**
-   - If using Docker, follow instructions in the `docker/` directory.
 
 ---
 
@@ -54,15 +64,13 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 1. **Start the backend:**
    ```bash
-   bun run start
+   kyro production
    ```
-2. **Start the frontend:**
+2. **Configure krypton & start it**
    ```bash
-   cd core
-   bun run dev
+   cd KRYPTON
+   bun run configure
    ```
-3. **Access Kyro:**
-   - Open your browser and navigate to the URL shown in the terminal (default: http://localhost:5173)
 
 ---
 
@@ -70,7 +78,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 - ⚡️ Fast backend powered by Bun
 - 🛠 Integrated CLI for migrations, database, and utilities
-- 🗄 SQLite database (portable, easy setup)
+- 🐱‍🏍 SQLite database (portable, easy setup)
 - 🎨 Modern UI/UX (Vite frontend in `/core`)
 - 🔒 Full authentication (JWT, email verification)
 - 🧑‍💼 Role-based permissions and access control
