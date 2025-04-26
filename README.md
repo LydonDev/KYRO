@@ -47,11 +47,9 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    bun link
    bun install
    ```
-3. **Database Setup**
+3. **Database Setup:**
    ```bash
    kyro user:create
-   ```
-   ```bash
    kyro unit seed
    kyro bolt migrate --force
    ```
