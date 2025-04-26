@@ -325,7 +325,7 @@ const ServerConsolePage = () => {
   const ip = server?.node && parsed ? `${server.node.fqdn}:${parsed.port}` : "";
 
   return (
-    <div className="bg-[#0E0E0F] min-h-screen p-6">
+    <div className="bg-stone-950 min-h-screen p-6">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -357,7 +357,7 @@ const ServerConsolePage = () => {
                   initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-red-400 bg-[#1E1E20] border border-[#232325] rounded-md"
+                  className="flex items-center px-3 py-2 text-sm font-medium text-red-400 bg-stone-950 border border-stone-900 rounded-md"
                 >
                   <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
                   <span className="truncate max-w-md">{error}</span>
@@ -367,9 +367,9 @@ const ServerConsolePage = () => {
 
             <div className="flex items-center space-x-3">
               {/* Status Indicators */}
-              <div className="text-gray-400 px-4 py-1.5 rounded-md bg-[#0E0E0F] border border-[#1E1E20] flex items-center space-x-6">
+              <div className="text-gray-400 px-4 py-1.5 rounded-md bg-stone-950 border border-stone-900 flex items-center space-x-6">
                 <div className="flex items-center">
-                  <div className="w-1 h-4 bg-[#313135] rounded mr-2"></div>
+                  <div className="w-1 h-4 bg-stone-950 rounded mr-2"></div>
                   <div className="text-xs">
                     <span className="block text-gray-400">IP</span>
                     <span className="block text-white font-medium">{ip}</span>
@@ -419,7 +419,7 @@ const ServerConsolePage = () => {
                 <button
                   onClick={() => handlePowerAction("start")}
                   disabled={powerLoading || isServerActive}
-                  className={`rounded-md flex items-center justify-center w-9 h-9 bg-[#0E0E0F] hover:bg-[#1E1E20] text-white border border-[#1E1E20] focus:ring-[#232325] ${isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                  className={`rounded-md flex items-center justify-center w-9 h-9 bg-stone-950 hover:bg-stone-900 text-white border border-stone-900 focus:ring-stone-900 ${isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                   aria-label="Start Server"
                 >
                   <Play className="w-4 h-4" />
@@ -427,7 +427,7 @@ const ServerConsolePage = () => {
                 <button
                   onClick={() => handlePowerAction("restart")}
                   disabled={powerLoading || !isServerActive}
-                  className={`rounded-md flex items-center justify-center w-9 h-9 bg-[#0E0E0F] hover:bg-[#1E1E20] text-white border border-[#1E1E20] focus:ring-[#232325] ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                  className={`rounded-md flex items-center justify-center w-9 h-9 bg-stone-950 hover:bg-stone-900 text-white border border-stone-900 focus:ring-stone-900 ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                   aria-label="Restart Server"
                 >
                   <RefreshCw className="w-4 h-4" />
@@ -436,7 +436,7 @@ const ServerConsolePage = () => {
                   onClick={() => handlePowerAction("stop")}
                   disabled={powerLoading || !isServerActive}
                   aria-label="Stop Server"
-                  className={`rounded-md flex items-center justify-center w-9 h-9 bg-[#0E0E0F] hover:bg-[#1E1E20] text-white border border-[#1E1E20] focus:ring-[#232325] ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                  className={`rounded-md flex items-center justify-center w-9 h-9 bg-stone-950 hover:bg-stone-900 text-white border border-stone-900 focus:ring-stone-900 ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 >
                   <Square className="w-4 h-4" />
                 </button>
@@ -446,10 +446,10 @@ const ServerConsolePage = () => {
         </div>
 
         {/* Console output */}
-        <div className="flex-1 flex flex-col bg-[#0E0E0F] border border-[#1E1E20] rounded-lg overflow-hidden">
+        <div className="flex-1 flex flex-col bg-stone-950 border border-stone-900 rounded-lg overflow-hidden">
           <div
             ref={consoleRef}
-            className="min-h-screen flex-1 p-4 font-mono text-xs text-white bg-[#0E0E0F] overflow-auto"
+            className="min-h-screen flex-1 p-4 font-mono text-xs text-white bg-stone-950 overflow-auto"
             style={{
               height: "100%",
               maxHeight: "425px",
@@ -474,7 +474,7 @@ const ServerConsolePage = () => {
                   <button
                     onClick={() => handlePowerAction("start")}
                     disabled={powerLoading || isServerActive}
-                    className={`flex items-center justify-center w-9 h-9 rounded-md bg-[#0E0E0F] hover:bg-[#1E1E20] text-white border border-[#1E1E20] focus:ring-[#232325] ${isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    className={`flex items-center justify-center w-9 h-9 rounded-md bg-stone-950 hover:bg-stone-900 text-white border border-stone-900 focus:ring-stone-900 ${isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                     aria-label="Start Server"
                   >
                     <Play className="w-4 h-4" />
@@ -482,7 +482,7 @@ const ServerConsolePage = () => {
                   <button
                     onClick={() => handlePowerAction("restart")}
                     disabled={powerLoading || !isServerActive}
-                    className={`flex items-center justify-center w-9 h-9 rounded-md bg-[#0E0E0F] hover:bg-[#1E1E20] text-white border border-[#1E1E20] focus:ring-[#232325] ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    className={`flex items-center justify-center w-9 h-9 rounded-md bg-stone-950 hover:bg-stone-900 text-white border border-stone-900 focus:ring-stone-900 ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                     aria-label="Restart Server"
                   >
                     <RefreshCw className="w-4 h-4" />
@@ -491,7 +491,7 @@ const ServerConsolePage = () => {
                     onClick={() => handlePowerAction("stop")}
                     disabled={powerLoading || !isServerActive}
                     aria-label="Stop Server"
-                    className={`flex items-center justify-center w-9 h-9 rounded-md bg-[#0E0E0F] hover:bg-[#1E1E20] text-white border border-[#1E1E20] focus:ring-[#232325] ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    className={`flex items-center justify-center w-9 h-9 rounded-md bg-stone-950 hover:bg-stone-900 text-white border border-stone-900 focus:ring-stone-900 ${!isServerActive ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                   >
                     <Square className="w-4 h-4" />
                   </button>
@@ -507,7 +507,7 @@ const ServerConsolePage = () => {
           </div>
 
           {/* Command input */}
-          <div className="border-t border-[#1E1E20] p-3 bg-[#0E0E0F]">
+          <div className="border-t border-stone-900 p-3 bg-stone-950">
             <form onSubmit={sendCommand} className="flex">
               <input
                 type="text"
@@ -521,12 +521,12 @@ const ServerConsolePage = () => {
                       ? "Start server to enable console"
                       : "Type command..."
                 }
-                className="flex-1 rounded-l-md px-3 py-2 bg-[#0E0E0F] text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#232325] border-y border-l border-[#1E1E20]"
+                className="flex-1 rounded-l-md px-3 py-2 bg-stone-950 text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-stone-900 border-y border-l border-stone-900"
               />
               <button
                 type="submit"
                 disabled={!connected || !isServerActive || !command.trim()}
-                className="px-3 py-2 rounded-r-md bg-[#1E1E20] text-white border border-[#1E1E20] hover:bg-[#232325] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+                className="px-3 py-2 rounded-r-md bg-stone-950 text-white border border-stone-900 hover:bg-stone-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
               >
                 <SendIcon className="h-4 w-4" />
               </button>

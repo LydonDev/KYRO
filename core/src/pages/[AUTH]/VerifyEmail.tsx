@@ -197,8 +197,8 @@ const VerifyEmail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-[#0E0E0F]">
-      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-[#1E1E20]">
+    <div className="min-h-screen flex bg-stone-950">
+      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-white">{appName}</h1>
         </div>
@@ -213,8 +213,8 @@ const VerifyEmail: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-3/5 flex items-center justify-center bg-[#0E0E0F]">
-        <div className="w-full max-w-md p-8 bg-[#0E0E0F] border border-[#1E1E20] rounded-xl">
+      <div className="w-3/5 flex items-center justify-center bg-stone-950">
+        <div className="w-full max-w-md p-8 bg-stone-950 border border-stone-900 rounded-xl">
           <h2 className="text-2xl font-semibold mb-1 text-white">
             Email verification
           </h2>
@@ -224,13 +224,13 @@ const VerifyEmail: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-3 mb-4 rounded-md bg-[#0E0E0F] border border-[#1E1E20]">
+              <div className="p-3 mb-4 rounded-md bg-stone-950 border border-stone-900">
                 <p className="text-xs text-red-500">{error}</p>
               </div>
             )}
 
             {success && (
-              <div className="p-3 mb-4 rounded-md bg-[#0E0E0F] border border-[#1E1E20]">
+              <div className="p-3 mb-4 rounded-md bg-stone-950 border border-stone-900">
                 <p className="text-xs text-green-500">
                   Email verified successfully! Redirecting...
                 </p>
@@ -238,7 +238,7 @@ const VerifyEmail: React.FC = () => {
             )}
 
             {resendSuccess && (
-              <div className="p-3 mb-4 rounded-md bg-[#0E0E0F] border border-[#1E1E20]">
+              <div className="p-3 mb-4 rounded-md bg-stone-950 border border-stone-900">
                 <p className="text-xs text-white">
                   A new verification code has been sent to your email.
                 </p>
@@ -256,7 +256,7 @@ const VerifyEmail: React.FC = () => {
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
-                  className="w-12 h-12 text-center text-lg rounded-md bg-[#0E0E0F] border border-[#1E1E20] text-white focus:outline-none disabled:opacity-50"
+                  className="w-12 h-12 text-center text-lg rounded-md bg-stone-950 border border-stone-900 text-white focus:outline-none disabled:opacity-50"
                   disabled={isLoading}
                 />
               ))}

@@ -81,8 +81,8 @@ export default function Mods() {
   }, [server, error, navigate]);
 
   return (
-    <div className="bg-[#0E0E0F] min-h-screen p-6">
-      <div className="flex flex-col h-full max-w-[1500px] mx-auto">
+    <div className="p-6">
+      <div className="flex flex-col">
         <div className="mb-6">
           <div className="flex items-center text-sm text-gray-400 mb-4">
             <button

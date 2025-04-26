@@ -205,7 +205,7 @@ const RegionContextMenu: React.FC<{
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.1 }}
-      className="fixed z-50 w-36 bg-[#0E0E0F] border border-[#1E1E20] rounded-lg py-1"
+      className="fixed z-50 w-36 bg-stone-950 border border-stone-900 rounded-lg py-1"
       style={{ top: menuPosition.y, left: menuPosition.x }}
     >
       {actions.map(({ label, icon: Icon, action, destructive }) => (
@@ -218,7 +218,7 @@ const RegionContextMenu: React.FC<{
           className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
             destructive
               ? "text-red-500 hover:bg-red-900/20"
-              : "text-[#9CA3AF] hover:bg-[#1E1E20]"
+              : "text-stone-400 hover:bg-stone-900/20"
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -640,9 +640,9 @@ const AdminRegionsPage = () => {
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="Europe North"
           required
@@ -668,9 +668,9 @@ const AdminRegionsPage = () => {
                 .replace(/[^a-z0-9-]/g, ""),
             })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="eu-north"
           required
@@ -691,9 +691,9 @@ const AdminRegionsPage = () => {
           onChange={(e) =>
             setFormData({ ...formData, countryId: e.target.value || undefined })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
         >
           {countryOptions.map((option) => (
@@ -719,9 +719,9 @@ const AdminRegionsPage = () => {
               fallbackRegionId: e.target.value || undefined,
             })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
         >
           <option value="">None</option>
@@ -753,9 +753,9 @@ const AdminRegionsPage = () => {
                 : undefined,
             })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           min={0}
           placeholder="No limit"
@@ -863,8 +863,8 @@ const AdminRegionsPage = () => {
         </div>
 
         {activeTab === "overview" ? (
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20]">
-            <div className="px-6 py-4">
+          <Card className="bg-stone-950 border border-stone-900">
+            <div className="px-6 py-4">   
               <div className="space-y-4">
                 <div>
                   <div className="text-xs text-white">Region ID</div>
@@ -911,7 +911,7 @@ const AdminRegionsPage = () => {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#1E1E20]">
+                <div className="pt-4 border-t border-stone-900">
                   <div className="text-xs font-medium text-white mb-3">
                     Statistics
                   </div>
@@ -937,7 +937,7 @@ const AdminRegionsPage = () => {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#1E1E20]">
+                <div className="pt-4 border-t border-stone-900">
                   <div className="text-xs text-white">Created At</div>
                   <div className="text-sm mt-1 text-gray-500">
                     {new Date(selectedRegion.createdAt).toLocaleString()}
@@ -956,7 +956,7 @@ const AdminRegionsPage = () => {
           <div className="grid grid-cols-3 gap-6">
             {/* Nodes List - Left Side */}
             <div className="col-span-2">
-              <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+              <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-medium text-white">
@@ -969,7 +969,7 @@ const AdminRegionsPage = () => {
                       selectedRegion.nodes.map((node) => (
                         <Card
                           key={node.id}
-                          className="flex items-center justify-between p-3 bg-[#0E0E0F] rounded-md border border-[#1E1E20]"
+                          className="flex items-center justify-between p-3 bg-stone-950 rounded-md border border-stone-900"
                         >
                           <div className="flex items-center space-x-3">
                             <div
@@ -1006,7 +1006,7 @@ const AdminRegionsPage = () => {
 
             {/* Assign Node Form - Right Side */}
             <div>
-              <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+              <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
                 <div className="p-6">
                   <div className="space-y-6">
                     <div>
@@ -1026,9 +1026,9 @@ const AdminRegionsPage = () => {
                         <select
                           value={selectedNodeId}
                           onChange={(e) => setSelectedNodeId(e.target.value)}
-                          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                           disabled={unassignedNodes.length === 0}
                         >
@@ -1064,7 +1064,7 @@ const AdminRegionsPage = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+          <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-medium text-white">
@@ -1145,7 +1145,7 @@ const AdminRegionsPage = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1E1E20] bg-[#0E0E0F]">
+          <tbody className="divide-y divide-stone-900 bg-stone-950">
             {sortedRegions.map((region) => {
               const countryName =
                 countryOptions.find(
@@ -1154,9 +1154,9 @@ const AdminRegionsPage = () => {
                 region.countryId ||
                 "-";
               return (
-                <tr
+                <tr   
                   key={region.id}
-                  className="hover:bg-[#1E1E20] cursor-pointer"
+                  className="hover:bg-stone-900 cursor-pointer"
                   onClick={() => {
                     setSelectedRegion(region);
                     setView("view");
@@ -1238,7 +1238,7 @@ const AdminRegionsPage = () => {
   // Context menu is rendered at the root level
 
   return (
-    <div className="min-h-screen bg-[#0E0E0F]">
+    <div className="min-h-screen bg-stone-950">
       {/* Context Menu */}
       <AnimatePresence>
         {contextMenu && (
@@ -1286,7 +1286,7 @@ const AdminRegionsPage = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
+                  <h1 className="text-lg font-semibold text-white">
                     Regions
                   </h1>
                   <p className="text-xs text-gray-500 mt-1">
@@ -1305,7 +1305,7 @@ const AdminRegionsPage = () => {
                 </div>
               </div>
 
-              <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+              <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
                 {renderRegionTable()}
               </div>
             </div>
@@ -1326,11 +1326,11 @@ const AdminRegionsPage = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.95, opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  className="bg-[#0E0E0F] border border-[#1E1E20] rounded-lg max-w-lg w-full p-6 relative"
+                  className="bg-stone-950 border border-stone-900 rounded-lg max-w-lg w-full p-6 relative"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center space-x-4 mb-4">
-                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">
+                    <h1 className="text-lg font-semibold text-white flex-1">
                       Create Region
                     </h1>
                   </div>
@@ -1358,11 +1358,11 @@ const AdminRegionsPage = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.95, opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  className="bg-[#0E0E0F] border border-[#1E1E20] rounded-lg max-w-lg w-full p-6 relative"
+                  className="bg-stone-950 border border-stone-900 rounded-lg max-w-lg w-full p-6 relative"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center space-x-4 mb-4">
-                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">
+                    <h1 className="text-lg font-semibold text-white flex-1">
                       Edit Region
                     </h1>
                   </div>

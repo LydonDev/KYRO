@@ -81,7 +81,7 @@ const AdminPage = () => {
             </p>
           </div>
           <div className="grid flex items-center justify-center">
-            <Card className="bg-[#0E0E0F] border border-[#1E1E20] w-full h-full mb-8">
+            <Card className="bg-stone-950 border border-stone-900 w-full h-full mb-8">
               <CardHeader className="w-full">
                 <div className="flex items-start w-full">
                   <div className="w-full">
@@ -114,7 +114,7 @@ const AdminPage = () => {
                 </div>
               </CardHeader>
             </Card>
-            <Card className="bg-[#0E0E0F] border border-[#1E1E20] w-full h-full mb-6 mt-8">
+            <Card className="bg-stone-950 border border-stone-900 w-full h-full mb-6 mt-8">
               <CardHeader>
                 <div className="flex items-start">
                   <div>
@@ -138,14 +138,14 @@ const AdminPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <a
               href="https://discord.gg/compute"
-              className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
+              className="bg-stone-950 border border-stone-900 transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-stone-900"
             >
               <QuestionMarkCircleIcon className="w-4 h-4" />
               <span>Get Help</span>
             </a>
             <a
               href="https://github.com/lydondev/KYRO"
-              className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
+              className="bg-stone-950 border border-stone-900 transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-stone-900"
             >
               <svg
                 className="w-4 h-4"
@@ -163,12 +163,12 @@ const AdminPage = () => {
             </a>
             <a
               href="https://docs.kyro.lol"
-              className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
+              className="bg-stone-950 border border-stone-900 transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-stone-900"
             >
               <BookOpenIcon className="w-4 h-4" />
               <span>Documentation</span>
             </a>
-            <button className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]">
+            <button className="bg-stone-950 border border-stone-900 transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-stone-900">
               <HeartIcon className="w-4 h-4" />
               <span>Support the Project</span>
             </button>

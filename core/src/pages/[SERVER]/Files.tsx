@@ -225,7 +225,7 @@ const Toast: React.FC<{ toast: Toast }> = ({ toast }) => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -20 }}
     className={`fixed bottom-4 right-4 px-4 py-3 rounded-lg flex items-center space-x-2 
-      ${toast.type === "success" ? "bg-[#0E0E0F] text-[#FFFFFF]" : "bg-[#1E1E20] text-[#EF4444] border border-[#1E1E20]"}`}
+      ${toast.type === "success" ? "bg-stone-950 text-[#FFFFFF]" : "bg-stone-950 text-[#EF4444] border border-stone-900"}`}
   >
     {toast.type === "success" ? (
       <CheckIcon className="w-4 h-4" />
@@ -243,10 +243,10 @@ const Checkbox: React.FC<{
 }> = ({ checked, onChange, className = "" }) => (
   <label className={`inline-flex items-center cursor-pointer ${className}`}>
     <div
-      className={`bg-[#1E1E20] w-4 h-4 rounded border transition-colors flex items-center justify-center ${
+      className={`bg-stone-950 w-4 h-4 rounded border transition-colors flex items-center justify-center ${
         checked
-          ? "bg-[#1E1E20] border-[#1E1E20]"
-          : "border-[#1E1E20] bg-[#1E1E20]"
+          ? "bg-stone-950 border-stone-900"
+          : "border-stone-900 bg-stone-950"
       }`}
       onClick={(e) => {
         e.stopPropagation();
@@ -354,7 +354,7 @@ const ContextMenu: React.FC<{
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.1 }}
-      className="fixed z-50 w-48 bg-[#0E0E0F] border border-[#1E1E20] rounded-lg py-1"
+      className="fixed z-50 w-48 bg-stone-950 border border-stone-900 rounded-lg py-1"
       style={{ top: menuPosition.y, left: menuPosition.x }}
     >
       {actions.map(({ label, icon: Icon, action, disabled }) => (
@@ -366,7 +366,7 @@ const ContextMenu: React.FC<{
             }
           }}
           disabled={disabled}
-          className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm text-[#9CA3AF] hover:bg-[#1E1E20]
+          className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm text-[#9CA3AF] hover:bg-stone-900
               ${disabled ? "opacity-50 cursor-not-allowed" : ""}}`}
         >
           <Icon className="w-4 h-4 text-[#9CA3AF]" />
@@ -1123,7 +1123,7 @@ const FileManager: React.FC = () => {
 
   return (
     <div
-      className="bg-[#0E0E0F] min-h-screen p-6"
+      className="bg-stone-950 min-h-screen p-6"
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDragOver={handleDrag}
@@ -1144,13 +1144,13 @@ const FileManager: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-[#0E0E0F]/50 flex items-center justify-center z-50"
+              className="fixed inset-0 bg-stone-950/50 flex items-center justify-center z-50"
             >
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
-                className="bg-[#0E0E0F] border border-[#1E1E20] rounded-xl p-8 text-center"
+                className="bg-stone-950 border border-stone-900 rounded-xl p-8 text-center"
               >
                 <ArrowUpTrayIcon className="w-12 h-12 text-[#9CA3AF] mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-[#FFFFFF] mb-4">
@@ -1171,7 +1171,7 @@ const FileManager: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#0E0E0F] border border-[#1E1E20] rounded-lg px-4 py-3 flex items-center gap-2 shadow-lg"
+              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-stone-950 border border-stone-900 rounded-lg px-4 py-3 flex items-center gap-2 shadow-lg"
             >
               <span className="text-sm font-medium text-[#FFFFFF] mr-2">
                 {selectedFiles.size}{" "}
@@ -1238,7 +1238,7 @@ const FileManager: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center px-3 py-1.5 text-xs text-[#EF4444] bg-[#1E1E20] border border-[#1E1E20] rounded-md"
+                  className="flex items-center px-3 py-1.5 text-xs text-[#EF4444] bg-stone-950 border border-stone-900 rounded-md"
                 >
                   <ExclamationCircleIcon className="w-3.5 h-3.5 mr-1.5" />
                   {error}
@@ -1298,9 +1298,9 @@ const FileManager: React.FC = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="w-full pl-9 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full pl-9 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
               />
               <MagnifyingGlassIcon className="w-4 h-4 text-[#9CA3AF] absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -1372,7 +1372,7 @@ const FileManager: React.FC = () => {
               {uploads.map((upload, index) => (
                 <div
                   key={index}
-                  className="mt-4 flex items-center justify-between bg-[#0E0E0F]/80 border border-[#1E1E20] px-4 py-2 rounded-md"
+                  className="mt-4 flex items-center justify-between bg-stone-950 border border-stone-900 px-4 py-2 rounded-md"
                 >
                   <div className="flex items-center space-x-3">
                     <DocumentIcon className="w-4 h-4 text-[#9CA3AF]" />
@@ -1393,9 +1393,9 @@ const FileManager: React.FC = () => {
                         <CheckIcon className="w-4 h-4 text-[#10B981]" />
                       </motion.div>
                     ) : (
-                      <div className="w-32 h-1 bg-[#1E1E20] rounded-full overflow-hidden">
+                      <div className="w-32 h-1 bg-stone-950 rounded-full overflow-hidden">
                         <motion.div
-                          className="h-full bg-[#FFFFFF]"
+                          className="h-full bg-stone-950"
                           initial={{ width: 0 }}
                           animate={{ width: `${upload.progress}%` }}
                           transition={{ duration: 0.1 }}
@@ -1416,9 +1416,10 @@ const FileManager: React.FC = () => {
           </div>
         ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-[#0E0E0F]/80 border border-[#1E1E20] rounded-xl overflow-hidden mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="bg-stone-950 border border-stone-900 rounded-xl overflow-hidden mt-6"
           >
             <table className="w-full">
               <thead>
@@ -1447,7 +1448,7 @@ const FileManager: React.FC = () => {
                   <th className="w-12"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1E1E20]">
+              <tbody className="divide-y divide-stone-900">
                 {sortedFiles.map((file) => {
                   const fileType = getFileTypeInfo(file.mime);
                   const FileIcon = file.isFile ? fileType.icon : FolderIcon;
@@ -1462,7 +1463,7 @@ const FileManager: React.FC = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className={`${isViewable || !file.isFile ? "cursor-pointer" : ""} 
-                      hover:bg-[#232325] transition-colors duration-100 ${file.hidden ? "bg-[#0E0E0F]" : ""}`}
+                      hover:stone-900 transition-colors duration-100 ${file.hidden ? "bg-stone-950" : ""}`}
                       onClick={() => {
                         if (isViewable && file.isFile) {
                           handleFileAction("edit", file);
@@ -1619,7 +1620,7 @@ const FileManager: React.FC = () => {
                   Read-only file
                 </span>
               )}
-              <div className="flex-1 overflow-hidden rounded-md border border-[#1E1E20]">
+              <div className="flex-1 overflow-hidden rounded-md border border-stone-900">
                 <Editor
                   value={modal.data.content}
                   language={
@@ -1721,9 +1722,9 @@ const FileManager: React.FC = () => {
                 currentPath.length > 0 ? currentPath.join("/") : "/"
               }
               autoFocus
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
             />
           </FormModal>
@@ -1749,10 +1750,9 @@ const FileManager: React.FC = () => {
               type="text"
               name="mode"
               defaultValue={modal.data.file.mode}
-              autoFocus
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
             />
             <div className="text-xs text-[#9CA3AF] mt-1">
@@ -1778,10 +1778,9 @@ const FileManager: React.FC = () => {
               type="text"
               name="name"
               placeholder="Archive name (without .zip)"
-              autoFocus
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
             />
             <div className="mt-2 text-xs text-[#9CA3AF]">

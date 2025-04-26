@@ -150,7 +150,7 @@ const ServerSettingsPage = () => {
   }
 
   return (
-    <div className="bg-[#0E0E0F] p-6">
+    <div className="bg-stone-950 p-6">
       <div className="flex flex-col h-full max-w-[1500px] mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -193,7 +193,7 @@ const ServerSettingsPage = () => {
           </div>
         </div>
 
-        <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-lg">
+        <div className="bg-stone-950 border border-stone-900 rounded-lg">
           <div className="p-6 space-y-6">
             {/* Server Name Section */}
             <div>
@@ -206,9 +206,9 @@ const ServerSettingsPage = () => {
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                    className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                     placeholder="Enter server name"
                   />
@@ -231,8 +231,8 @@ const ServerSettingsPage = () => {
                   <div
                     className={`flex items-center p-3 text-sm rounded-md ${
                       renameFeedback.type === "success"
-                        ? "bg-[#0E0E0F] border border-[#1E1E20] text-[#10B981]"
-                        : "bg-[#0E0E0F] border border-[#1E1E20] text-[#EF4444]"
+                        ? "bg-stone-950 border border-stone-900 text-[#10B981]"
+                        : "bg-stone-950 border border-stone-900 text-[#EF4444]"
                     }`}
                   >
                     {renameFeedback.type === "success" ? (
@@ -251,7 +251,7 @@ const ServerSettingsPage = () => {
               <h2 className="text-lg font-medium text-[#FFFFFF] mb-4">
                 Danger Zone
               </h2>
-              <div className="bg-[#0E0E0F] p-4 rounded-md border border-[#1E1E20]">
+              <div className="bg-stone-950 p-4 rounded-md border border-stone-900">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div className="mb-4 md:mb-0">
                     <h3 className="text-sm font-medium text-[#FFFFFF]">

@@ -156,7 +156,7 @@ const UserContextMenu: React.FC<{
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.1 }}
-      className="fixed z-50 w-36 bg-[#0E0E0F] border border-[#1E1E20] rounded-lg py-1"
+      className="fixed z-50 w-36 bg-stone-950 border border-stone-900 rounded-lg py-1"
       style={{ top: menuPosition.y, left: menuPosition.x }}
     >
       {actions.map(({ label, icon: Icon, action, destructive }) => (
@@ -169,7 +169,7 @@ const UserContextMenu: React.FC<{
           className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
             destructive
               ? "text-red-500 hover:bg-red-900/20"
-              : "text-[#9CA3AF] hover:bg-[#1E1E20]"
+              : "text-[#9CA3AF] hover:bg-stone-900"
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -518,9 +518,9 @@ const AdminUsersPage = () => {
           onChange={(e) =>
             setFormData({ ...formData, username: e.target.value })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-90 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="john.doe"
           required
@@ -544,9 +544,9 @@ const AdminUsersPage = () => {
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="••••••••"
           required={type === "create"}
@@ -559,7 +559,7 @@ const AdminUsersPage = () => {
       </div>
 
       <div className="space-y-1">
-        <Card className="mt-2 space-y-2 bg-[#0E0E0F] border border-[#1E1E20] p-3">
+        <Card className="mt-2 space-y-2 bg-stone-950 border border-stone-900 p-3">
           {availablePermissions.map((permission) => (
             <div key={permission.id} className="flex items-start space-x-2">
               <input
@@ -674,7 +674,7 @@ const AdminUsersPage = () => {
         </div>
 
         {activeTab === "overview" ? (
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20]">
+          <Card className="bg-stone-950 border border-stone-900">
             <div className="px-6 py-4">
               <div className="space-y-4">
                 <div>
@@ -713,7 +713,7 @@ const AdminUsersPage = () => {
             </div>
           </Card>
         ) : (
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+          <Card className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
             <div className="px-6 py-4">
               <div className="space-y-4">
                 <div>
@@ -732,8 +732,8 @@ const AdminUsersPage = () => {
                       key={permission.id}
                       className={`p-3 rounded-md border ${
                         selectedUser.permissions.includes(permission.id)
-                          ? "bg-[#1E1E20] border-[#1E1E20]"
-                          : "bg-[#0E0E0F] border-[#1E1E20]"
+                          ? "bg-stone-950 border-stone-900"
+                          : "bg-stone-950 border-stone-900"
                       }`}
                     >
                       <div className="flex items-start">
@@ -806,11 +806,11 @@ const AdminUsersPage = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1E1E20] bg-[#0E0E0F]">
+          <tbody className="divide-y divide-stone-900 bg-stone-950">
             {sortedUsers.map((user) => (
               <tr
                 key={user.id}
-                className="hover:bg-[#1E1E20] cursor-pointer"
+                className="hover:bg-stone-900 cursor-pointer"
                 onClick={() => {
                   setSelectedUser(user);
                   setView("view");
@@ -872,7 +872,7 @@ const AdminUsersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0E0E0F]">
+    <div className="min-h-screen bg-stone-950">
       <div className="p-6">
         {/* Global Alerts */}
         {alerts.length > 0 && (
@@ -911,7 +911,7 @@ const AdminUsersPage = () => {
                 </div>
               </div>
 
-              <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+              <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
                 {renderUserTable()}
               </div>
             </div>

@@ -164,15 +164,15 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses = {
     primary:
-      "bg-[#1E1E20] hover:bg-[#232325] text-[#FFFFFF] border border-[#232325] focus:ring-[#232325]",
+      "bg-stone-900 hover:bg-stone-850 text-[#FFFFFF] border border-stone-900 focus:ring-stone-900",
     secondary:
-      "bg-[#141415] hover:bg-[#1E1E20] text-[#9CA3AF] border border-[#1E1E20] focus:ring-[#1E1E20]",
+      "bg-stone-950 hover:bg-stone-800 text-[#9CA3AF] border border-stone-900 focus:ring-stone-900",
     danger:
       "bg-[#EF4444]/10 hover:bg-[#EF4444]/20 text-[#EF4444] border border-[#EF4444]/20 focus:ring-[#EF4444]/20",
     success:
       "bg-[#10B981]/10 hover:bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/20 focus:ring-[#10B981]/20",
     outline:
-      "bg-transparent hover:bg-[#232325] text-[#FFFFFF] border border-[#1E1E20] focus:ring-[#1E1E20]",
+      "bg-transparent hover:bg-stone-800 text-[#FFFFFF] border border-stone-900 focus:ring-stone-900",
     link: "bg-transparent text-[#9CA3AF] hover:text-[#FFFFFF] border-0",
   };
 

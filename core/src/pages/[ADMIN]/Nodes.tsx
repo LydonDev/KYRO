@@ -117,10 +117,10 @@ interface AlertProps {
 const Alert: React.FC<AlertProps> = ({ type, message, onDismiss }) => {
   const bgColor =
     type === "error"
-      ? "bg-[#0E0E0F]"
+      ? "bg-stone-950"
       : type === "success"
-        ? "bg-[#0E0E0F]"
-        : "bg-[#0E0E0F]";
+        ? "bg-stone-950"
+        : "bg-stone-950";
   const textColor =
     type === "error"
       ? "text-red-600"
@@ -234,7 +234,7 @@ const NodeContextMenu: React.FC<{
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.1 }}
-      className="fixed z-50 w-36 bg-[#0E0E0F] border border-[#1E1E20] rounded-lg py-1"
+      className="fixed z-50 w-36 bg-stone-950 border border-stone-900 rounded-lg py-1"
       style={{ top: menuPosition.y, left: menuPosition.x }}
     >
       {actions.map(({ label, icon: Icon, action, destructive }) => (
@@ -247,7 +247,7 @@ const NodeContextMenu: React.FC<{
           className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
             destructive
               ? "text-red-500 hover:bg-red-900/20"
-              : "text-[#9CA3AF] hover:bg-[#1E1E20]"
+              : "text-[#9CA3AF] hover:bg-stone-900"
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -694,9 +694,9 @@ const AdminNodesPage = () => {
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="node-1"
           required
@@ -715,9 +715,9 @@ const AdminNodesPage = () => {
           type="text"
           value={formData.fqdn}
           onChange={(e) => setFormData({ ...formData, fqdn: e.target.value })}
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="node1.example.com"
           required
@@ -736,9 +736,9 @@ const AdminNodesPage = () => {
           onChange={(e) =>
             setFormData({ ...formData, port: parseInt(e.target.value) })
           }
-          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           required
           min={1}
@@ -849,7 +849,7 @@ const AdminNodesPage = () => {
           <button
             onClick={() => onPageChange(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="p-1 rounded border border-[#1E1E20] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded border border-stone-900 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeftIcon className="w-4 h-4" />
           </button>
@@ -873,8 +873,8 @@ const AdminNodesPage = () => {
                 onClick={() => onPageChange(pageNum)}
                 className={`px-2 py-1 rounded ${
                   currentPage === pageNum
-                    ? "bg-[#0E0E0F] text-white"
-                    : "border border-[#1E1E20] hover:bg-[#1E1E20]"
+                    ? "bg-stone-950 text-white"
+                    : "border border-stone-900 hover:bg-stone-900"
                 }`}
               >
                 {pageNum}
@@ -885,7 +885,7 @@ const AdminNodesPage = () => {
           <button
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
-            className="p-1 rounded border border-[#1E1E20] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded border border-stone-900 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronRightIcon className="w-4 h-4" />
           </button>
@@ -998,9 +998,8 @@ const AdminNodesPage = () => {
 
     return (
       <div className="grid grid-cols-3 gap-6">
-        {/* Allocations List - Left Side */}
         <div className="col-span-2">
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20]">
+          <Card className="bg-stone-950 border border-900">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -1033,7 +1032,7 @@ const AdminNodesPage = () => {
                       {paginatedAssigned.map((allocation) => (
                         <div
                           key={allocation.id}
-                          className="flex items-center justify-between p-3 bg-[#0E0E0F] rounded-md border border-[#1E1E20]"
+                          className="flex items-center justify-between p-3 bg-stone-950 rounded-md border border-stone-900"
                         >
                           <div className="flex items-center space-x-3">
                             <ServerIcon className="w-4 h-4 text-gray-400" />
@@ -1072,7 +1071,7 @@ const AdminNodesPage = () => {
                       {paginatedUnassigned.map((allocation) => (
                         <div
                           key={allocation.id}
-                          className="flex items-center justify-between p-3 bg-[#0E0E0F] rounded-md border border-[#1E1E20] hover:border-[#1E1E20]"
+                          className="flex items-center justify-between p-3 bg-stone-950 rounded-md border border-stone-900 hover:border-stone-900"
                         >
                           <div className="flex items-center space-x-3">
                             <div>
@@ -1126,7 +1125,7 @@ const AdminNodesPage = () => {
 
         {/* Create Allocation Form - Right Side */}
         <div>
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+          <Card className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
             <div className="p-6">
               <div className="space-y-6">
                 <div>
@@ -1161,9 +1160,9 @@ const AdminNodesPage = () => {
                             bindAddress: e.target.value,
                           })
                         }
-                        className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                        className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                    text-sm text-white
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                         placeholder="0.0.0.0"
                         required
@@ -1185,9 +1184,9 @@ const AdminNodesPage = () => {
                               portRange: undefined,
                             })
                           }
-                          className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                          className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                           min={1}
                           max={65535}
@@ -1215,9 +1214,9 @@ const AdminNodesPage = () => {
                                 },
                               })
                             }
-                            className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                            className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                             min={1}
                             max={65535}
@@ -1243,9 +1242,9 @@ const AdminNodesPage = () => {
                                 },
                               })
                             }
-                            className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                            className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                             min={1}
                             max={65535}
@@ -1268,9 +1267,9 @@ const AdminNodesPage = () => {
                             alias: e.target.value,
                           })
                         }
-                        className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                        className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                         placeholder="Primary game port"
                       />
@@ -1289,9 +1288,9 @@ const AdminNodesPage = () => {
                             notes: e.target.value,
                           })
                         }
-                        className="mt-1 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                        className="mt-1 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                         placeholder="Additional information"
                       />
@@ -1403,7 +1402,7 @@ const AdminNodesPage = () => {
         </div>
 
         {activeTab === "overview" ? (
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20]">
+          <Card className="bg-stone-950 border border-stone-900">
             <div className="px-6 py-4">
               <div className="space-y-4">
                 <div>
@@ -1443,7 +1442,7 @@ const AdminNodesPage = () => {
 
                 {selectedNode.systemState && (
                   <>
-                    <div className="pt-4 border-t border-[#232325]">
+                    <div className="pt-4 border-t border-stone-900">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <div className="text-xs text-white">
@@ -1493,7 +1492,7 @@ const AdminNodesPage = () => {
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-[#232325]">
+                    <div className="pt-4 border-t border-stone-900">
                       <div className="text-xs font-medium text-gray-400 mb-3">
                         Resource Allocation
                       </div>
@@ -1531,7 +1530,7 @@ const AdminNodesPage = () => {
                   </>
                 )}
 
-                <div className="pt-4 border-t border-[#232325]">
+                <div className="pt-4 border-t border-stone-900">
                   <div className="text-xs text-white">Last Checked</div>
                   <div className="text-sm mt-1 text-gray-400">
                     {new Date(selectedNode.lastChecked).toLocaleString()}
@@ -1557,7 +1556,7 @@ const AdminNodesPage = () => {
             {nodeServers.map((server) => (
               <Card
                 key={server.id}
-                className="bg-[#0E0E0F] border border-[#1E1E20]"
+                className="bg-stone-950 border border-stone-900"
               >
                 <div className="px-6 h-16 flex items-center justify-between">
                   <div className="flex items-center space-x-4">
@@ -1601,7 +1600,7 @@ const AdminNodesPage = () => {
             ))}
 
             {nodeServers.length === 0 && (
-              <Card className="text-center py-6 bg-[#0E0E0F] rounded-md border border-[#1E1E20]">
+              <Card className="text-center py-6 bg-stone-900 rounded-md border border-stone-900">
                 <p className="text-xs text-gray-400">No servers found</p>
               </Card>
             )}
@@ -1609,7 +1608,7 @@ const AdminNodesPage = () => {
         ) : activeTab === "allocations" ? (
           renderAllocationTab()
         ) : (
-          <Card className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs">
+          <Card className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
             <div className="px-6 py-4">
               <div className="space-y-6">
                 <div>
@@ -1637,7 +1636,7 @@ const AdminNodesPage = () => {
                       2. Run Configuration Script
                     </div>
                     <div className="mt-1 relative">
-                      <div className="bg-[#0E0E0F] border border-[#1E1E20] p-3 pr-12 rounded-md font-mono text-xs overflow-x-auto text-gray-400">
+                      <div className="bg-stone-950 border border-stone-900 p-3 pr-12 rounded-md font-mono text-xs overflow-x-auto text-gray-400">
                         bun run configure
                       </div>
                     </div>
@@ -1654,7 +1653,7 @@ const AdminNodesPage = () => {
                       When prompted for the connection key, use the following:
                     </p>
                     <div className="mt-2 relative">
-                      <div className="bg-[#0E0E0F] border border-[#1E1E20] p-3 pr-12 rounded-md font-mono text-xs overflow-x-auto text-gray-400">
+                      <div className="bg-stone-950 border border-stone-900 p-3 pr-12 rounded-md font-mono text-xs overflow-x-auto text-gray-400">
                         {selectedNode.connectionKey || "Loading..."}
                       </div>
                       <button
@@ -1688,7 +1687,7 @@ const AdminNodesPage = () => {
                         href="https://docs.kyro.lol/krypton/configuration"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-indigo-500 hover:underline"
+                        className="text-stone-500 hover:underline"
                       >
                         configuration documentation
                       </a>{" "}
@@ -1747,7 +1746,7 @@ const AdminNodesPage = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-[#0E0E0F]">
+          <tbody className="bg-stone-950">
             {sortedNodes.map((node) => {
               const nodeServers = servers.filter(
                 (server) => server.node.id === node.id,
@@ -1755,7 +1754,7 @@ const AdminNodesPage = () => {
               return (
                 <tr
                   key={node.id}
-                  className="hover:bg-[#1E1E20] cursor-pointer"
+                  className="hover:bg-stone-900 cursor-pointer"
                   onClick={() => {
                     setSelectedNode(node);
                     setView("view");
@@ -1839,7 +1838,7 @@ const AdminNodesPage = () => {
   }
 
   return (
-    <div className="bg-[#0E0E0F]">
+    <div className="bg-stone-950">
       <div className="p-6">
         {/* Global Alerts */}
         {alerts.length > 0 && (
@@ -1855,7 +1854,7 @@ const AdminNodesPage = () => {
           </div>
         )}
 
-        <div className="transition-all duration-200 ease-in-out bg-[#0E0E0F] w-full h-screen flex flex-col">
+        <div className="transition-all duration-200 ease-in-out stone-950 w-full h-screen flex flex-col">
           {view === "list" && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -1868,7 +1867,7 @@ const AdminNodesPage = () => {
                       href="https://docs.kyro.lol"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-indigo-500 hover:underline"
+                      className="text-stone-500 hover:underline"
                     >
                       documentation
                     </a>
@@ -1886,7 +1885,7 @@ const AdminNodesPage = () => {
                 </div>
               </div>
 
-              <Card className="bg-[#0E0E0F] border border-[#1E1E20]">
+              <Card className="bg-stone-950 border border-stone-900">
                 {renderNodeTable()}
               </Card>
             </div>

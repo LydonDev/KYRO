@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Button } from "../../components/UI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
@@ -157,11 +158,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0E0E0F]">
-        <div className="w-8 h-8 border-2 border-[#1E1E20] border-t-white rounded-full animate-spin"></div>
-      </div>
-    );
+    return (<LoadingSpinner/>);
   }
 
   return (
@@ -214,9 +211,9 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#0E0E0F]">
+    <div className="min-h-screen flex bg-stone-950">
       {/* Left panel */}
-      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-[#1E1E20]">
+      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-white">{appName}</h1>
         </div>
@@ -231,7 +228,7 @@ export const AuthPage: React.FC = () => {
         <div className="mt-8">
           <Link
             to="https://github.com/lydondev"
-            className="inline-flex items-center text-gray-400 border-b border-[#1E1E20]"
+            className="inline-flex items-center text-gray-400 border-b border-stone-900"
           >
             Powered by {appName}
             <svg
@@ -253,8 +250,8 @@ export const AuthPage: React.FC = () => {
       </div>
 
       {/* Right panel */}
-      <div className="w-3/5 flex items-center justify-center bg-[#141415]">
-        <div className="rounded-xl p-8 w-full max-w-md bg-[#0E0E0F] border border-[#1E1E20]">
+      <div className="w-3/5 flex items-center justify-center bg-stone-950">
+        <div className="rounded-xl p-8 w-full max-w-md bg-stone-950 border border-stone-900">
           <h2 className="text-2xl font-semibold mb-1 text-white">Sign in</h2>
           <p className="text-sm mb-6 text-gray-400">
             Enter your credentials to access your account.
@@ -278,7 +275,7 @@ export const AuthPage: React.FC = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full px-3 py-2 rounded-md text-sm bg-[#141415] border border-[#1E1E20] text-white outline-none"
+                className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
                 placeholder="yourusername"
                 required
               />
@@ -305,7 +302,7 @@ export const AuthPage: React.FC = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full px-3 py-2 rounded-md text-sm bg-[#141415] border border-[#1E1E20] text-white outline-none"
+                  className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
                   placeholder="*********"
                   required
                 />

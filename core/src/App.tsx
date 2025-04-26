@@ -50,13 +50,16 @@ interface LayoutProps {
 
 function Layout({ children }: LayoutProps) {
   const location = useLocation();
+  // Sidebar should NOT render on auth-related routes
   const noSidebarRoutes = [
     "/login",
     "/register",
     "/verify-email",
     "/forgot-password",
   ];
-  const shouldHaveSidebar = !noSidebarRoutes.includes(location.pathname);
+  // Check for exact match or prefix match (in case of nested auth routes)
+  const isAuthRoute = noSidebarRoutes.some(route => location.pathname.startsWith(route));
+  const shouldHaveSidebar = !isAuthRoute;
 
   return (
     <div>
@@ -115,6 +118,7 @@ function App() {
                     <Route path="/maintainence" element={<Maintainence />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/verify-email" element={<VerifyEmail />} />
+
                     <Route
                       path="/forgot-password"
                       element={<ForgotPassword />}
@@ -124,6 +128,14 @@ function App() {
                       element={
                         <ProtectedRoute>
                           <Servers />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/profile"
+                      element={
+                        <ProtectedRoute>
+                          <Profile />
                         </ProtectedRoute>
                       }
                     />
@@ -140,14 +152,6 @@ function App() {
                       element={
                         <ProtectedRoute>
                           <Unauthorized />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/profile"
-                      element={
-                        <ProtectedRoute>
-                          <Profile />
                         </ProtectedRoute>
                       }
                     />

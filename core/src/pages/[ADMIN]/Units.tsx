@@ -123,16 +123,16 @@ const EnvironmentVariableForm: React.FC<{
         <button
           type="button"
           onClick={addVariable}
-          className="px-2 py-1 text-xs font-medium text-gray-600 bg-[#0E0E0F] border border-[#1E1E20] rounded-md hover:bg-gray-50"
+          className="px-2 py-1 text-xs font-medium text-gray-600 bg-stone-950 border border-stone-900 rounded-md hover:bg-gray-50"
         >
           Add Variable
         </button>
       </div>
 
       {variables.map((variable, index) => (
-        <div key={index} className="border-t border-[#1E1E20] p-3 space-y-3">
+        <div key={index} className="border-t border-stone-900 p-3 space-y-3">
           <div className="flex justify-between items-start">
-            <div className="grow space-y-3">
+            <div className="grow space-y-3">  
               <div className="grid grid-cols-2 gap-2">
                 <input
                   type="text"
@@ -140,9 +140,9 @@ const EnvironmentVariableForm: React.FC<{
                   onChange={(e) =>
                     updateVariable(index, "name", e.target.value)
                   }
-                  className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900s focus:border-stone-900
                     transition-colors duration-200"
                   placeholder="Variable Name"
                 />
@@ -152,9 +152,9 @@ const EnvironmentVariableForm: React.FC<{
                   onChange={(e) =>
                     updateVariable(index, "defaultValue", e.target.value)
                   }
-                  className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                   placeholder="Default Value"
                 />
@@ -166,9 +166,9 @@ const EnvironmentVariableForm: React.FC<{
                 onChange={(e) =>
                   updateVariable(index, "description", e.target.value)
                 }
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                   text-sm text-[#FFFFFF]
-                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                  focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                   transition-colors duration-200"
                 placeholder="Description (optional)"
               />
@@ -177,9 +177,9 @@ const EnvironmentVariableForm: React.FC<{
                 type="text"
                 value={variable.rules}
                 onChange={(e) => updateVariable(index, "rules", e.target.value)}
-                className="block w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="block w-full px-3 py-2 rounded-md bg-stone-900 border border-stone-900
                   text-sm text-[#FFFFFF]
-                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                  focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                   transition-colors duration-200"
                 placeholder="Validation Rules (e.g., string|max:20)"
               />
@@ -237,7 +237,7 @@ const EnvironmentVariableForm: React.FC<{
       ))}
 
       {variables.length === 0 && (
-        <div className="text-center py-4 border border-[#1E1E20] border-dashed rounded-md">
+        <div className="text-center py-4 border border-stone-900 border-dashed rounded-md">
           <p className="text-xs text-gray-500">No variables defined</p>
         </div>
       )}
@@ -291,7 +291,7 @@ const ConfigFilesForm: React.FC<{
       {files.map((file, index) => (
         <div
           key={index}
-          className="border border-[#1E1E20] rounded-md p-3 space-y-3"
+          className="border border-stone-900 rounded-md p-3 space-y-3"
         >
           <div className="flex justify-between items-start">
             <div className="grow space-y-3">
@@ -299,9 +299,9 @@ const ConfigFilesForm: React.FC<{
                 type="text"
                 value={file.path}
                 onChange={(e) => updateFile(index, "path", e.target.value)}
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                 placeholder="File Path (e.g., server.properties)"
               />
@@ -309,9 +309,9 @@ const ConfigFilesForm: React.FC<{
               <textarea
                 value={file.content}
                 onChange={(e) => updateFile(index, "content", e.target.value)}
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                   text-sm text-[#FFFFFF]
-                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                  focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                   transition-colors duration-200 font-mono"
                 placeholder="File Content"
                 rows={5}
@@ -331,7 +331,7 @@ const ConfigFilesForm: React.FC<{
       ))}
 
       {files.length === 0 && (
-        <div className="text-center py-4 border border-[#1E1E20] border-dashed rounded-md">
+        <div className="text-center py-4 border border-stone-900 border-dashed rounded-md">
           <p className="text-xs text-gray-500">
             No configuration files defined
           </p>
@@ -562,7 +562,7 @@ const ContainerList: React.FC<{
             ))}
           </div>
         ) : (
-          <div className="text-center py-4 border border-[#1E1E20] border-dashed rounded-md">
+          <div className="text-center py-4 border border-stone-900 border-dashed rounded-md">
             <div className="flex flex-col items-center justify-center">
               <PackageIcon className="w-5 h-5 text-gray-400 mb-1" />
               <p className="text-xs text-gray-500">No containers assigned</p>
@@ -924,9 +924,9 @@ const AdminUnitsPage: React.FC = () => {
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="block w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="block w-full px-3 py-2 rounded-md bg-stone-900 border border-stone-900
             text-sm text-[#FFFFFF]
-            focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+            focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
             transition-colors duration-200"
           placeholder="Minecraft Java Server"
           required
@@ -946,9 +946,9 @@ const AdminUnitsPage: React.FC = () => {
               shortName: e.target.value.toLowerCase(),
             })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="minecraft-java"
           pattern="[a-z0-9-]+"
@@ -965,9 +965,9 @@ const AdminUnitsPage: React.FC = () => {
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
             text-sm text-[#FFFFFF]
-            focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+            focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
             transition-colors duration-200"
           placeholder="Detailed description of the unit..."
           rows={3}
@@ -986,9 +986,9 @@ const AdminUnitsPage: React.FC = () => {
           onChange={(e) =>
             setFormData({ ...formData, dockerImage: e.target.value })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
             text-sm text-[#FFFFFF]
-            focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+            focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
             transition-colors duration-200"
           placeholder="itzg/minecraft-server:java17"
           required
@@ -1005,9 +1005,9 @@ const AdminUnitsPage: React.FC = () => {
           onChange={(e) =>
             setFormData({ ...formData, defaultStartupCommand: e.target.value })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
             text-sm text-[#FFFFFF]
-            focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+            focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
             transition-colors duration-200"
           placeholder="java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar server.jar"
           required
@@ -1046,9 +1046,9 @@ const AdminUnitsPage: React.FC = () => {
                 },
               })
             }
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
               text-sm text-[#FFFFFF]
-              focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+              focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
               transition-colors duration-200"
             placeholder="Install Docker Image"
             required
@@ -1065,9 +1065,9 @@ const AdminUnitsPage: React.FC = () => {
                 },
               })
             }
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
               text-sm text-[#FFFFFF]
-              focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+              focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
               transition-colors duration-200"
             placeholder="Entrypoint (default: bash)"
             defaultValue="bash"
@@ -1084,9 +1084,9 @@ const AdminUnitsPage: React.FC = () => {
               },
             })
           }
-          className="mt-2 w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="mt-2 w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
             text-sm text-[#FFFFFF]
-            focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+            focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
             transition-colors duration-200 font-mono"
           placeholder="Install script commands..."
           rows={4}
@@ -1122,7 +1122,7 @@ const AdminUnitsPage: React.FC = () => {
 
       {/* Cargo Containers Section */}
       {type === "edit" && selectedUnit?.id && (
-        <div className="pt-4 border-t border-[#1E1E20]">
+        <div className="pt-4 border-t border-stone-900">
           <ContainerList
             unitId={selectedUnit.id}
             assignedContainers={assignedContainers}
@@ -1209,7 +1209,7 @@ const AdminUnitsPage: React.FC = () => {
           </div>
         </div>
 
-        <Card className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs p-6 space-y-4">
+        <Card className="bg-stone-950 border border-stone-900 rounded-md shadow-xs p-6 space-y-4">
           <div>
             <div className="text-xs text-[#FFFFFF]">Description</div>
             <div className="text-sm mt-1 text-gray-400">
@@ -1217,7 +1217,7 @@ const AdminUnitsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-[#FFFFFF] mb-3">
               Docker Configuration
             </div>
@@ -1239,7 +1239,7 @@ const AdminUnitsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-[#FFFFFF] mb-3">
               Environment Variables
             </div>
@@ -1248,7 +1248,7 @@ const AdminUnitsPage: React.FC = () => {
                 {selectedUnit.environmentVariables.map((variable, index) => (
                   <Card
                     key={index}
-                    className="bg-[#0E0E0F] border border-[#1E1E20] p-3"
+                    className="bg-stone-950 border border-stone-900 p-3"
                   >
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -1303,14 +1303,14 @@ const AdminUnitsPage: React.FC = () => {
             )}
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-[#FFFFFF] mb-3">
               Configuration Files
             </div>
             {selectedUnit.configFiles.length > 0 ? (
               <div className="space-y-3">
                 {selectedUnit.configFiles.map((file, index) => (
-                  <div key={index} className="border-t border-[#1E1E20] p-3">
+                  <div key={index} className="border-t border-stone-900 p-3">
                     <div>
                       <div className="text-xs text-gray-500">Path</div>
                       <div className="text-sm font-mono mt-1 text-gray-400">
@@ -1319,7 +1319,7 @@ const AdminUnitsPage: React.FC = () => {
                     </div>
                     <div className="mt-2">
                       <div className="text-xs text-gray-500">Content</div>
-                      <pre className="mt-1 p-2 bg-[#0E0E0F] rounded text-xs font-mono whitespace-pre-wrap text-gray-400">
+                      <pre className="mt-1 p-2 bg-stone-950 rounded text-xs font-mono whitespace-pre-wrap text-gray-400">
                         {file.content}
                       </pre>
                     </div>
@@ -1334,7 +1334,7 @@ const AdminUnitsPage: React.FC = () => {
           </div>
 
           {/* Cargo Containers Section */}
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <ContainerList
               unitId={selectedUnit.id}
               assignedContainers={assignedContainers}
@@ -1342,7 +1342,7 @@ const AdminUnitsPage: React.FC = () => {
             />
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-gray-400 mb-3">
               Install Script
             </div>
@@ -1361,14 +1361,14 @@ const AdminUnitsPage: React.FC = () => {
               </div>
               <div>
                 <div className="text-xs text-gray-500">Script</div>
-                <pre className="mt-2 p-3 bg-[#0E0E0F] rounded-md text-xs font-mono overflow-auto text-gray-400">
+                <pre className="mt-2 p-3 bg-stone-950 rounded-md text-xs font-mono overflow-auto text-gray-400">
                   {selectedUnit.installScript.script}
                 </pre>
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-gray-400 mb-3">
               Startup Configuration
             </div>
@@ -1380,7 +1380,7 @@ const AdminUnitsPage: React.FC = () => {
           </div>
 
           {selectedUnit.createdAt && selectedUnit.updatedAt && (
-            <div className="pt-4 border-t border-[#1E1E20] grid grid-cols-2">
+            <div className="pt-4 border-t border-stone-900 grid grid-cols-2">
               <div>
                 <div className="text-xs text-gray-500">Created At</div>
                 <div className="text-sm mt-1 text-gray-400">
@@ -1404,7 +1404,7 @@ const AdminUnitsPage: React.FC = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="min-h-screen bg-[#0E0E0F]">
+    <div className="min-h-screen bg-stone-950">
       <div className="p-6">
         {view === "list" && (
           <div className="space-y-6">
@@ -1459,7 +1459,7 @@ const AdminUnitsPage: React.FC = () => {
               {units.map((unit) => (
                 <Card
                   key={unit.id}
-                  className="bg-[#0E0E0F] border-t border-[#1E1E20] cursor-pointer"
+                  className="bg-stone-950 border-t border-stone-900 cursor-pointer"
                   onClick={() => {
                     setSelectedUnit(unit);
                     setView("view");
@@ -1482,7 +1482,7 @@ const AdminUnitsPage: React.FC = () => {
               ))}
 
               {units.length === 0 && (
-                <div className="text-center py-6 bg-[#0E0E0F] rounded-md border border-[#1E1E20]">
+                <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
                   <p className="text-xs text-[#FFFFFF]">No units found</p>
                 </div>
               )}

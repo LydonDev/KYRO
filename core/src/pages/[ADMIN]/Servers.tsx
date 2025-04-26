@@ -444,7 +444,7 @@ const AdminServersPage = () => {
             type="text"
             value={createFormData.name}
             onChange={(e) => updateFormData({ name: e.target.value })}
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                                   text-sm text-[#FFFFFF]
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
@@ -497,7 +497,7 @@ const AdminServersPage = () => {
                     allocationId: "",
                   })
                 }
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                                   text-sm text-[#FFFFFF]
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
@@ -526,7 +526,7 @@ const AdminServersPage = () => {
                   onChange={(e) =>
                     updateFormData({ allocationId: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                                   text-sm text-[#FFFFFF]
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
@@ -562,7 +562,7 @@ const AdminServersPage = () => {
             </label>
             {loadingRegions ? (
               <div className="flex items-center space-x-2 py-2">
-                <div className="animate-spin h-4 w-4 border-2 border-[#1E1E20] rounded-full border-t-transparent"></div>
+                <div className="animate-spin h-4 w-4 border-2 border-stone-900 rounded-full border-t-transparent"></div>
                 <span className="text-xs text-[#FFFFFF]">
                   Loading regions...
                 </span>
@@ -579,7 +579,7 @@ const AdminServersPage = () => {
                       allocationId: "",
                     })
                   }
-                  className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                                   text-sm text-[#FFFFFF]
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
@@ -604,7 +604,7 @@ const AdminServersPage = () => {
                   ))}
                 </select>
                 {availableRegions.length === 0 && (
-                  <p className="text-xs text-[#FFFFFF] mt-1">
+                  <p className="text-xs text-white mt-1">
                     No regions configured. Please create a region first or
                     select a specific node.
                   </p>
@@ -625,8 +625,8 @@ const AdminServersPage = () => {
           <select
             value={createFormData.unitId}
             onChange={(e) => updateFormData({ unitId: e.target.value })}
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
             required
@@ -647,8 +647,8 @@ const AdminServersPage = () => {
           <select
             value={createFormData.userId}
             onChange={(e) => updateFormData({ userId: e.target.value })}
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
             required
@@ -673,8 +673,8 @@ const AdminServersPage = () => {
               onChange={(e) =>
                 updateFormData({ memoryMiB: parseInt(e.target.value) })
               }
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
               min={128}
@@ -692,8 +692,8 @@ const AdminServersPage = () => {
               onChange={(e) =>
                 updateFormData({ diskMiB: parseInt(e.target.value) })
               }
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
               min={1024}
@@ -711,8 +711,8 @@ const AdminServersPage = () => {
               onChange={(e) =>
                 updateFormData({ cpuPercent: parseInt(e.target.value) })
               }
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
               min={25}
@@ -737,7 +737,7 @@ const AdminServersPage = () => {
         )}
 
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-[#FFFFFF]">
+          <label className="block text-xs font-medium text-white">
             Name
           </label>
           <input
@@ -746,8 +746,8 @@ const AdminServersPage = () => {
             onChange={(e) =>
               setEditFormData({ ...editFormData, name: e.target.value })
             }
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
             placeholder="my-server"
@@ -756,7 +756,7 @@ const AdminServersPage = () => {
         </div>
 
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-[#FFFFFF]">
+          <label className="block text-xs font-medium text-white">
             Unit
           </label>
           <select
@@ -764,8 +764,8 @@ const AdminServersPage = () => {
             onChange={(e) =>
               setEditFormData({ ...editFormData, unitId: e.target.value })
             }
-            className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+            className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
             required
@@ -800,8 +800,8 @@ const AdminServersPage = () => {
                   memoryMiB: parseInt(e.target.value),
                 })
               }
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
               min={128}
@@ -822,8 +822,8 @@ const AdminServersPage = () => {
                   diskMiB: parseInt(e.target.value),
                 })
               }
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
               min={1024}
@@ -832,7 +832,7 @@ const AdminServersPage = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium text-[#FFFFFF]">
+            <label className="block text-xs font-medium text-white">
               CPU (%)
             </label>
             <input
@@ -844,8 +844,8 @@ const AdminServersPage = () => {
                   cpuPercent: parseInt(e.target.value),
                 })
               }
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                                  text-sm text-[#FFFFFF]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
+                                  text-sm text-white
                                   focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                                   transition-colors duration-200"
               min={25}
@@ -915,7 +915,7 @@ const AdminServersPage = () => {
           </div>
         </div>
 
-        <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-lg overflow-hidden">
+        <div className="bg-stone-950 border border-stone-900 rounded-lg overflow-hidden">
           <div className="px-6 py-4">
             <div className="space-y-4">
               <div>
@@ -960,8 +960,8 @@ const AdminServersPage = () => {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#232325]">
-                <div className="text-xs font-medium text-[#FFFFFF] mb-3">
+              <div className="pt-4 border-t border-stone-900">
+                <div className="text-xs font-medium text-white mb-3">
                   Resources
                 </div>
                 <div className="grid grid-cols-3 gap-4">
@@ -986,7 +986,7 @@ const AdminServersPage = () => {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#232325]">
+              <div className="pt-4 border-t border-stone-900">
                 <div className="text-xs font-medium text-[#FFFFFF] mb-3">
                   Relationships
                 </div>
@@ -1047,7 +1047,7 @@ const AdminServersPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0E0E0F]">
+      <div className="min-h-screen bg-stone-950">
         <div className="p-6">
           <div className="text-red-600 text-xs">Error: {error}</div>
         </div>
@@ -1056,7 +1056,7 @@ const AdminServersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0E0E0F]">
+    <div className="min-h-screen bg-stone-950">
       <div className="p-6">
         <div className="transition-all duration-200 ease-in-out">
           {view === "list" && (
@@ -1081,7 +1081,7 @@ const AdminServersPage = () => {
 
               <div className="space-y-1.5">
                 {servers.map((server) => (
-                  <div className="block bg-[#0E0E0F] rounded-md border border-[#1E1E20] overflow-hidden cursor-pointer w-full">
+                  <div className="block bg-stone-950 rounded-md border border-stone-900 overflow-hidden cursor-pointer w-full">
                     <div className="flex items-center justify-between">
                       <div className="px-3 py-3 flex-grow flex items-center justify-between transition-colors duration-150">
                         <div className="flex items-center space-x-3">
@@ -1149,7 +1149,7 @@ const AdminServersPage = () => {
                 ))}
 
                 {servers.length === 0 && (
-                  <div className="text-center py-6 bg-[#0E0E0F] rounded-md border border-[#1E1E20]">
+                  <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
                     <p className="text-xs text-gray-500">No servers found</p>
                   </div>
                 )}

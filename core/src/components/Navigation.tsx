@@ -41,7 +41,7 @@ const NavItem = ({
       to={to}
       className={`flex items-center h-8 ml-2 text-sm font-medium rounded-sm transition active:scale-95 duration-200 ${
         isActive
-          ? "shadow-sm px-2 bg-[#1E1E20] border border-[#232325] text-white rounded-sm "
+          ? "shadow-sm px-2 bg-stone-900 border border-stone-900 text-white rounded-sm "
           : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF] rounded-sm"
       }`}
     >
@@ -58,7 +58,7 @@ const UserAvatar: React.FC<{ username: string }> = ({ username }) => {
   const initial = username.charAt(0).toUpperCase();
 
   return (
-    <div className="h-9 w-9 rounded-md flex items-center justify-center border border-[#232325]">
+    <div className="h-9 w-9 rounded-md flex items-center justify-center border border-stone-900">
       <span className="text-base font-bold text-white select-none drop-shadow-md">
         {initial}
       </span>
@@ -108,7 +108,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.replace("/signin");
+    window.location.replace("/login");
   };
 
   const toggleDropdown = () => {
@@ -126,11 +126,11 @@ function Sidebar() {
   const hasAdminPermission = user?.permissions?.includes("admin") || false;
 
   return (
-    <div className="fixed inset-y-0 left-0 w-56 bg-[#0E0E0F] flex flex-col border-r border-[#1E1E20]">
-      <div className="h-14 flex items-center p-1 border-b border-[#1E1E20]">
+    <div className="fixed inset-y-0 left-0 w-56 bg-stone-950 flex flex-col border-r border-stone-900">
+      <div className="h-14 flex items-center p-1 border-b border-stone-900 backdrop-blur">
         <Link
           to="/servers"
-          className="h-12 flex items-center w-full px-4 hover:bg-[#232325] rounded-lg active:scale-95 transition"
+          className="h-12 flex items-center w-full px-4 hover:bg-stone-900 rounded-lg active:scale-95 transition"
         >
           <span className="text-base font-semibold text-white">{appName}</span>
         </Link>
@@ -146,10 +146,10 @@ function Sidebar() {
           />
 
           <NavItem
-            to="/profille"
+            to="/profile"
             icon={UserIcon}
             label="Profile"
-            isActive={location.pathname === "/profille"}
+            isActive={location.pathname === "/profile"}
           />
 
           {isServerPage && (
@@ -280,7 +280,7 @@ function Sidebar() {
             <div className="relative">
               <div
                 ref={buttonRef}
-                className="flex items-center gap-3 cursor-pointer mr-2 py-2 px-1 rounded-xl hover:bg-[#232325] active:scale-95 shadow-sm  transition duration-200 ease-in-out backdrop-blur w-44"
+                className="flex items-center gap-3 cursor-pointer mr-2 py-2 px-1 rounded-xl hover:bg-stone-900 active:scale-95 shadow-sm  transition duration-200 ease-in-out backdrop-blur w-44"
                 onClick={toggleDropdown}
               >
                 <UserAvatar username={user.username || "User"} />
@@ -293,7 +293,7 @@ function Sidebar() {
               </div>
               <div
                 ref={dropdownRef}
-                className={`absolute ${dropdownAlignLeft ? "left-42" : "right-42"} ${dropdownShiftUp ? "bottom-full mb-1" : "top-full mt-1"} w-48 bg-[#0E0E0F] rounded-md shadow-lg border border-[#1E1E20] 
+                className={`absolute ${dropdownAlignLeft ? "left-42" : "right-42"} ${dropdownShiftUp ? "bottom-full mb-1" : "top-full mt-1"} w-48 bg-stone-950 rounded-md shadow-lg border border-stone-900 
                        overflow-hidden max-h-[calc(100vh-80px)] overflow-auto transform transition-all duration-200 ease-in-out origin-top-right z-50 ${
                          isDropdownOpen
                            ? "opacity-100 scale-y-100 translate-y-0"
@@ -301,13 +301,14 @@ function Sidebar() {
                        }`}
               >
                 <div className="py-1">
-                  <button className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-[#232325] flex items-center">
+                  <Link to="/profile">
+                  <button className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center">
                     <UserCircleIcon className="mr-2 h-4 w-4 text-gray-500" />
                     Profile
-                  </button>
+                  </button></Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-[#232325] flex items-center"
+                    className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center"
                   >
                     <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4 text-gray-500" />
                     Sign out

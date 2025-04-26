@@ -64,9 +64,9 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#0E0E0F]">
+    <div className="min-h-screen flex bg-stone-950">
       {/* Left panel */}
-      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-[#1E1E20]">
+      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-white">{appName}</h1>
         </div>
@@ -83,7 +83,7 @@ export const RegisterPage: React.FC = () => {
         <div className="mt-8">
           <Link
             to="https://github.com/lydondev"
-            className="inline-flex items-center text-gray-400 border-b border-[#1E1E20]"
+            className="inline-flex items-center text-gray-400 border-b border-stone-900"
           >
             Powered by {appName}
             <svg
@@ -105,8 +105,8 @@ export const RegisterPage: React.FC = () => {
       </div>
 
       {/* Right panel */}
-      <div className="w-3/5 flex items-center justify-center bg-[#141415]">
-        <div className="rounded-xl p-8 w-full max-w-md bg-[#0E0E0F] border border-[#1E1E20]">
+      <div className="w-3/5 flex items-center justify-center bg-stone-950">
+        <div className="rounded-xl p-8 w-full max-w-md bg-stone-950 border border-stone-900">
           <h2 className="text-2xl font-semibold mb-1 text-white">Register</h2>
           <p className="text-sm mb-6 text-gray-400">
             Create a new account to get started.
@@ -130,7 +130,7 @@ export const RegisterPage: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full px-3 py-2 rounded-md text-sm bg-[#141415] border border-[#1E1E20] text-white outline-none"
+                className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
                 placeholder="email@example.com"
                 required
               />
@@ -147,7 +147,7 @@ export const RegisterPage: React.FC = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full px-3 py-2 rounded-md text-sm bg-[#141415] border border-[#1E1E20] text-white outline-none"
+                className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
                 placeholder="yourusername"
                 required
               />
@@ -166,7 +166,7 @@ export const RegisterPage: React.FC = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full px-3 py-2 rounded-md text-sm bg-[#141415] border border-[#1E1E20] text-white outline-none"
+                  className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
                   placeholder="*********"
                   required
                 />
@@ -197,7 +197,7 @@ export const RegisterPage: React.FC = () => {
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="block w-full px-3 py-2 rounded-md text-sm bg-[#141415] border border-[#1E1E20] text-white outline-none"
+                  className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
                   placeholder="*********"
                   required
                 />
@@ -228,7 +228,7 @@ export const RegisterPage: React.FC = () => {
             <div className="text-center mt-6">
               <p className="text-sm text-gray-400">
                 Already have an account?{" "}
-                <Link to="/login" className="text-white">
+                <Link to="/login" className="text-gray-400">
                   Sign in
                 </Link>
               </p>

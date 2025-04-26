@@ -109,7 +109,7 @@
 
 html,
 body {
-  background-color: #0e0e0f;
+  background-color: oklch(14.7% 0.004 49.25);
   min-height: 100vh;
   margin: 0;
   padding: 0;
@@ -170,7 +170,7 @@ body {
   }
 
   .dark {
-    --background: #0e0e0f;
+    --background: oklch(14.7% 0.004 49.25);
     --foreground: 0 0% 98%;
     --card: #0e0e0f;
     --card-foreground: 0 0% 98%;

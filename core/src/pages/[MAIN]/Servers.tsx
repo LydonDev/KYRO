@@ -100,12 +100,14 @@ export default function Home() {
   }
 
   return (
-    <div className="p-6 bg-[#0E0E0F] min-h-screen">
+    <div className="p-6 bg-stone-950 min-h-screen">
       <div className="w-full mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-[#FFFFFF]">Servers</h1>
+            <div>
+              <h1 className="text-2xl font-semibold text-[#FFFFFF]">Servers</h1>
+              <p className="text-sm text-[#9CA3AF]">Manage your servers</p>
+            </div>
           </div>
           <Button
             variant="secondary"
@@ -116,7 +118,6 @@ export default function Home() {
           </Button>
         </div>
 
-        {/* Success Message */}
         {successMessage && (
           <Alert
             type="success"
@@ -125,7 +126,6 @@ export default function Home() {
           />
         )}
 
-        {/* Tabs */}
         <div className="mb-4 flex space-x-1">
           <Button
             onClick={() => setActiveTab("servers")}
@@ -143,7 +143,6 @@ export default function Home() {
           </Button>
         </div>
 
-        {/* Content based on active tab */}
         {activeTab === "servers" && (
           <div>
             {filteredServers.length > 0 ? (
@@ -151,7 +150,7 @@ export default function Home() {
                 {filteredServers.map((server) => (
                   <div
                     key={server.id}
-                    className="block bg-[#0E0E0F] rounded-md border border-[#1E1E20] overflow-hidden"
+                    className="block bg-stone-950 rounded-md border border-stone-900 overflow-hidden"
                   >
                     <div className="flex items-center justify-between">
                       <Link
@@ -201,7 +200,7 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 bg-[#0E0E0F] rounded-lg border border-[#1E1E20]">
+              <div className="flex flex-col items-center justify-center py-16 bg-stone-950 rounded-lg border border-stone-900">
                 <div className="w-32 h-32 mb-6">
                   <ServerIcon className="w-full h-full text-[#9CA3AF]" />
                 </div>
@@ -225,18 +224,18 @@ export default function Home() {
         )}
 
         {activeTab === "overview" && (
-          <div className="bg-[#0E0E0F] rounded-md border border-[#1E1E20] p-6">
+          <div className="bg-stone-950 rounded-md border border-stone-900 p-6">
             <h2 className="text-lg font-medium text-[#FFFFFF] mb-4">
               Server Overview
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border border-[#1E1E20] rounded-md p-4">
+              <div className="border border-stone-900 rounded-md p-4">
                 <div className="text-[#9CA3AF] text-sm mb-1">Total Servers</div>
                 <div className="text-2xl font-medium text-[#FFFFFF]">
                   {stats.total}
                 </div>
               </div>
-              <div className="border border-[#1E1E20] rounded-md p-4">
+              <div className="border border-stone-900 rounded-md p-4">
                 <div className="text-[#9CA3AF] text-sm mb-1">Online</div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-[#10B981] mr-2"></div>
@@ -245,7 +244,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="border border-[#1E1E20] rounded-md p-4">
+              <div className="border border-stone-900 rounded-md p-4">
                 <div className="text-[#9CA3AF] text-sm mb-1">Offline</div>
                 <div className="flex items-center">
                   <div className="h-2 w-2 rounded-full bg-[#9CA3AF] mr-2"></div>

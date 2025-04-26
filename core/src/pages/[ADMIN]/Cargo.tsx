@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import {
   ChevronRightIcon,
   TrashIcon,
-  PencilIcon,
   ArrowLeftIcon,
   PlusIcon,
   FolderIcon,
   FileIcon,
   LinkIcon,
+  PencilIcon,
 } from "lucide-react";
 import { z } from "zod";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { Button } from "@/components/UI";
 import { Card } from "@/components/ui/card";
 
-// Schemas matching backend validation
 const cargoPropertiesSchema = z.object({
   hidden: z.boolean().optional(),
   readonly: z.boolean().optional(),
@@ -157,7 +156,7 @@ const PropertiesForm: React.FC<{
           {properties.customProperties &&
             Object.entries(properties.customProperties).map(([key, value]) => (
               <div key={key} className="flex items-center space-x-2">
-                <div className="flex-1 text-xs border border-[#1E1E20] rounded-md p-2 bg-[#0E0E0F] text-gray-400">
+                <div className="flex-1 text-xs border border-stone-900 rounded-md p-2 bg-stone-950 text-gray-400">
                   <span className="font-medium">{key}:</span>{" "}
                   {JSON.stringify(value)}
                 </div>
@@ -191,9 +190,9 @@ const PropertiesForm: React.FC<{
               type="text"
               value={customKey}
               onChange={(e) => setCustomKey(e.target.value)}
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
               placeholder="Property name"
             />
@@ -201,9 +200,9 @@ const PropertiesForm: React.FC<{
               type="text"
               value={customValue}
               onChange={(e) => setCustomValue(e.target.value)}
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
               placeholder="Property value"
             />
@@ -293,7 +292,7 @@ const ContainerItemsForm: React.FC<{
 
       {/* Cargo Selector */}
       {showSelector && (
-        <div className="border border-[#1E1E20] rounded-md p-3 space-y-3">
+        <div className="border border-stone-900 rounded-md p-3 space-y-3">
           <h4 className="text-xs font-medium mb-2 text-white">
             Add cargo to container
           </h4>
@@ -308,9 +307,9 @@ const ContainerItemsForm: React.FC<{
               <select
                 value={selectedCargoId}
                 onChange={(e) => setSelectedCargoId(e.target.value)}
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
               >
                 <option value="">-- Select cargo --</option>
@@ -330,9 +329,9 @@ const ContainerItemsForm: React.FC<{
               type="text"
               value={targetPath}
               onChange={(e) => setTargetPath(e.target.value)}
-              className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-stone-900
                     transition-colors duration-200"
               placeholder="/path/to/destination"
             />
@@ -372,7 +371,7 @@ const ContainerItemsForm: React.FC<{
               return (
                 <Card
                   key={index}
-                  className="flex justify-between items-center border border-[#1E1E20] p-3"
+                  className="flex justify-between items-center border border-stone-900 p-3"
                 >
                   <div className="flex items-start space-x-3">
                     <div className="pt-1">
@@ -405,7 +404,7 @@ const ContainerItemsForm: React.FC<{
             })}
           </div>
         ) : (
-          <Card className="text-center py-4 bg-[#0E0E0F] border border-[#1E1E20] border-dashed ">
+          <Card className="text-center py-4 bg-stone-950 border border-stone-900 border-dashed ">
             <p className="text-xs text-gray-400">No items in this container</p>
           </Card>
         )}
@@ -832,9 +831,9 @@ const AdminCargoPage: React.FC = () => {
           onChange={(e) =>
             setCargoFormData({ ...cargoFormData, name: e.target.value })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="My Cargo Item"
           required
@@ -850,9 +849,9 @@ const AdminCargoPage: React.FC = () => {
           onChange={(e) =>
             setCargoFormData({ ...cargoFormData, description: e.target.value })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="Description of this cargo item..."
           rows={3}
@@ -907,9 +906,9 @@ const AdminCargoPage: React.FC = () => {
                 onChange={(e) =>
                   setFileUpload(e.target.files ? e.target.files[0] : null)
                 }
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                 required
               />
@@ -934,9 +933,9 @@ const AdminCargoPage: React.FC = () => {
                     remoteUrl: e.target.value,
                   })
                 }
-                className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+                className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
                 placeholder="https://example.com/file.zip"
                 required={cargoFormData.type === "remote"}
@@ -1005,7 +1004,7 @@ const AdminCargoPage: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <button
+            <Button
               onClick={() => {
                 setCargoFormData({
                   name: selectedCargo.name,
@@ -1019,24 +1018,23 @@ const AdminCargoPage: React.FC = () => {
                 });
                 setView("cargo-edit");
               }}
-              className="flex items-center px-3 py-2 text-xs font-medium text-white bg-[#0E0E0F] border border-[#1E1E20] rounded-md hover:bg-[#1E1E20]"
+              icon={<PencilIcon className="w-3.5 h-3.5 mr-1.5"/>}
             >
-              <PencilIcon className="w-3.5 h-3.5 mr-1.5" />
               Edit
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => handleDeleteCargo(selectedCargo.id!)}
-              className="flex items-center px-3 py-2 text-xs font-medium text-red-600 bg-white border border-gray-200 rounded-md hover:bg-red-50"
+              variant="danger"
+              icon={<TrashIcon className="w-3.5 h-3.5 mr-1.5" />}
             >
-              <TrashIcon className="w-3.5 h-3.5 mr-1.5" />
               Delete
-            </button>
+            </Button>
             {selectedCargo.type === "local" && (
               <a
                 href={`/api/cargo/${selectedCargo.id}/download`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-2 text-xs font-medium text-gray-600 bg-[#0E0E0F] border border-[#1E1E20] rounded-md hover:bg-[#1E1E20]"
+                className="px-3 py-2 text-xs font-medium text-gray-600 bg-stone-950 border border-stone-900 rounded-md hover:bg-stone-900"
               >
                 Download
               </a>
@@ -1044,13 +1042,13 @@ const AdminCargoPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs p-6 space-y-4">
+        <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs p-6 space-y-4">
           <div>
             <div className="text-xs text-gray-400">Description</div>
             <div className="text-sm mt-1">{selectedCargo.description}</div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-gray-900 mb-3">
               Cargo Details
             </div>
@@ -1092,7 +1090,7 @@ const AdminCargoPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-white mb-3">
               Properties
             </div>
@@ -1135,7 +1133,7 @@ const AdminCargoPage: React.FC = () => {
           </div>
 
           {/* Usage Information */}
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-white mb-3">
               Used In Containers
             </div>
@@ -1232,9 +1230,9 @@ const AdminCargoPage: React.FC = () => {
           onChange={(e) =>
             setContainerFormData({ ...containerFormData, name: e.target.value })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="My Container"
           required
@@ -1253,9 +1251,9 @@ const AdminCargoPage: React.FC = () => {
               description: e.target.value,
             })
           }
-          className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200"
           placeholder="Description of this container..."
           rows={3}
@@ -1346,7 +1344,7 @@ const AdminCargoPage: React.FC = () => {
             <div className="text-sm mt-1">{selectedContainer.description}</div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E1E20]">
+          <div className="pt-4 border-t border-stone-900">
             <div className="text-xs font-medium text-white mb-3">
               Container Items
             </div>
@@ -1404,7 +1402,7 @@ const AdminCargoPage: React.FC = () => {
           </div>
 
           {selectedContainer.createdAt && selectedContainer.updatedAt && (
-            <div className="pt-4 border-t border-[#1E1E20] grid grid-cols-2">
+            <div className="pt-4 border-t border-stone-900 grid grid-cols-2">
               <div>
                 <div className="text-xs text-gray-400">Created At</div>
                 <div className="text-sm mt-1">
@@ -1428,7 +1426,7 @@ const AdminCargoPage: React.FC = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="bg-[#0E0E0F]">
+    <div className="bg-stone-950">
       <div className="p-6">
         {error && (
           <div className="mb-4 space-y-2">
@@ -1525,7 +1523,7 @@ const AdminCargoPage: React.FC = () => {
                 cargoItems.map((cargo) => (
                   <div
                     key={cargo.id}
-                    className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md cursor-pointer hover:border-gray-600 transition-all duration-200"
+                    className="bg-stone-950 border border-stone-900 rounded-md cursor-pointer hover:border-stone-900 transition-all duration-200"
                     onClick={() => {
                       setSelectedCargo(cargo);
                       setView("cargo-view");
@@ -1554,7 +1552,7 @@ const AdminCargoPage: React.FC = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-6 bg-[#0E0E0F] rounded-md border border-[#1E1E20]">
+                <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
                   <div className="flex flex-col items-center justify-center">
                     <FolderIcon className="w-6 h-6 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-500 mb-2">No Cargo found</p>
@@ -1648,7 +1646,7 @@ const AdminCargoPage: React.FC = () => {
                 containers.map((container) => (
                   <div
                     key={container.id}
-                    className="bg-[#0E0E0F] border border-[#1E1E20] rounded-md shadow-xs cursor-pointer hover:border-gray-600 transition-all duration-200"
+                    className="bg-stone-950 border border-stone-900 rounded-md shadow-xs cursor-pointer hover:border-gray-600 transition-all duration-200"
                     onClick={() => {
                       setSelectedContainer(container);
                       setView("container-view");
@@ -1674,7 +1672,7 @@ const AdminCargoPage: React.FC = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-6 bg-[#0E0E0F] rounded-md border border-[#1E1E20]">
+                <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
                   <div className="flex flex-col items-center justify-center">
                     <FolderIcon className="w-6 h-6 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-500 mb-2">

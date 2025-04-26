@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "../../components/UI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
@@ -179,10 +180,14 @@ const ForgotPassword: React.FC = () => {
     }
   };
 
+  if(isLoading) {
+    return(<LoadingSpinner/>)
+  }
+
   return (
-    <div className="min-h-screen flex bg-[#0E0E0F]">
+    <div className="min-h-screen flex bg-stone-950">
       {/* Left panel */}
-      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-[#1E1E20]">
+      <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-[#FFFFFF]">{appName}</h1>
         </div>
@@ -199,7 +204,7 @@ const ForgotPassword: React.FC = () => {
         <div className="mt-8">
           <Link
             to="https://github.com/lydondev"
-            className="inline-flex items-center border-b border-[#1E1E20] pb-1 text-[#9CA3AF]"
+            className="inline-flex items-center border-b border-stone-900 pb-1 text-[#9CA3AF]"
           >
             Powered by {appName}
             <svg
@@ -221,8 +226,8 @@ const ForgotPassword: React.FC = () => {
       </div>
 
       {/* Right panel */}
-      <div className="w-3/5 flex items-center justify-center bg-[#141415]">
-        <div className="bg-[#0E0E0F] rounded-xl p-8 w-full max-w-md border border-[#1E1E20]">
+      <div className="w-3/5 flex items-center justify-center bg-stone-950">
+        <div className="bg-stone-950 rounded-xl p-8 w-full max-w-md border border-stone-900">
           {!verificationStep && !success ? (
             <>
               <h2 className="text-2xl font-semibold text-[#FFFFFF] mb-1">
@@ -234,7 +239,7 @@ const ForgotPassword: React.FC = () => {
 
               <form onSubmit={handleSendResetEmail} className="space-y-5">
                 {error && (
-                  <div className="bg-[rgba(239,68,68,0.1)] border border-[#EF4444] rounded-md p-3 mb-4">
+                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
                     <p className="text-xs text-[#EF4444]">{error}</p>
                   </div>
                 )}
@@ -250,7 +255,7 @@ const ForgotPassword: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-3 py-2 rounded-md border border-[#1E1E20] bg-[#141415] text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-[#1E1E20]"
+                    className="block w-full px-3 py-2 rounded-md border border-stone-900 bg-stone-950 text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-stone-900"
                     placeholder="email@example.com"
                     required
                   />
@@ -284,7 +289,7 @@ const ForgotPassword: React.FC = () => {
 
               <form onSubmit={handleVerifyCode} className="space-y-5">
                 {error && (
-                  <div className="bg-[rgba(239,68,68,0.1)] border border-[#EF4444] rounded-md p-3 mb-4">
+                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
                     <p className="text-xs text-[#EF4444]">{error}</p>
                   </div>
                 )}
@@ -298,7 +303,7 @@ const ForgotPassword: React.FC = () => {
                       value={digit}
                       onChange={(e) => handleChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
-                      className="w-10 h-12 border border-[#1E1E20] rounded text-center text-[#FFFFFF] font-medium text-lg bg-[#141415] focus:outline-none focus:ring-1 focus:ring-[#1E1E20]"
+                      className="w-10 h-12 border border-stone-900 rounded text-center text-[#FFFFFF] font-medium text-lg bg-stone-950 focus:outline-none focus:ring-1 focus:ring-stone-900"
                     />
                   ))}
                 </div>
@@ -338,12 +343,12 @@ const ForgotPassword: React.FC = () => {
 
               <form onSubmit={handleResetPassword} className="space-y-5">
                 {error && (
-                  <div className="bg-[rgba(239,68,68,0.1)] border border-[#EF4444] rounded-md p-3 mb-4">
+                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
                     <p className="text-xs text-[#EF4444]">{error}</p>
                   </div>
                 )}
                 {success && (
-                  <div className="bg-[rgba(16,185,129,0.1)] border border-[#10B981] rounded-md p-3 mb-4">
+                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
                     <p className="text-xs text-[#10B981]">
                       Password reset successful! Redirecting to login...
                     </p>
@@ -361,7 +366,7 @@ const ForgotPassword: React.FC = () => {
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="block w-full px-3 py-2 rounded-md border border-[#1E1E20] bg-[#141415] text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-[#1E1E20]"
+                    className="block w-full px-3 py-2 rounded-md border border-stone-900 bg-stone-950 text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-stone-900"
                     placeholder="New password"
                     required
                   />
@@ -378,7 +383,7 @@ const ForgotPassword: React.FC = () => {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="block w-full px-3 py-2 rounded-md border border-[#1E1E20] bg-[#141415] text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-[#1E1E20]"
+                    className="block w-full px-3 py-2 rounded-md border border-stone-900 bg-stone-950 text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-stone-900"
                     placeholder="Confirm new password"
                     required
                   />
