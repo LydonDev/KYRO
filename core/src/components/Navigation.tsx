@@ -37,10 +37,10 @@ const NavItem = ({
   return (
     <Link
       to={to}
-      className={`flex items-center h-8 ml-2 text-sm rounded-lg font-medium transition active:scale-95 duration-200 ${
+      className={`flex items-center h-8 ml-2 text-sm font-medium rounded-sm transition active:scale-95 duration-200 ${
         isActive
-          ? "shadow-sm px-2 bg-[#1E1E20] border border-[#232325] text-white"
-          : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF]"
+          ? "shadow-sm px-2 bg-[#1E1E20] border border-[#232325] text-white rounded-sm "
+          : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF] rounded-sm"
       }`}
     >
       <Icon

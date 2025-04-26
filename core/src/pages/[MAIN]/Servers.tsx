@@ -220,13 +220,9 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-[#FFFFFF]">Servers</h1>
-            {currentProject && (
-              <p className="text-sm text-[#9CA3AF]">
-                {currentProject.isDefault
-                  ? `Showing all servers in the Default project`
-                  : `Showing servers in ${currentProject.name} project`}
-              </p>
-            )}
+            <p className="text-sm text-[#9CA3AF]">
+              {currentProject?.name}
+            </p>
           </div>
           <Button
             variant="secondary"
@@ -295,16 +291,6 @@ export default function Home() {
                             </div>
                             <div className="text-[11px] text-[#9CA3AF] flex items-center">
                               <span>{server.status?.status?.id}</span>
-                              {server.projectId !== currentProject?.id && (
-                                <>
-                                  <span className="flex items-center">
-                                    <BoltIcon className="w-3 h-3 mr-1" />
-                                    {projects.find(
-                                      (p) => p.id === server.projectId,
-                                    )?.name || "Unknown Project"}
-                                  </span>
-                                </>
-                              )}
                             </div>
                           </div>
                         </div>
