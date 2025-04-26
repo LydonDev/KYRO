@@ -235,8 +235,8 @@ const AdminRegionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>("list");
-const [showCreateModal, setShowCreateModal] = useState(false);
-const [showEditModal, setShowEditModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "nodes" | "servers">(
     "overview",
@@ -768,7 +768,6 @@ const [showEditModal, setShowEditModal] = useState(false);
       <div className="flex items-center space-x-3 justify-end">
         <Button
           type="button"
-
           onClick={() => {
             setShowCreateModal(false);
             setShowEditModal(false);
@@ -776,10 +775,10 @@ const [showEditModal, setShowEditModal] = useState(false);
         >
           Cancel
         </Button>
-        <Button 
-        type="submit" 
-        variant="secondary"
-        icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+        <Button
+          type="submit"
+          variant="secondary"
+          icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
         >
           {type === "create" ? "Create Region" : "Update Region"}
         </Button>
@@ -1331,7 +1330,9 @@ const [showEditModal, setShowEditModal] = useState(false);
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center space-x-4 mb-4">
-                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">Create Region</h1>
+                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">
+                      Create Region
+                    </h1>
                   </div>
                   {renderForm("create")}
                 </motion.div>
@@ -1361,7 +1362,9 @@ const [showEditModal, setShowEditModal] = useState(false);
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center space-x-4 mb-4">
-                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">Edit Region</h1>
+                    <h1 className="text-lg font-semibold text-[#FFFFFF] flex-1">
+                      Edit Region
+                    </h1>
                   </div>
                   {renderForm("edit")}
                 </motion.div>

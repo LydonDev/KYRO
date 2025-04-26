@@ -98,195 +98,195 @@ function App() {
   return (
     <AuthProvider>
       <SystemProvider>
-          <Layout>
-            <ErrorBoundary>
-              <Suspense fallback={<LoadingSpinner />}>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={location.pathname}
-                    variants={pageVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="h-full"
-                  >
-                    <Routes location={location}>
-                      <Route path="/login" element={<AuthPage />} />
-                      <Route path="/maintainence" element={<Maintainence />} />
-                      <Route path="/register" element={<RegisterPage />} />
-                      <Route path="/verify-email" element={<VerifyEmail />} />
-                      <Route
-                        path="/forgot-password"
-                        element={<ForgotPassword />}
-                      />
-                      <Route
-                        path="/servers"
-                        element={
-                          <ProtectedRoute>
-                            <Servers />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/comingsoon"
-                        element={
-                          <ProtectedRoute>
-                            <ComingSoon />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/unauthorized"
-                        element={
-                          <ProtectedRoute>
-                            <Unauthorized />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/profile"
-                        element={
-                          <ProtectedRoute>
-                            <Profile />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin"
-                        element={
-                          <ProtectedRoute>
-                            <AdminPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route path="/" element={<Navigate to="/servers" />} />
-                      <Route
-                        path="/dashboard"
-                        element={<Navigate to="/servers" />}
-                      />
-                      <Route path="*" element={<NotFound />} />
+        <Layout>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner />}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={location.pathname}
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="h-full"
+                >
+                  <Routes location={location}>
+                    <Route path="/login" element={<AuthPage />} />
+                    <Route path="/maintainence" element={<Maintainence />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
+                    <Route
+                      path="/servers"
+                      element={
+                        <ProtectedRoute>
+                          <Servers />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/comingsoon"
+                      element={
+                        <ProtectedRoute>
+                          <ComingSoon />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/unauthorized"
+                      element={
+                        <ProtectedRoute>
+                          <Unauthorized />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/profile"
+                      element={
+                        <ProtectedRoute>
+                          <Profile />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin"
+                      element={
+                        <ProtectedRoute>
+                          <AdminPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/" element={<Navigate to="/servers" />} />
+                    <Route
+                      path="/dashboard"
+                      element={<Navigate to="/servers" />}
+                    />
+                    <Route path="*" element={<NotFound />} />
 
-                      {/* Admin routes */}
-                      <Route
-                        path="/admin/nodes"
-                        element={
-                          <ProtectedRoute>
-                            <AdminNodes />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/servers"
-                        element={
-                          <ProtectedRoute>
-                            <AdminServers />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/units"
-                        element={
-                          <ProtectedRoute>
-                            <AdminUnits />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/users"
-                        element={
-                          <ProtectedRoute>
-                            <AdminUsers />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/cargo"
-                        element={
-                          <ProtectedRoute>
-                            <AdminCargo />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/regions"
-                        element={
-                          <ProtectedRoute>
-                            <AdminRegions />
-                          </ProtectedRoute>
-                        }
-                      />
+                    {/* Admin routes */}
+                    <Route
+                      path="/admin/nodes"
+                      element={
+                        <ProtectedRoute>
+                          <AdminNodes />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/servers"
+                      element={
+                        <ProtectedRoute>
+                          <AdminServers />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/units"
+                      element={
+                        <ProtectedRoute>
+                          <AdminUnits />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/users"
+                      element={
+                        <ProtectedRoute>
+                          <AdminUsers />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/cargo"
+                      element={
+                        <ProtectedRoute>
+                          <AdminCargo />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/regions"
+                      element={
+                        <ProtectedRoute>
+                          <AdminRegions />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                      {/* Server routes */}
-                      <Route
-                        path="/servers/:id/console"
-                        element={
-                          <ProtectedRoute>
-                            <ServerConsole />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/files"
-                        element={
-                          <ProtectedRoute>
-                            <ServerFiles />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/mods"
-                        element={
-                          <ProtectedRoute>
-                            <ServerMods />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/plugins"
-                        element={
-                          <ProtectedRoute>
-                            <ServerPlugins />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/players"
-                        element={
-                          <ProtectedRoute>
-                            <ServerPlayers />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/databases"
-                        element={
-                          <ProtectedRoute>
-                            <ServerDatabases />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/backups"
-                        element={
-                          <ProtectedRoute>
-                            <ServerBackups />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/servers/:id/settings"
-                        element={
-                          <ProtectedRoute>
-                            <ServerSettings />
-                          </ProtectedRoute>
-                        }
-                      />
-                    </Routes>
-                  </motion.div>
-                </AnimatePresence>
-              </Suspense>
-            </ErrorBoundary>
-          </Layout>
+                    {/* Server routes */}
+                    <Route
+                      path="/servers/:id/console"
+                      element={
+                        <ProtectedRoute>
+                          <ServerConsole />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/files"
+                      element={
+                        <ProtectedRoute>
+                          <ServerFiles />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/mods"
+                      element={
+                        <ProtectedRoute>
+                          <ServerMods />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/plugins"
+                      element={
+                        <ProtectedRoute>
+                          <ServerPlugins />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/players"
+                      element={
+                        <ProtectedRoute>
+                          <ServerPlayers />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/databases"
+                      element={
+                        <ProtectedRoute>
+                          <ServerDatabases />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/backups"
+                      element={
+                        <ProtectedRoute>
+                          <ServerBackups />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/servers/:id/settings"
+                      element={
+                        <ProtectedRoute>
+                          <ServerSettings />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </Routes>
+                </motion.div>
+              </AnimatePresence>
+            </Suspense>
+          </ErrorBoundary>
+        </Layout>
       </SystemProvider>
     </AuthProvider>
   );

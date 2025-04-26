@@ -1,5 +1,5 @@
 /*
- * Kyro version v1.0.0-dev 
+ * Kyro version v1.0.0-dev
  * (c) 2025 - 2025 Lydon
  */
 

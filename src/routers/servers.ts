@@ -83,7 +83,7 @@ async function makeDaemonRequest(
       url,
       data,
       headers: {
-        "X-API-Key": node.connectionKey, 
+        "X-API-Key": node.connectionKey,
       },
       timeout: 10000,
     });
@@ -672,7 +672,7 @@ router.patch(
       const daemonUpdateData = {
         serverId: server.internalId,
         name: updateData.name || server.name,
-        memoryLimit: (updateData.memoryMiB || server.memoryMiB) * 1024 * 1024, 
+        memoryLimit: (updateData.memoryMiB || server.memoryMiB) * 1024 * 1024,
         cpuLimit: Math.floor(
           ((updateData.cpuPercent || server.cpuPercent) * 1024) / 100,
         ),
@@ -695,7 +695,7 @@ router.patch(
         { id: server.id },
         {
           ...updateData,
-          state: "running", 
+          state: "running",
         },
       );
 
@@ -811,7 +811,7 @@ router.get("/", checkPermission(Permissions.USER), async (req: any, res) => {
             status,
             node: {
               ...server.node,
-              connectionKey: undefined, 
+              connectionKey: undefined,
             },
           };
         } catch (error) {
@@ -820,7 +820,7 @@ router.get("/", checkPermission(Permissions.USER), async (req: any, res) => {
             status: { state: "unknown" },
             node: {
               ...server.node,
-              connectionKey: undefined, 
+              connectionKey: undefined,
             },
           };
         }
@@ -841,7 +841,7 @@ router.get("/:id", checkPermission(Permissions.USER), async (req: any, res) => {
       ...server,
       node: {
         ...server.node,
-        connectionKey: undefined, 
+        connectionKey: undefined,
       },
     });
   } catch (error: any) {

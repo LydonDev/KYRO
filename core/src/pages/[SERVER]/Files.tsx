@@ -291,11 +291,11 @@ const ContextMenu: React.FC<{
         let y = position.y;
 
         if (x + rect.width > viewport.width) {
-          x = Math.max(0, viewport.width - rect.width - 16); 
+          x = Math.max(0, viewport.width - rect.width - 16);
         }
 
         if (y + rect.height > viewport.height) {
-          y = Math.max(0, viewport.height - rect.height - 16); 
+          y = Math.max(0, viewport.height - rect.height - 16);
         }
 
         setMenuPosition({ x, y });
@@ -1485,23 +1485,23 @@ const FileManager: React.FC = () => {
                           <FileIcon
                             className={`w-4 h-4 ${
                               !file.isFile
-                                ? "text-[#8146ab]" 
+                                ? "text-[#8146ab]"
                                 : file.mime.startsWith("image/")
-                                  ? "text-[#F59E0B]" 
+                                  ? "text-[#F59E0B]"
                                   : file.mime.startsWith("text/") ||
                                       file.mime.includes("javascript") ||
                                       file.mime.includes("json")
-                                    ? "text-[#10B981]" 
+                                    ? "text-[#10B981]"
                                     : file.mime.includes("pdf")
-                                      ? "text-[#EF4444]" 
+                                      ? "text-[#EF4444]"
                                       : file.mime.startsWith("audio/")
-                                        ? "text-[#F59E0B]" 
+                                        ? "text-[#F59E0B]"
                                         : file.mime.startsWith("video/")
                                           ? "text-[#EF4444]"
                                           : file.mime.includes("zip") ||
                                               file.mime.includes("tar") ||
                                               file.mime.includes("compress")
-                                            ? "text-[#F59E0B]" 
+                                            ? "text-[#F59E0B]"
                                             : "text-[#9CA3AF]"
                             }`}
                           />

@@ -196,12 +196,11 @@ export default function Home() {
                           <ChevronRightIcon className="h-3.5 w-3.5 text-[#9CA3AF]" />
                         </div>
                       </Link>
-
                     </div>
                   </div>
                 ))}
               </div>
-            ) : ( 
+            ) : (
               <div className="flex flex-col items-center justify-center py-16 bg-[#0E0E0F] rounded-lg border border-[#1E1E20]">
                 <div className="w-32 h-32 mb-6">
                   <ServerIcon className="w-full h-full text-[#9CA3AF]" />
@@ -210,7 +209,8 @@ export default function Home() {
                   No servers found
                 </h2>
                 <p className="text-[#9CA3AF] text-center max-w-md mb-6">
-                  You don't have any active servers yet. To create a new server, please contact your administrator.
+                  You don't have any active servers yet. To create a new server,
+                  please contact your administrator.
                 </p>
                 <Button
                   variant="secondary"

@@ -38,7 +38,7 @@ const updateNodeSchema = createNodeSchema.partial();
 async function checkNodeStatus(fqdn: string, port: number): Promise<boolean> {
   return new Promise((resolve) => {
     const socket = new net.Socket();
-    const timeout = 5000; 
+    const timeout = 5000;
 
     socket.setTimeout(timeout);
 
@@ -330,8 +330,7 @@ router.post("/:id/allocations", checkPermission("admin"), async (req, res) => {
       });
 
       res.status(201).json(allocation);
-    }
-    else if ("portRange" in req.body) {
+    } else if ("portRange" in req.body) {
       const validatedData = createAllocationRangeSchema.parse(req.body);
       const { portRange, ...rest } = validatedData;
 

@@ -9,7 +9,7 @@ const parseUserRow = (row: any): User => ({
   permissions: JSON.parse(row.permissions),
   createdAt: parseDate(row.createdAt),
   updatedAt: parseDate(row.updatedAt),
-  isEmailVerified: row.isEmailVerified === 1, 
+  isEmailVerified: row.isEmailVerified === 1,
 });
 
 export function createUsersRepository({ db }: DatabaseContext) {
@@ -90,7 +90,7 @@ export function createUsersRepository({ db }: DatabaseContext) {
           email,
           password: hashedPassword,
           permissions: userPermissions,
-          isEmailVerified: false, 
+          isEmailVerified: false,
           createdAt: new Date(),
           updatedAt: new Date(),
         };
@@ -209,7 +209,7 @@ export function createUsersRepository({ db }: DatabaseContext) {
     createVerificationCode: async (userId: string): Promise<string> => {
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + 24); 
+      expiresAt.setHours(expiresAt.getHours() + 24);
 
       try {
         db.prepare("DELETE FROM verification_codes WHERE userId = ?").run(

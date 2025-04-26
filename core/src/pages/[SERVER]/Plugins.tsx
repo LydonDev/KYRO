@@ -53,7 +53,7 @@ export default function Plugins() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (!response.ok) throw new Error("Failed to fetch server");
@@ -104,9 +104,7 @@ export default function Plugins() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-white mr-4">
-                Plugins
-              </h1>
+              <h1 className="text-xl font-semibold text-white mr-4">Plugins</h1>
             </div>
           </div>
         </div>

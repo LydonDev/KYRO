@@ -74,7 +74,9 @@ export const Modal: React.FC<ModalProps> = ({
         className={`bg-[#0E0E0F] border border-[#1E1E20] rounded-md w-full ${maxWidth} transition-all duration-200 ${isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100"}`}
       >
         <div className="flex justify-between items-center px-6 mt-6">
-          <h3 className="text-lg font-semibold leading-none tracking-tight text-[#FFFFFF]">{title}</h3>
+          <h3 className="text-lg font-semibold leading-none tracking-tight text-[#FFFFFF]">
+            {title}
+          </h3>
         </div>
         <div className="px-6 py-5">{children}</div>
       </div>

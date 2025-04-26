@@ -5,7 +5,6 @@ import {
   TrashIcon,
   ArrowLeftIcon,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Badge, Button } from "@/components/UI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { FormModal } from "@/components/ui/modal";
@@ -108,14 +107,13 @@ interface Region {
   updatedAt: Date;
 }
 
-// Update the CreateFormData interface to include regionId
 interface CreateFormData {
   name: string;
   nodeId?: string;
-  regionId?: string; // New field for region selection
+  regionId?: string;
   unitId: string;
   userId: string;
-  allocationId?: string; // Made optional to allow deletion
+  allocationId?: string;
   memoryMiB: number;
   diskMiB: number;
   cpuPercent: number;
@@ -132,9 +130,7 @@ interface EditFormData {
 type View = "list" | "create" | "view" | "edit";
 
 const AdminServersPage = () => {
-  // ...existing state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  // Core state
   const [servers, setServers] = useState<Server[]>([]);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
@@ -147,20 +143,17 @@ const AdminServersPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Restrict access to admin only
   useEffect(() => {
     if (!user || !user.permissions.includes("admin")) {
       navigate("/unauthorized", { replace: true });
     }
   }, [user, navigate]);
 
-  // Deployment tab state - moved to top level
   const [deploymentTab, setDeploymentTab] = useState<"nodes" | "regions">(
     "nodes",
   );
   const [loadingRegions, setLoadingRegions] = useState(false);
 
-  // Form state for creating servers
   const [createFormData, setCreateFormData] = useState<CreateFormData>({
     name: "",
     nodeId: "",
@@ -172,7 +165,6 @@ const AdminServersPage = () => {
     cpuPercent: 100,
   });
 
-  // Form state for editing servers (simplified compared to create form)
   const [editFormData, setEditFormData] = useState<EditFormData>({
     name: "",
     unitId: "",
@@ -182,22 +174,17 @@ const AdminServersPage = () => {
   });
 
   const [formError, setFormError] = useState<string | null>(null);
-  // Modal state for create server
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
-  // Search state
   const [userSearch] = useState("");
   const [unitSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
-  // Add loading states for edit operation
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Effect to fetch regions when the create view is shown
   useEffect(() => {
     if (view === "create") {
       fetchRegions();
@@ -236,7 +223,6 @@ const AdminServersPage = () => {
       setAvailableRegions(data);
     } catch (err) {
       console.error("Failed to fetch regions:", err);
-      // Don't show an error, just fall back to node selection
       setDeploymentTab("nodes");
     } finally {
       setLoadingRegions(false);
@@ -274,7 +260,6 @@ const AdminServersPage = () => {
         usersRes.json(),
       ]);
 
-      // Try to get regions data if available
       let regionsData = [];
       if (regionsRes.ok) {
         regionsData = await regionsRes.json();
@@ -299,11 +284,9 @@ const AdminServersPage = () => {
     setFormError(null);
 
     try {
-      // Extract data from form and determine if we're using region-based or node-based deployment
       const payload = { ...createFormData };
       const isRegionBased = !!payload.regionId;
 
-      // If using region-based deployment, we don't need nodeId or allocationId
       if (isRegionBased) {
         delete payload.nodeId;
         delete payload.allocationId;
@@ -351,7 +334,6 @@ const AdminServersPage = () => {
     setUpdating(true);
 
     try {
-      // Create an object with only the changed values
       const changesOnly: EditFormData = {};
 
       if (editFormData.name !== selectedServer.name) {
@@ -374,7 +356,6 @@ const AdminServersPage = () => {
         changesOnly.cpuPercent = editFormData.cpuPercent;
       }
 
-      // If nothing changed, just go back to view
       if (Object.keys(changesOnly).length === 0) {
         setView("view");
         setUpdating(false);
@@ -396,10 +377,8 @@ const AdminServersPage = () => {
         throw new Error(data.error || "Failed to update server");
       }
 
-      // Refresh server list and select the updated server
       await fetchData();
 
-      // Find the updated server in the refreshed list
       const refreshedServer = servers.find((s) => s.id === selectedServer.id);
       if (refreshedServer) {
         setSelectedServer(refreshedServer);
@@ -466,9 +445,9 @@ const AdminServersPage = () => {
             value={createFormData.name}
             onChange={(e) => updateFormData({ name: e.target.value })}
             className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
             placeholder="my-server"
             required
           />
@@ -519,9 +498,9 @@ const AdminServersPage = () => {
                   })
                 }
                 className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
                 required={deploymentTab === "nodes"}
               >
                 <option value="">Select a node</option>
@@ -548,9 +527,9 @@ const AdminServersPage = () => {
                     updateFormData({ allocationId: e.target.value })
                   }
                   className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
                   required={deploymentTab === "nodes"}
                 >
                   <option value="">Select a port allocation</option>
@@ -601,9 +580,9 @@ const AdminServersPage = () => {
                     })
                   }
                   className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
                   required={deploymentTab === "regions"}
                 >
                   <option value="">Select a region</option>
@@ -647,9 +626,9 @@ const AdminServersPage = () => {
             value={createFormData.unitId}
             onChange={(e) => updateFormData({ unitId: e.target.value })}
             className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
             required
           >
             <option value="">Select a unit</option>
@@ -669,9 +648,9 @@ const AdminServersPage = () => {
             value={createFormData.userId}
             onChange={(e) => updateFormData({ userId: e.target.value })}
             className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
             required
           >
             <option value="">Select a user</option>
@@ -695,9 +674,9 @@ const AdminServersPage = () => {
                 updateFormData({ memoryMiB: parseInt(e.target.value) })
               }
               className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
               min={128}
               required
             />
@@ -714,9 +693,9 @@ const AdminServersPage = () => {
                 updateFormData({ diskMiB: parseInt(e.target.value) })
               }
               className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
               min={1024}
               required
             />
@@ -733,9 +712,9 @@ const AdminServersPage = () => {
                 updateFormData({ cpuPercent: parseInt(e.target.value) })
               }
               className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
               min={25}
               max={400}
               required
@@ -768,9 +747,9 @@ const AdminServersPage = () => {
               setEditFormData({ ...editFormData, name: e.target.value })
             }
             className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
             placeholder="my-server"
             required
           />
@@ -786,9 +765,9 @@ const AdminServersPage = () => {
               setEditFormData({ ...editFormData, unitId: e.target.value })
             }
             className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
             required
           >
             {filteredUnits.map((unit) => (
@@ -822,9 +801,9 @@ const AdminServersPage = () => {
                 })
               }
               className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
               min={128}
               required
             />
@@ -844,9 +823,9 @@ const AdminServersPage = () => {
                 })
               }
               className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
               min={1024}
               required
             />
@@ -866,16 +845,15 @@ const AdminServersPage = () => {
                 })
               }
               className="w-full px-3 py-2 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200"
+                                  text-sm text-[#FFFFFF]
+                                  focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                                  transition-colors duration-200"
               min={25}
               max={400}
               required
             />
           </div>
         </div>
-
       </form>
     );
   };
@@ -1092,73 +1070,82 @@ const AdminServersPage = () => {
                     Manage all servers running on your nodes.
                   </p>
                 </div>
-                <Button onClick={() => setIsCreateModalOpen(true)} variant="secondary">
+                <Button
+                  onClick={() => setIsCreateModalOpen(true)}
+                  variant="secondary"
+                >
                   <PlusIcon className="w-3.5 h-3.5 mr-1.5" />
                   Create Server
                 </Button>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {servers.map((server) => (
-                  <Card
-                    key={server.id}
-                    className="bg-[#0E0E0F] border border-[#1E1E20]"
-                    onClick={() => {
-                      setSelectedServer(server);
-                      setView("view");
-                    }}
-                  >
-                    <div className="px-6 h-20 flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-shrink-0">
-                          <div
-                            className={`h-2 w-2 rounded-full ${
-                              server.state === "running"
-                                ? "bg-green-400"
-                                : server.state === "updating"
-                                  ? "bg-yellow-400"
-                                  : server.state === "starting"
-                                    ? "bg-blue-400"
-                                    : "bg-gray-300"
-                            }`}
-                          />
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-[#FFFFFF]">
-                            {server.name}
+                  <div className="block bg-[#0E0E0F] rounded-md border border-[#1E1E20] overflow-hidden cursor-pointer w-full">
+                    <div className="flex items-center justify-between">
+                      <div className="px-3 py-3 flex-grow flex items-center justify-between transition-colors duration-150">
+                        <div className="flex items-center space-x-3">
+                          <div className="flex-shrink-0">
+                            <div
+                              className={`h-1.5 w-1.5 rounded-full ${
+                                server.status?.status?.state === "running"
+                                  ? "bg-[#10B981]"
+                                  : "bg-[#9CA3AF]"
+                              }`}
+                            ></div>
                           </div>
-                          <div className="text-xs text-gray-500">
-                            {server.user?.username} • {server.unit?.shortName}
-                            {server.node?.region &&
-                              ` • ${server.node.region.name}`}
+                          <div className="min-w-0">
+                            <button
+                              className="text-xs font-medium text-[#FFFFFF] truncate"
+                              key={server.id}
+                              onClick={() => {
+                                setSelectedServer(server);
+                                setEditFormData({
+                                  name: server.name,
+                                  unitId: server.unitId,
+                                  memoryMiB: server.memoryMiB,
+                                  diskMiB: server.diskMiB,
+                                  cpuPercent: server.cpuPercent,
+                                });
+                                setFormError(null);
+                                setIsEditModalOpen(true);
+                              }}
+                            >
+                              {server.name}
+                            </button>
+                            <div className="text-[11px] text-[#9CA3AF] flex items-center">
+                              <span>{server.status?.status?.id}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center space-x-6">
-                        <div className="flex space-x-4">
-                          <span className="text-xs text-gray-500">
-                            <span className="font-medium text-[#FFFFFF]">
-                              {server.cpuPercent}%
-                            </span>{" "}
-                            CPU
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            <span className="font-medium text-[#FFFFFF]">
-                              {server.memoryMiB} MiB
-                            </span>{" "}
-                            RAM
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            <span className="font-medium text-[#FFFFFF]">
-                              {server.diskMiB} MiB
-                            </span>{" "}
-                            Disk
-                          </span>
+
+                        <div className="flex items-center space-x-6">
+                          <div className="flex space-x-3">
+                            <div className="text-[11px] text-[#9CA3AF]">
+                              <span className="font-medium text-[#FFFFFF]">
+                                {server.cpuPercent}%
+                              </span>{" "}
+                              CPU limit
+                            </div>
+                            <div className="text-[11px] text-[#9CA3AF]">
+                              <span className="font-medium text-[#FFFFFF]">
+                                {(server.memoryMiB / 1024).toFixed(2)} GiB
+                              </span>{" "}
+                              Memory limit
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setSelectedServer(server);
+                              setView("view");
+                            }}
+                          >
+                            <ChevronRightIcon className="h-3.5 w-3.5 text-[#9CA3AF]" />
+                          </button>
                         </div>
-                        <ChevronRightIcon className="w-4 h-4 text-gray-400" />
                       </div>
                     </div>
-                  </Card>
+                  </div>
                 ))}
 
                 {servers.length === 0 && (
@@ -1221,20 +1208,24 @@ const AdminServersPage = () => {
           )}
 
           <FormModal
-  isOpen={isEditModalOpen}
-  onClose={() => {
-    setIsEditModalOpen(false);
-    setFormError(null);
-  }}
-  title={selectedServer ? `Edit Server: ${selectedServer.name}` : 'Edit Server'}
-  onSubmit={handleEdit}
-  isSubmitting={updating}
-  error={formError}
-  submitText={updating ? 'Updating...' : 'Update Server'}
-  cancelText="Cancel"
->
-  {renderEditForm()}
-</FormModal>
+            isOpen={isEditModalOpen}
+            onClose={() => {
+              setIsEditModalOpen(false);
+              setFormError(null);
+            }}
+            title={
+              selectedServer
+                ? `Edit Server: ${selectedServer.name}`
+                : "Edit Server"
+            }
+            onSubmit={handleEdit}
+            isSubmitting={updating}
+            error={formError}
+            submitText={updating ? "Updating..." : "Update Server"}
+            cancelText="Cancel"
+          >
+            {renderEditForm()}
+          </FormModal>
 
           {view === "view" && renderServerView()}
         </div>

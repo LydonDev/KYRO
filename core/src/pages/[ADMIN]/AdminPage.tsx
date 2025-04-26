@@ -71,17 +71,17 @@ const AdminPage = () => {
   }, [currentVersion]);
 
   return (
-    <div className="min-h-screen">
+    <div>
       <div className="p-6">
         <div className="space-y-6">
           <div>
             <h1 className="text-lg font-semibold text-white">Overview</h1>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-1 mb-8">
               A quick administrative overview of your {appName} panel.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
-            <Card className="bg-[#0E0E0F] border border-[#1E1E20] w-full h-full">
+          <div className="grid flex items-center justify-center">
+            <Card className="bg-[#0E0E0F] border border-[#1E1E20] w-full h-full mb-8">
               <CardHeader className="w-full">
                 <div className="flex items-start w-full">
                   <div className="w-full">
@@ -114,33 +114,28 @@ const AdminPage = () => {
                 </div>
               </CardHeader>
             </Card>
-            <div className="ml-4">
-              <Card className="bg-[#0E0E0F] border border-[#1E1E20] w-full h-full">
-                <CardHeader className="w-full">
-                  <div className="flex items-start w-full">
-                    <div className="w-full">
-                      <CardTitle className="flex items-center text-[#FFFFFF] w-full">
-                        <span className="text-lg font-semibold">
-                          Competitor
-                        </span>
-                      </CardTitle>
-                      <CardDescription className="mt-2 w-full">
-                        {appName} was created to bring something new to the game
-                        server management panel market as all the other
-                        alternatives are no longer maintained, have
-                        vulnerabilities, or just look horrible. Unlike
-                        traditional options, {appName} focuses on modern design,
-                        security, and performance to offer a superior user
-                        experience.
-                      </CardDescription>
-                    </div>
+            <Card className="bg-[#0E0E0F] border border-[#1E1E20] w-full h-full mb-6 mt-8">
+              <CardHeader>
+                <div className="flex items-start">
+                  <div>
+                    <CardTitle className="flex items-center text-[#FFFFFF]">
+                      <span className="text-lg font-semibold">Competitor</span>
+                    </CardTitle>
+                    <CardDescription className="mt-2">
+                      {appName} was created to bring something new to the game
+                      server management panel market as all the other
+                      alternatives are no longer maintained, have
+                      vulnerabilities, or just look horrible. Unlike traditional
+                      options, {appName} focuses on modern design, security, and
+                      performance to offer a superior user experience.
+                    </CardDescription>
                   </div>
-                </CardHeader>
-              </Card>
-            </div>
+                </div>
+              </CardHeader>
+            </Card>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <a
               href="https://discord.gg/compute"
               className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
@@ -149,7 +144,7 @@ const AdminPage = () => {
               <span>Get Help</span>
             </a>
             <a
-              href="https://github.com/lydondev"
+              href="https://github.com/lydondev/KYRO"
               className="bg-[#0E0E0F] border border-[#1E1E20] transition font-medium text-sm text-[#FFFFFF] py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-[#1E1E20]"
             >
               <svg

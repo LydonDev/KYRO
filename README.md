@@ -1,5 +1,5 @@
 > [!CAUTION]
-> Kyro is under active development and may be unstable. 
+> Kyro is under active development and may be unstable.
 
 # Kyro ⚡️
 
@@ -95,6 +95,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 5. Open a Pull Request
 
 **Contribution Guidelines:**
+
 - Follow Bun/TypeScript best practices
 - Maintain clean, readable code
 - Update documentation as needed
@@ -104,24 +105,31 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 ## ❓ FAQ
 
 - **Kyro feels slow or laggy!**
+
   - Clear your browser cache/cookies, ensure you are running in production mode, and check your system resources. Running on older hardware or with too many background processes may impact speed.
 
 - **How do I change the panel's name?**
+
   - Set the `VITE_APP_NAME` variable in all `.env` files to your desired name. This will also rename all Kyro commands and require you to stop all running Kyro processes and rename your Kyro database accordingly.
 
 - **Can I install a theme or plugins?**
+
   - Not at this time. Kyro does not currently support themes or plugins. To customize the look, you must manually edit the frontend files.
 
 - **How do I set up email verification?**
+
   - Register a Resend account for an API key and link your domain to Resend. This enables email verification for user registration and password resets.
 
 - **The application won't start. What should I check?**
+
   - Ensure all dependencies are installed with `bun install` in each repo (`KRYPTON`, `KYRO`, and `core`). Verify your `.env` files are present and correctly configured. Check the logs with `kyro logs` for specific errors.
 
 - **How do I contribute to Kyro?**
+
   - Fork the repository, create a new branch, and submit a pull request. Ensure your code follows the existing style and includes tests where appropriate.
 
 - **How do I update Kyro to the latest version?**
+
   - Pull the latest changes from the repository, reinstall dependencies with `bun install`, and run any new migrations with `kyro migrate --force`.
 
 - **Where can I get help or report bugs?**

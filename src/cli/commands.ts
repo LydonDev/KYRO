@@ -53,33 +53,115 @@ export const checkVersionCommand = new Command("check-version")
   .description(`Check if your ${appName} installation is up to date`)
   .action(async () => {
     try {
-      const res = await fetch("https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD");
+      const res = await fetch(
+        "https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD",
+      );
       const remoteVersion = (await res.text()).trim();
       const result = compareVersions(localVersion, remoteVersion);
 
       if (result < 0) {
-        console.log(chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"));
-        console.log(chalk.hex("#a2b3ff")(`│ 🚀 ${appName} Environment                        │`));
-        console.log(chalk.hex("#a2b3ff")("│ 🌟 Checking Version                        │"));
-        console.log(chalk.hex("#a2b3ff")("│                                            │"));
-        console.log(chalk.hex("#a2b3ff")(`│ 🧩 Version: Your version (${localVersion}) is         │`));
-        console.log(chalk.hex("#a2b3ff")(`│  outdated. Latest is ${remoteVersion}.                │`));
-        console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "╭────────────────────────────────────────────╮",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│ 🚀 ${appName} Environment                        │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "│ 🌟 Checking Version                        │",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "│                                            │",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│ 🧩 Version: Your version (${localVersion}) is         │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│  outdated. Latest is ${remoteVersion}.                │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "╰────────────────────────────────────────────╯\n",
+          ),
+        );
       } else if (result > 0) {
-        console.log(chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"));
-        console.log(chalk.hex("#a2b3ff")(`│ 🚀 ${appName} Environment                        │`));
-        console.log(chalk.hex("#a2b3ff")("│ 🌟 Checking Version                        │"));
-        console.log(chalk.hex("#a2b3ff")("│                                            │"));
-        console.log(chalk.hex("#a2b3ff")(`│ 🧩 Version: You are ahead of the official  │`));
-        console.log(chalk.hex("#a2b3ff")(`│  version Current: ${localVersion}, Latest: ${remoteVersion}    │`));
-        console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "╭────────────────────────────────────────────╮",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│ 🚀 ${appName} Environment                        │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "│ 🌟 Checking Version                        │",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "│                                            │",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│ 🧩 Version: You are ahead of the official  │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│  version Current: ${localVersion}, Latest: ${remoteVersion}    │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "╰────────────────────────────────────────────╯\n",
+          ),
+        );
       } else {
-        console.log(chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"));
-        console.log(chalk.hex("#a2b3ff")(`│ 🚀 ${appName} Environment                        │`));
-        console.log(chalk.hex("#a2b3ff")("│ 🌟 Checking Version                        │"));
-        console.log(chalk.hex("#a2b3ff")("│                                            │"));
-        console.log(chalk.hex("#a2b3ff")(`│ 🧩 Version: ${localVersion} (Up to date)             │`));
-        console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "╭────────────────────────────────────────────╮",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│ 🚀 ${appName} Environment                        │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "│ 🌟 Checking Version                        │",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "│                                            │",
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            `│ 🧩 Version: ${localVersion} (Up to date)             │`,
+          ),
+        );
+        console.log(
+          chalk.hex("#a2b3ff")(
+            "╰────────────────────────────────────────────╯\n",
+          ),
+        );
       }
     } catch (err: any) {
       console.error(chalk.red("Failed to check version:"), err.message);
@@ -100,7 +182,9 @@ const compareVersions = (v1: string, v2: string): number => {
 
 const printVersionStatus = async () => {
   try {
-    const res = await fetch("https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD");
+    const res = await fetch(
+      "https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD",
+    );
     const remoteVersion = (await res.text()).trim();
     const result = compareVersions(localVersion, remoteVersion);
 
@@ -109,8 +193,8 @@ const printVersionStatus = async () => {
       result < 0
         ? chalk.red(" (Outdated)")
         : result > 0
-        ? chalk.yellow(" (Ahead of official)")
-        : chalk.green(" (Up to date)");
+          ? chalk.yellow(" (Ahead of official)")
+          : chalk.green(" (Up to date)");
 
     return chalk.hex("#a2b3ff")(`${versionLine}${statusLine.padEnd(36)}│`);
   } catch {
@@ -125,30 +209,62 @@ const printBanner = async () => {
 
   console.clear();
   console.log(asciiGradient(ascii));
-  console.log(chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"));
-  console.log(chalk.hex("#a2b3ff")(`│ 🚀 ${appName} Environment                        │`));
-  console.log(chalk.hex("#a2b3ff")("│ 🌟 Launching services...                   │"));
-  console.log(chalk.hex("#a2b3ff")("│                                            │"));
+  console.log(
+    chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")(
+      `│ 🚀 ${appName} Environment                        │`,
+    ),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")("│ 🌟 Launching services...                   │"),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")("│                                            │"),
+  );
   console.log(await printVersionStatus());
-  console.log(chalk.hex("#a2b3ff")("│                                            │"));
-  console.log(chalk.hex("#a2b3ff")(`│ 🔌 API: ${apiUrl}:${apiPort}              │`));
-  console.log(chalk.hex("#a2b3ff")(`│ 🖥️  ${appName}: ${appUrl}:${appPort}             │`));
-  console.log(chalk.hex("#a2b3ff")("│ ⚙️  Krypton: http://localhost:8080          │"));
-  console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
+  console.log(
+    chalk.hex("#a2b3ff")("│                                            │"),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")(`│ 🔌 API: ${apiUrl}:${apiPort}              │`),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")(
+      `│ 🖥️  ${appName}: ${appUrl}:${appPort}             │`,
+    ),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")("│ ⚙️  Krypton: http://localhost:8080          │"),
+  );
+  console.log(
+    chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"),
+  );
 };
 
 const formatLogLine = (data: Buffer): string => {
   const timestamp = new Date().toISOString().replace("T", " ").substring(0, 19);
-  return data
-    .toString()
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => `[${timestamp}] ${line}`)
-    .join("\n") + "\n";
+  return (
+    data
+      .toString()
+      .split("\n")
+      .filter(Boolean)
+      .map((line) => `[${timestamp}] ${line}`)
+      .join("\n") + "\n"
+  );
 };
 
-const spawnWithLogs = (proc: { name: string, cmd: string, args: string[], cwd: string }) => {
-  const logPath = path.join(logsDir, `${proc.name.replace(/\s+/g, "_").toLowerCase()}.log`);
+const spawnWithLogs = (proc: {
+  name: string;
+  cmd: string;
+  args: string[];
+  cwd: string;
+}) => {
+  const logPath = path.join(
+    logsDir,
+    `${proc.name.replace(/\s+/g, "_").toLowerCase()}.log`,
+  );
   const logStream = fs.createWriteStream(logPath, { flags: "a" });
   const child = spawn(proc.cmd, proc.args, { cwd: proc.cwd });
 
@@ -170,21 +286,43 @@ const spawnWithLogs = (proc: { name: string, cmd: string, args: string[], cwd: s
 export const devCommand = new Command("development")
   .description(`Run ${appName} in development mode`)
   .action(async () => {
-    const os = require('os');
+    const os = require("os");
 
     await stopAllServers();
 
     const processes = [
-      { name: "dist", cmd: "rm", args: ["-rf", "dist"], cwd: "/opt/KYRO/kyro/core" },
-      { name: `${appName} Frontend`, cmd: "bun", args: ["run", "dev"], cwd: "/opt/KYRO/kyro/core" },
-      { name: `${appName} Backend`, cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/kyro" },
-      { name: "Krypton", cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/krypton" },
+      {
+        name: "dist",
+        cmd: "rm",
+        args: ["-rf", "dist"],
+        cwd: "/opt/KYRO/kyro/core",
+      },
+      {
+        name: `${appName} Frontend`,
+        cmd: "bun",
+        args: ["run", "dev"],
+        cwd: "/opt/KYRO/kyro/core",
+      },
+      {
+        name: `${appName} Backend`,
+        cmd: "bun",
+        args: ["run", "start"],
+        cwd: "/opt/KYRO/kyro",
+      },
+      {
+        name: "Krypton",
+        cmd: "bun",
+        args: ["run", "start"],
+        cwd: "/opt/KYRO/krypton",
+      },
     ];
 
     let bannerPrinted = false;
 
     setTimeout(() => {
-      require('child_process').exec(`${os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open'} ${appUrl}:${appPort}`);
+      require("child_process").exec(
+        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${appUrl}:${appPort}`,
+      );
     }, 1000);
 
     processes.forEach((proc) => {
@@ -204,7 +342,9 @@ export const devCommand = new Command("development")
 
         child.on("close", (code) => {
           if (code !== 0) {
-            console.log(chalk.red(`❌ Frontend process exited with code ${code}`));
+            console.log(
+              chalk.red(`❌ Frontend process exited with code ${code}`),
+            );
             process.exit(code);
           }
         });
@@ -215,21 +355,43 @@ export const devCommand = new Command("development")
 export const prodCommand = new Command("production")
   .description(`Run ${appName} in production mode`)
   .action(async () => {
-    const os = require('os');
+    const os = require("os");
 
     await stopAllServers();
 
     const processes = [
-      { name: "dist", cmd: "rm", args: ["-rf", "dist"], cwd: "/opt/KYRO/kyro/core" },
-      { name: `${appName} Frontend`, cmd: "bun", args: ["run", "build"], cwd: "/opt/KYRO/kyro/core" },
-      { name: `${appName} Backend`, cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/kyro" },
-      { name: "Krypton", cmd: "bun", args: ["run", "start"], cwd: "/opt/KYRO/krypton" },
+      {
+        name: "dist",
+        cmd: "rm",
+        args: ["-rf", "dist"],
+        cwd: "/opt/KYRO/kyro/core",
+      },
+      {
+        name: `${appName} Frontend`,
+        cmd: "bun",
+        args: ["run", "build"],
+        cwd: "/opt/KYRO/kyro/core",
+      },
+      {
+        name: `${appName} Backend`,
+        cmd: "bun",
+        args: ["run", "start"],
+        cwd: "/opt/KYRO/kyro",
+      },
+      {
+        name: "Krypton",
+        cmd: "bun",
+        args: ["run", "start"],
+        cwd: "/opt/KYRO/krypton",
+      },
     ];
 
     let bannerPrinted = false;
 
     setTimeout(() => {
-      require('child_process').exec(`${os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open'} ${appUrl}:${appPort}`);
+      require("child_process").exec(
+        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${appUrl}:${appPort}`,
+      );
     }, 1000);
 
     processes.forEach((proc) => {
@@ -249,7 +411,9 @@ export const prodCommand = new Command("production")
 
         child.on("close", (code) => {
           if (code !== 0) {
-            console.log(chalk.red(`❌ Frontend process exited with code ${code}`));
+            console.log(
+              chalk.red(`❌ Frontend process exited with code ${code}`),
+            );
             process.exit(code);
           }
         });
@@ -257,13 +421,16 @@ export const prodCommand = new Command("production")
     });
   });
 
-  export const logsClearCommand = new Command("clear:logs")
+export const logsClearCommand = new Command("clear:logs")
   .description("Clear all log files")
   .action(() => {
     const clearLogsDirectory = () => {
       exec(`rm -rf ./logs`, (err) => {
         if (err) {
-          console.error(chalk.red("Error clearing logs directory:"), err.message);
+          console.error(
+            chalk.red("Error clearing logs directory:"),
+            err.message,
+          );
         } else {
           console.log(chalk.green("Logs directory cleared successfully."));
         }
@@ -275,19 +442,21 @@ export const prodCommand = new Command("production")
 export const logsCommand = new Command("logs")
   .description(`View logs for ${appName}`)
   .action(() => {
-    const http = require('http');
-    const path = require('path');
-    const fs = require('fs');
-    const os = require('os');
+    const http = require("http");
+    const path = require("path");
+    const fs = require("fs");
+    const os = require("os");
 
     const port = 4321;
     const logsPath = logsDir;
-    const highlightJsCdn = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
-    const highlightCssCdn = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css';
+    const highlightJsCdn =
+      "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js";
+    const highlightCssCdn =
+      "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css";
 
     function getLogFiles() {
       try {
-        return fs.readdirSync(logsPath).filter((f) => f.endsWith('.log'));
+        return fs.readdirSync(logsPath).filter((f) => f.endsWith(".log"));
       } catch {
         return [];
       }
@@ -295,7 +464,7 @@ export const logsCommand = new Command("logs")
 
     function serveIndex(res) {
       const files = getLogFiles();
-      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.writeHead(200, { "Content-Type": "text/html" });
       res.end(`<!DOCTYPE html>
 <html>
 <head>
@@ -307,7 +476,7 @@ export const logsCommand = new Command("logs")
 <body>
   <h2>${appName} Logs</h2>
   <ul>
-    ${files.map(f => `<li><a href="/log/${encodeURIComponent(f)}">${f}</a></li>`).join('')}
+    ${files.map((f) => `<li><a href="/log/${encodeURIComponent(f)}">${f}</a></li>`).join("")}
   </ul>
   <hr>
   <small>Click a log file to view its contents.</small>
@@ -320,16 +489,16 @@ export const logsCommand = new Command("logs")
       const fullPath = path.join(logsPath, safeName);
       if (!fs.existsSync(fullPath)) {
         res.writeHead(404);
-        res.end('Log file not found');
+        res.end("Log file not found");
         return;
       }
-      fs.readFile(fullPath, 'utf-8', (err, data) => {
+      fs.readFile(fullPath, "utf-8", (err, data) => {
         if (err) {
           res.writeHead(500);
-          res.end('Error reading file');
+          res.end("Error reading file");
           return;
         }
-        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.writeHead(200, { "Content-Type": "text/html" });
         res.end(`<!DOCTYPE html>
 <html>
 <head>
@@ -349,13 +518,15 @@ export const logsCommand = new Command("logs")
     }
 
     setTimeout(() => {
-      require('child_process').exec(`${os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open'} ${appUrl}:${port}`);
+      require("child_process").exec(
+        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${appUrl}:${port}`,
+      );
     }, 5000);
 
     const server = http.createServer((req, res) => {
-      const urlParts = req.url.split('/');
+      const urlParts = req.url.split("/");
       const resource = urlParts[1];
-      if (resource === 'log' && urlParts[2]) {
+      if (resource === "log" && urlParts[2]) {
         serveLogFile(res, urlParts[2]);
       } else {
         serveIndex(res);
@@ -366,14 +537,30 @@ export const logsCommand = new Command("logs")
       const asciiPath = "/opt/KYRO/kyro/_ascii.txt";
       const ascii = fs.readFileSync(asciiPath, "utf-8");
       const asciiGradient = gradient("FFFFFF", "#a2b3ff");
-    
+
       console.clear();
       console.log(asciiGradient(ascii));
-      console.log(chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"));
-      console.log(chalk.hex("#a2b3ff")(`│ 🚀 ${appName} Environment                        │`));
-      console.log(chalk.hex("#a2b3ff")("│ 🌟 Launching logs site...                  │"));
-      console.log(chalk.hex("#a2b3ff")("│                                            │"));
-      console.log(chalk.hex("#a2b3ff")(`│ ⚙️  Logs: ${appUrl}:${port}             │`));
-      console.log(chalk.hex("#a2b3ff")("╰────────────────────────────────────────────╯\n"));
+      console.log(
+        chalk.hex("#a2b3ff")("╭────────────────────────────────────────────╮"),
+      );
+      console.log(
+        chalk.hex("#a2b3ff")(
+          `│ 🚀 ${appName} Environment                        │`,
+        ),
+      );
+      console.log(
+        chalk.hex("#a2b3ff")("│ 🌟 Launching logs site...                  │"),
+      );
+      console.log(
+        chalk.hex("#a2b3ff")("│                                            │"),
+      );
+      console.log(
+        chalk.hex("#a2b3ff")(`│ ⚙️  Logs: ${appUrl}:${port}             │`),
+      );
+      console.log(
+        chalk.hex("#a2b3ff")(
+          "╰────────────────────────────────────────────╯\n",
+        ),
+      );
     });
   });

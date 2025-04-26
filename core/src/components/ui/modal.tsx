@@ -27,7 +27,7 @@ export const BaseModal: React.FC<BaseModalProps> = ({
   footer,
 }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose} >
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-[#0E0E0F] border border-[#1E1E20] text-white">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -65,20 +65,17 @@ export const FormModal: React.FC<FormModalProps> = ({
       title={title}
       footer={
         <>
+          <Button onClick={onClose} disabled={isSubmitting}>
+            {cancelText}
+          </Button>
           <Button
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
-              {cancelText}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={onSubmit}
-              disabled={isSubmitting}
-              icon={<Plus className="w-4 h-4" />}
-            >
-              {isSubmitting ? "Creating..." : submitText}
-            </Button>
+            variant="secondary"
+            onClick={onSubmit}
+            disabled={isSubmitting}
+            icon={<Plus className="w-4 h-4" />}
+          >
+            {isSubmitting ? "Creating..." : submitText}
+          </Button>
         </>
       }
     >

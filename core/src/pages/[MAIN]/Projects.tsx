@@ -71,7 +71,10 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
             </Alert>
           )}
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium text-[#FFFFFF]">
+            <label
+              htmlFor="name"
+              className="text-sm font-medium text-[#FFFFFF]"
+            >
               Project Name
             </label>
             <Input
@@ -88,7 +91,10 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="description" className="text-sm font-medium text-[#FFFFFF]">
+            <label
+              htmlFor="description"
+              className="text-sm font-medium text-[#FFFFFF]"
+            >
               Description (optional)
             </label>
             <Textarea
@@ -104,10 +110,7 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
             />
           </div>
           <DialogFooter>
-          <Button
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
+            <Button onClick={onClose} disabled={isSubmitting}>
               Cancel
             </Button>
             <Button
@@ -338,7 +341,7 @@ const ProjectsPage: React.FC = () => {
             undone.
           </p>
           <DialogFooter>
-          <Button
+            <Button
               variant="secondary"
               onClick={() => setDeleteDialogOpen(false)}
               disabled={isSubmitting}

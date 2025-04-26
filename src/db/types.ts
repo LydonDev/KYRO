@@ -28,7 +28,7 @@ export interface Node {
   connectionKey: string;
   isOnline: boolean;
   lastChecked: Date;
-  regionId?: string | null; 
+  regionId?: string | null;
   region?: Region | null;
   createdAt: Date;
   updatedAt: Date;
@@ -120,12 +120,12 @@ export interface Project {
 export interface Region {
   id: string;
   name: string;
-  identifier: string; 
-  countryId?: string | null; 
-  fallbackRegionId?: string | null; 
-  fallbackRegion?: Region | null; 
-  serverLimit?: number | null; 
-  nodes: Node[]; 
+  identifier: string;
+  countryId?: string | null;
+  fallbackRegionId?: string | null;
+  fallbackRegion?: Region | null;
+  serverLimit?: number | null;
+  nodes: Node[];
   createdAt: Date;
   updatedAt: Date;
 }

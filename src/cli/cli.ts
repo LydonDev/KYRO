@@ -23,7 +23,13 @@ import { mkdir, rm, readFile } from "fs/promises";
 import { Database } from "bun:sqlite";
 import { spawn, spawnSync } from "child_process";
 import { Command } from "commander";
-import { devCommand, prodCommand, checkVersionCommand, logsCommand, logsClearCommand } from "./commands";
+import {
+  devCommand,
+  prodCommand,
+  checkVersionCommand,
+  logsCommand,
+  logsClearCommand,
+} from "./commands";
 import { sendWelcomeEmail } from "../services/email";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
@@ -995,8 +1001,7 @@ unitCommand
     }
   });
 
-
-  unitCommand
+unitCommand
   .command("create")
   .description("Create a new unit")
   .option("-f, --file <path>", "JSON file containing unit configuration")

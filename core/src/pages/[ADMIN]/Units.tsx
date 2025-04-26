@@ -80,7 +80,6 @@ type Unit = z.infer<typeof unitSchema>;
 type Container = z.infer<typeof containerSchema>;
 type View = "list" | "create" | "view" | "edit";
 
-
 // Environment Variables Form Component
 const EnvironmentVariableForm: React.FC<{
   variables: Unit["environmentVariables"];
