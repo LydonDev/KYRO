@@ -70,6 +70,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    ```bash
    cd KRYPTON
    bun run configure
+   bun run start
    ```
 
 ---
