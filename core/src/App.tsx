@@ -6,11 +6,9 @@ import ErrorBoundary from "./pages/[ERRORS]/ErrorBoundary";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { AuthProvider, ProtectedRoute, AuthPage } from "./pages/[AUTH]/SignIn";
 import { SystemProvider } from "./contexts/SystemContext";
-import { ProjectProvider } from "./contexts/ProjectContext";
 import { usePageTitle } from "./hooks/usePageTitle";
 
 const Servers = lazy(() => import("./pages/[MAIN]/Servers"));
-const Projects = lazy(() => import("./pages/[MAIN]/Projects"));
 const NotFound = lazy(() => import("./pages/[ERRORS]/NotFound"));
 const ComingSoon = lazy(() => import("./pages/[ERRORS]/CoomingSoon"));
 const Unauthorized = lazy(() => import("./pages/[ERRORS]/Unauthorized"));
@@ -100,7 +98,6 @@ function App() {
   return (
     <AuthProvider>
       <SystemProvider>
-        <ProjectProvider>
           <Layout>
             <ErrorBoundary>
               <Suspense fallback={<LoadingSpinner />}>
@@ -143,14 +140,6 @@ function App() {
                         element={
                           <ProtectedRoute>
                             <Unauthorized />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/projects"
-                        element={
-                          <ProtectedRoute>
-                            <Projects />
                           </ProtectedRoute>
                         }
                       />
@@ -298,7 +287,6 @@ function App() {
               </Suspense>
             </ErrorBoundary>
           </Layout>
-        </ProjectProvider>
       </SystemProvider>
     </AuthProvider>
   );

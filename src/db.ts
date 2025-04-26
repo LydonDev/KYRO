@@ -6,7 +6,6 @@ import { createUnitsRepository } from "./db/units";
 import { createAllocationsRepository } from "./db/allocations";
 import { createServersRepository } from "./db/servers";
 import { createCargoRepository } from "./db/cargo";
-import { createProjectsRepository } from "./db/projects";
 import { createRegionsRepository } from "./db/regions";
 import chalk from "chalk";
 import { existsSync } from "fs";
@@ -58,7 +57,6 @@ export class DB {
       this.allocations = createAllocationsRepository(context);
       this.servers = createServersRepository(context);
       this.cargo = createCargoRepository(context);
-      this.projects = createProjectsRepository(context);
       this.regions = createRegionsRepository(context);
     }
   }
@@ -73,7 +71,6 @@ export class DB {
       "cargo",
       "cargo_containers",
       "unit_cargo_containers",
-      "projects",
       "regions",
     ];
 
@@ -104,7 +101,6 @@ export class DB {
       "cargo",
       "cargo_containers",
       "unit_cargo_containers",
-      "projects",
       "regions",
     ];
 

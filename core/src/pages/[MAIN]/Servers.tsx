@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { ChevronRightIcon, FolderIcon } from "@heroicons/react/24/solid";
-import { ServerIcon, PlusIcon, BoltIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ServerIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import { useProjects } from "../../contexts/ProjectContext";
-import { Alert, Button, FormDialog } from "../../components/UI";
+import { Alert, Button } from "../../components/UI";
 
 interface Node {
   id: string;
@@ -31,94 +30,12 @@ interface Server {
   userId: string;
 }
 
-interface ServerMoveDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  server: Server | null;
-  onMove: (projectId: string) => Promise<void>;
-  projects: any[];
-  currentProjectId: string | null;
-  isSubmitting: boolean;
-  error: string | null;
-}
-
-const ServerMoveDialog: React.FC<ServerMoveDialogProps> = ({
-  isOpen,
-  onClose,
-  server,
-  onMove,
-  projects,
-  currentProjectId,
-  isSubmitting,
-  error,
-}) => {
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
-
-  useEffect(() => {
-    if (isOpen && projects.length > 0) {
-      const otherProject = projects.find((p) => p.id !== currentProjectId);
-      if (otherProject) {
-        setSelectedProjectId(otherProject.id);
-      } else if (projects.length > 0) {
-        setSelectedProjectId(projects[0].id);
-      }
-    }
-  }, [isOpen, projects, currentProjectId]);
-
-  if (!isOpen || !server) return null;
-
-  return (
-    <FormDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Move Server to Project"
-      error={error}
-      submitText={isSubmitting ? "Moving..." : "Move Server"}
-      isSubmitting={isSubmitting}
-      onSubmit={(e) => {
-        e.preventDefault();
-        onMove(selectedProjectId);
-      }}
-    >
-      <div>
-
-        <div>
-          <label className="text-sm font-medium text-[#FFFFFF]">
-            Select Project
-          </label>
-          <select
-            value={selectedProjectId}
-            onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="mt-2 w-full px-3 py-2 text-sm bg-[#0E0E0F] border border-[#1E1E20] rounded-md text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-[#232325]"
-          >
-            {projects.map((project) => (
-              <option
-                key={project.id}
-                value={project.id}
-                disabled={project.id === server.projectId}
-              >
-                {project.name}{" "}
-                {project.id === server.projectId ? "(Current)" : ""}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </FormDialog>
-  );
-};
-
 export default function Home() {
-  const { currentProject, projects, moveServerToProject } = useProjects();
   const [servers, setServers] = useState<Server[]>([]);
   const [filteredServers, setFilteredServers] = useState<Server[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("servers");
-  const [isMovingServer, setIsMovingServer] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<Server | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [moveError, setMoveError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   if (error) {
@@ -140,37 +57,6 @@ export default function Home() {
     offline: filteredServers.filter(
       (s) => s.status?.status?.state !== "running",
     ).length,
-  };
-
-  const handleMoveServer = async (projectId: string) => {
-    if (!selectedServer) return;
-
-    try {
-      setMoveError(null);
-      setIsSubmitting(true);
-      await moveServerToProject(selectedServer.id, projectId);
-
-      setServers((prevServers) =>
-        prevServers.map((server) =>
-          server.id === selectedServer.id ? { ...server, projectId } : server,
-        ),
-      );
-
-      setIsMovingServer(false);
-      setSelectedServer(null);
-      setSuccessMessage(`Server moved to project successfully`);
-
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 3000);
-    } catch (error) {
-      console.error("Failed to move server:", error);
-      setMoveError(
-        error instanceof Error ? error.message : "Failed to move server",
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   const fetchServers = async () => {
@@ -220,9 +106,6 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-[#FFFFFF]">Servers</h1>
-            <p className="text-sm text-[#9CA3AF]">
-              {currentProject?.name}
-            </p>
           </div>
           <Button
             variant="secondary"
@@ -314,38 +197,20 @@ export default function Home() {
                         </div>
                       </Link>
 
-                      {/* Project menu button - only show if not in default project or if there are multiple projects */}
-                      {projects.length > 1 && (
-                        <button
-                          onClick={() => {
-                            setSelectedServer(server);
-                            setMoveError(null);
-                            setIsMovingServer(true);
-                          }}
-                          className="h-full px-3 border-l border-[#1E1E20] text-[#9CA3AF] cursor-pointer hover:text-[#FFFFFF] transition-colors duration-150"
-                          title="Move to different project"
-                        >
-                          <FolderIcon className="w-4 h-4" />
-                        </button>
-                      )}
                     </div>
                   </div>
                 ))}
               </div>
-            ) : (
+            ) : ( 
               <div className="flex flex-col items-center justify-center py-16 bg-[#0E0E0F] rounded-lg border border-[#1E1E20]">
                 <div className="w-32 h-32 mb-6">
                   <ServerIcon className="w-full h-full text-[#9CA3AF]" />
                 </div>
                 <h2 className="text-xl font-semibold text-[#FFFFFF] mb-2">
-                  {currentProject?.isDefault
-                    ? "No servers found"
-                    : `No servers in ${currentProject?.name}`}
+                  No servers found
                 </h2>
                 <p className="text-[#9CA3AF] text-center max-w-md mb-6">
-                  {currentProject?.isDefault
-                    ? "You don't have any active servers yet. To create a new server, please contact your administrator."
-                    : "There are no servers in this project yet. You can move servers here from other projects."}
+                  You don't have any active servers yet. To create a new server, please contact your administrator.
                 </p>
                 <Button
                   variant="secondary"
@@ -362,9 +227,7 @@ export default function Home() {
         {activeTab === "overview" && (
           <div className="bg-[#0E0E0F] rounded-md border border-[#1E1E20] p-6">
             <h2 className="text-lg font-medium text-[#FFFFFF] mb-4">
-              {currentProject
-                ? `${currentProject.name} Project Overview`
-                : "Server Overview"}
+              Server Overview
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="border border-[#1E1E20] rounded-md p-4">
@@ -395,22 +258,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Move Server Dialog */}
-      <ServerMoveDialog
-        isOpen={isMovingServer}
-        onClose={() => {
-          setIsMovingServer(false);
-          setSelectedServer(null);
-          setMoveError(null);
-        }}
-        server={selectedServer}
-        onMove={handleMoveServer}
-        projects={projects}
-        currentProjectId={currentProject?.id || null}
-        isSubmitting={isSubmitting}
-        error={moveError}
-      />
     </div>
   );
 }
