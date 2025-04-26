@@ -138,7 +138,9 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 - [Argon](https://github.com/argon-foss)
 - [Pterodactyl](https://github.com/pterodactyl)
 - [Airlink](https://github.com/airlinklabs)
+- [Octant](https://discord.gg/compute)
+- [Pyro](https://github.com/pyrohost/pyrodactyl)
 
 <div align="center">
-  Made with ❤️ by Lydon Team
+  Made with ❤️ by Lydon
 </div>
