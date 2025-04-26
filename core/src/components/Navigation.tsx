@@ -13,9 +13,11 @@ import {
   UserIcon,
   CogIcon,
   PuzzlePieceIcon,
+  ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 import { useAuth } from "../pages/[AUTH]/SignIn";
-import { DatabaseIcon, Hammer } from "lucide-react";
+import { DatabaseIcon, Hammer, UserCircleIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
@@ -52,6 +54,16 @@ const NavItem = ({
   );
 };
 
+const UserAvatar: React.FC<{ username: string }> = ({ username }) => {
+  const initial = username.charAt(0).toUpperCase();
+  
+  return (
+    <div className="h-9 w-9 rounded-md flex items-center justify-center border border-[#232325]">
+      <span className="text-base font-bold text-white select-none drop-shadow-md">{initial}</span>
+    </div>
+  );
+};
+
 const SectionHeader = ({ label }: { label: string }) => {
   return (
     <div className="px-4 pt-5 pb-1">
@@ -65,6 +77,41 @@ const SectionHeader = ({ label }: { label: string }) => {
 function Sidebar() {
   const location = useLocation();
   const { user } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownAlignLeft, setDropdownAlignLeft] = useState(false);
+  const [dropdownShiftUp, setDropdownShiftUp] = useState(false);
+
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isDropdownOpen && dropdownRef.current && buttonRef.current) {
+      const dropdownRect = dropdownRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      // Check right overflow
+      if (dropdownRect.right > viewportWidth) {
+        setDropdownAlignLeft(true);
+      } else {
+        setDropdownAlignLeft(false);
+      }
+      // Check bottom overflow
+      if (dropdownRect.bottom > viewportHeight) {
+        setDropdownShiftUp(true);
+      } else {
+        setDropdownShiftUp(false);
+      }
+    }
+  }, [isDropdownOpen]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.replace("/signin"); 
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   const isServerPage =
     location.pathname.startsWith("/servers/") &&
@@ -97,20 +144,12 @@ function Sidebar() {
           />
 
           <NavItem
-            to="/projects"
-            icon={FolderIcon}
-            label="Projects"
-            isActive={location.pathname === "/projects"}
-          />
-
-          <NavItem
             to="/profille"
             icon={UserIcon}
             label="Profile"
             isActive={location.pathname === "/profille"}
           />
 
-          {/* Server Section - Only show when on a server page */}
           {isServerPage && (
             <>
               <SectionHeader label="Server" />
@@ -233,27 +272,49 @@ function Sidebar() {
         </nav>
       </div>
 
-      <div className="p-6">
-        <Link
-          to="https://github.com/lydondev"
-          className="inline-flex text-xs items-center text-[#9CA3AF] transition hover:text-white border-b border-[#1E1E20] pb-1"
-        >
-          Powered by {appName}
-          <svg
-            className="ml-1 w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-        </Link>
+      <div className="p-1">
+      <div className="flex justify-start space-x-2">
+        {user && (
+          <div className="relative">
+            <div 
+              ref={buttonRef}
+              className="flex items-center gap-3 cursor-pointer mr-2 py-2 px-1 rounded-xl hover:bg-[#232325] active:scale-95 shadow-sm  transition duration-200 ease-in-out backdrop-blur w-44"
+              onClick={toggleDropdown}
+            >
+              <UserAvatar username={user.username || 'User'} />
+              <div className="flex flex-col">
+                <span className="text-white text-sm">{user.username}</span>
+                <span className="text-gray-400 text-xs ">{user.permissions}</span>
+              </div>
+            </div>            
+            <div 
+              ref={dropdownRef}
+              className={`absolute ${dropdownAlignLeft ? 'left-42' : 'right-42'} ${dropdownShiftUp ? 'bottom-full mb-1' : 'top-full mt-1'} w-48 bg-[#0E0E0F] rounded-md shadow-lg border border-[#1E1E20] 
+                       overflow-hidden max-h-[calc(100vh-80px)] overflow-auto transform transition-all duration-200 ease-in-out origin-top-right z-50 ${
+                isDropdownOpen 
+                  ? 'opacity-100 scale-y-100 translate-y-0' 
+                  : 'opacity-0 scale-y-95 translate-y-1 pointer-events-none'
+              }`}
+            >
+              <div className="py-1">
+                <button 
+                  className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-[#232325] flex items-center"
+                >
+                  <UserCircleIcon className="mr-2 h-4 w-4 text-gray-500" />
+                  Profile
+                </button>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-[#232325] flex items-center"
+                >
+                  <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4 text-gray-500" />
+                  Sign out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        </div>
       </div>
     </div>
   );
