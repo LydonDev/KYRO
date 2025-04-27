@@ -873,75 +873,73 @@ const AdminUsersPage = () => {
 
   return (
     <div className="card min-h-screen bg-stone-950">
-        {/* Global Alerts */}
-        {alerts.length > 0 && (
-          <div className="mb-4 space-y-2">
-            {alerts.map((alert) => (
-              <Alert
-                key={alert.id}
-                type={alert.type}
-                message={alert.message}
-                onDismiss={() => dismissAlert(alert.id)}
-              />
-            ))}
+      {/* Global Alerts */}
+      {alerts.length > 0 && (
+        <div className="mb-4 space-y-2">
+          {alerts.map((alert) => (
+            <Alert
+              key={alert.id}
+              type={alert.type}
+              message={alert.message}
+              onDismiss={() => dismissAlert(alert.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="transition-all duration-200 ease-in-out">
+        {view === "list" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-semibold text-[#FFFFFF]">Users</h1>
+                <p className="text-xs text-gray-400 mt-1">
+                  Manage users and their permissions for accessing the panel.
+                </p>
+              </div>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => setView("create")}
+                  variant="secondary"
+                  icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+                >
+                  Create User
+                </Button>
+              </div>
+            </div>
+
+            <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
+              {renderUserTable()}
+            </div>
           </div>
         )}
 
-        <div className="transition-all duration-200 ease-in-out">
-          {view === "list" && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
-                    Users
-                  </h1>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Manage users and their permissions for accessing the panel.
-                  </p>
-                </div>
-                <div className="flex space-x-3">
-                  <Button
-                    onClick={() => setView("create")}
-                    variant="secondary"
-                    icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
-                  >
-                    Create User
-                  </Button>
-                </div>
-              </div>
-
-              <div className="bg-stone-950 border border-stone-900 rounded-md shadow-xs">
-                {renderUserTable()}
+        {view === "create" && (
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => {
+                  setView("list");
+                  setSelectedUser(null);
+                }}
+                className="flex items-center text-gray-400 hover:bg-gray-100 p-2 cursor-pointer rounded-md transition hover:text-gray-900"
+              >
+                <ArrowLeftIcon className="w-4 h-4" />
+              </button>
+              <div>
+                <h1 className="text-lg font-semibold text-[#FFFFFF]">
+                  Create User
+                </h1>
               </div>
             </div>
-          )}
+            {renderForm("create")}
+          </div>
+        )}
 
-          {view === "create" && (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => {
-                    setView("list");
-                    setSelectedUser(null);
-                  }}
-                  className="flex items-center text-gray-400 hover:bg-gray-100 p-2 cursor-pointer rounded-md transition hover:text-gray-900"
-                >
-                  <ArrowLeftIcon className="w-4 h-4" />
-                </button>
-                <div>
-                  <h1 className="text-lg font-semibold text-[#FFFFFF]">
-                    Create User
-                  </h1>
-                </div>
-              </div>
-              {renderForm("create")}
-            </div>
-          )}
+        {view === "edit" && renderForm("edit")}
 
-          {view === "edit" && renderForm("edit")}
-
-          {view === "view" && renderUserView()}
-        </div>
+        {view === "view" && renderUserView()}
+      </div>
       {contextMenu && (
         <UserContextMenu
           position={contextMenu.position}

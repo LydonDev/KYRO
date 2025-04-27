@@ -1,6 +1,6 @@
 const LoadingSpinner = () => {
   return (
-    <div className="pl-64 fixed inset-0 z-50 flex items-center justify-center bg-stone-950">
+    <div className="pl-64 fixed inset-0 z-50 flex items-center justify-center">
       <img
         src="https://media.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
         alt="Loading..."

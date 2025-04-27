@@ -158,7 +158,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   if (loading) {
-    return (<LoadingSpinner/>);
+    return <LoadingSpinner />;
   }
 
   return (

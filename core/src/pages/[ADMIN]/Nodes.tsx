@@ -1839,85 +1839,85 @@ const AdminNodesPage = () => {
 
   return (
     <div className="card bg-stone-950 min-h-screen">
-        {/* Global Alerts */}
-        {alerts.length > 0 && (
-          <div className="mb-4 space-y-2">
-            {alerts.map((alert) => (
-              <Alert
-                key={alert.id}
-                type={alert.type}
-                message={alert.message}
-                onDismiss={() => dismissAlert(alert.id)}
-              />
-            ))}
+      {/* Global Alerts */}
+      {alerts.length > 0 && (
+        <div className="mb-4 space-y-2">
+          {alerts.map((alert) => (
+            <Alert
+              key={alert.id}
+              type={alert.type}
+              message={alert.message}
+              onDismiss={() => dismissAlert(alert.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="transition-all duration-200 ease-in-out flex flex-col">
+        {view === "list" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-semibold text-white">Nodes</h1>
+                <p className="text-xs text-gray-400 mt-1">
+                  Nodes are where your servers run and live. Learn how to set up{" "}
+                  {appName}'s Krypton daemon via the{" "}
+                  <a
+                    href="https://docs.kyro.lol"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-stone-500 hover:underline"
+                  >
+                    documentation
+                  </a>
+                  .
+                </p>
+              </div>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => setView("create")}
+                  icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+                  variant="secondary"
+                >
+                  Create Node
+                </Button>
+              </div>
+            </div>
+
+            <Card className="bg-stone-950 border border-stone-900">
+              {renderNodeTable()}
+            </Card>
           </div>
         )}
 
-        <div className="transition-all duration-200 ease-in-out flex flex-col">
-          {view === "list" && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-lg font-semibold text-white">Nodes</h1>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Nodes are where your servers run and live. Learn how to set
-                    up {appName}'s Krypton daemon via the{" "}
-                    <a
-                      href="https://docs.kyro.lol"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-stone-500 hover:underline"
-                    >
-                      documentation
-                    </a>
-                    .
-                  </p>
-                </div>
-                <div className="flex space-x-3">
-                  <Button
-                    onClick={() => setView("create")}
-                    icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
-                    variant="secondary"
-                  >
-                    Create Node
-                  </Button>
-                </div>
+        {view === "create" && (
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4">
+              <Button
+                onClick={() => {
+                  setView("list");
+                  setSelectedNode(null);
+                  setFormData({ name: "", fqdn: "", port: 8080 });
+                }}
+                icon={<ArrowLeftIcon className="w-3.5 h-3.5 mr-1.5" />}
+                variant="secondary"
+              >
+                Back
+              </Button>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">
+                  Create Node
+                </h1>
               </div>
-
-              <Card className="bg-stone-950 border border-stone-900">
-                {renderNodeTable()}
-              </Card>
             </div>
-          )}
+            {renderForm("create")}
+          </div>
+        )}
 
-          {view === "create" && (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Button
-                  onClick={() => {
-                    setView("list");
-                    setSelectedNode(null);
-                    setFormData({ name: "", fqdn: "", port: 8080 });
-                  }}
-                  icon={<ArrowLeftIcon className="w-3.5 h-3.5 mr-1.5" />}
-                  variant="secondary"
-                >
-                  Back
-                </Button>
-                <div>
-                  <h1 className="text-lg font-semibold text-gray-900">
-                    Create Node
-                  </h1>
-                </div>
-              </div>
-              {renderForm("create")}
-            </div>
-          )}
+        {view === "edit" && renderForm("edit")}
 
-          {view === "edit" && renderForm("edit")}
-
-          {view === "view" && renderNodeView()}
-        </div>
+        {view === "view" && renderNodeView()}
+      </div>
 
       {/* Context Menu */}
       {contextMenu && (

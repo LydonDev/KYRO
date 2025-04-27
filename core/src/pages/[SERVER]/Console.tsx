@@ -12,6 +12,8 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import AnsiParser from "../../components/AnsiParser";
 import { motion } from "framer-motion";
 import { CommandLineIcon } from "@heroicons/react/24/solid";
+import { Badge } from "@/components/UI";
+import { Card } from "@/components/ui/card";
 
 interface Node {
   id: string;
@@ -352,6 +354,20 @@ const ServerConsolePage = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center">
               <h1 className="text-xl font-semibold text-white mr-4">Console</h1>
+              <span className="text-gray-400 text-sm">{ip}</span>
+
+              <Badge
+                variant={
+                  server?.state?.toLowerCase() === "running"
+                    ? "success"
+                    : server?.state?.toLowerCase() === "stopped"
+                      ? "danger"
+                      : "default"
+                }
+                className="text-sm ml-3"
+              >
+                {server?.state}
+              </Badge>
               {error && (
                 <motion.div
                   initial={{ opacity: 0, x: -5 }}
@@ -366,55 +382,6 @@ const ServerConsolePage = () => {
             </div>
 
             <div className="flex items-center space-x-3">
-              {/* Status Indicators */}
-              <div className="text-gray-400 px-4 py-1.5 rounded-md bg-stone-950 border border-stone-900 flex items-center space-x-6">
-                <div className="flex items-center">
-                  <div className="w-1 h-4 bg-stone-950 rounded mr-2"></div>
-                  <div className="text-xs">
-                    <span className="block text-gray-400">IP</span>
-                    <span className="block text-white font-medium">{ip}</span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-1 h-4 bg-gray-600 rounded mr-2"></div>
-                  <div className="text-xs">
-                    <span className="block text-gray-400">CPU</span>
-                    <span className="block text-white font-medium">
-                      {liveStats.cpuPercent.toFixed(1)}%
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-1 h-4 bg-gray-600 rounded mr-2"></div>
-                  <div className="text-xs">
-                    <span className="block text-gray-400">RAM</span>
-                    <span className="block text-white font-medium">
-                      {formatBytes(liveStats.memory.used)} /{" "}
-                      {formatBytes(liveStats.memory.limit)}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-1 h-4 bg-gray-600 rounded mr-2"></div>
-                  <div className="text-xs">
-                    <span className="block text-gray-400">STORAGE</span>
-                    <span className="block text-white font-medium">
-                      {formatBytes((server?.diskMiB || 0) * 1024 * 1024)}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-1 h-4 bg-gray-600 rounded mr-2"></div>
-                  <div className="text-xs">
-                    <span className="block text-gray-400">NETWORK</span>
-                    <span className="block text-white font-medium">
-                      {formatBytes(liveStats.network.rxBytes)} /{" "}
-                      {formatBytes(liveStats.network.txBytes)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => handlePowerAction("start")}
@@ -445,6 +412,87 @@ const ServerConsolePage = () => {
           </div>
         </div>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <Card
+            className="border border-stone-900 bg-stone-950 p-4"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
+              backgroundSize: "15px 15px",
+            }}
+          >
+            <p className="text-sm font-medium text-gray-500">CPU Usage</p>
+            <div className="flex items-baseline mt-2">
+              <p className="text-2xl font-semibold text-gray-400">
+                {isServerActive ? `${liveStats.cpuPercent.toFixed(1)}%` : "-"}
+              </p>
+            </div>
+          </Card>
+
+          <Card
+            className="border border-stone-900 bg-stone-950 p-4"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
+              backgroundSize: "15px 15px",
+            }}
+          >
+            <p className="text-sm font-medium text-gray-500">Memory</p>
+            <div className="flex items-baseline mt-2">
+              <p className="text-2xl font-semibold text-gray-400">
+                {isServerActive ? formatBytes(liveStats.memory.used) : "-"}
+              </p>
+              {isServerActive && (
+                <span className="ml-2 text-sm font-medium text-gray-500">
+                  / {formatBytes(server?.status.memory_limit)}
+                </span>
+              )}
+            </div>
+          </Card>
+
+          <Card
+            className="border border-stone-900 bg-stone-950 p-4"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
+              backgroundSize: "15px 15px",
+            }}
+          >
+            <p className="text-sm font-medium text-gray-500">Network I/O</p>
+            <div className="flex items-baseline mt-2">
+              <p className="text-2xl font-semibold text-gray-400">
+                {isServerActive ? formatBytes(liveStats.network.rxBytes) : "-"}
+              </p>
+              {isServerActive && (
+                <span className="ml-2 text-sm font-medium text-gray-500">
+                  /s in
+                </span>
+              )}
+            </div>
+          </Card>
+
+          <Card
+            className="border border-stone-900 bg-stone-950 p-4"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
+              backgroundSize: "15px 15px",
+            }}
+          >
+            <p className="text-sm font-medium text-gray-500">Disk Space</p>
+            <div className="flex items-baseline mt-2">
+              <p className="text-2xl font-semibold text-gray-400">
+                {isServerActive
+                  ? formatBytes((server?.diskMiB || 0) * 1024 * 1024)
+                  : "-"}
+              </p>
+              <span className="ml-2 text-sm font-medium text-gray-500">
+                {isServerActive ? "total" : ""}
+              </span>
+            </div>
+          </Card>
+        </div>
+
         {/* Console output */}
         <div className="flex-1 flex flex-col bg-stone-950 border border-stone-900 rounded-lg overflow-hidden">
           <div
@@ -454,8 +502,6 @@ const ServerConsolePage = () => {
               height: "100%",
               maxHeight: "425px",
               minHeight: "425px",
-              backgroundImage:
-                "radial-gradient(circle at 15px 15px, rgba(49, 49, 53, 0.3) 2px, transparent 0), radial-gradient(circle at 15px 15px, rgba(49, 49, 53, 0.3) 2px, transparent 0)",
               backgroundSize: "30px 30px",
             }}
           >

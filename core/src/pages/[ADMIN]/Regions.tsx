@@ -864,7 +864,7 @@ const AdminRegionsPage = () => {
 
         {activeTab === "overview" ? (
           <Card className="bg-stone-950 border border-stone-900">
-            <div className="px-6 py-4">   
+            <div className="px-6 py-4">
               <div className="space-y-4">
                 <div>
                   <div className="text-xs text-white">Region ID</div>
@@ -1154,7 +1154,7 @@ const AdminRegionsPage = () => {
                 region.countryId ||
                 "-";
               return (
-                <tr   
+                <tr
                   key={region.id}
                   className="hover:bg-stone-900 cursor-pointer"
                   onClick={() => {
@@ -1286,9 +1286,7 @@ const AdminRegionsPage = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-lg font-semibold text-white">
-                    Regions
-                  </h1>
+                  <h1 className="text-lg font-semibold text-white">Regions</h1>
                   <p className="text-xs text-gray-500 mt-1">
                     Group your nodes into regions for better organization and
                     load balancing.

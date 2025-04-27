@@ -1018,7 +1018,7 @@ const AdminCargoPage: React.FC = () => {
                 });
                 setView("cargo-edit");
               }}
-              icon={<PencilIcon className="w-3.5 h-3.5 mr-1.5"/>}
+              icon={<PencilIcon className="w-3.5 h-3.5 mr-1.5" />}
             >
               Edit
             </Button>
@@ -1427,277 +1427,271 @@ const AdminCargoPage: React.FC = () => {
 
   return (
     <div className="card min-h-screen bg-stone-950">
-        {error && (
-          <div className="mb-4 space-y-2">
-            <div className="bg-red-500/10 border border-red-500/20 rounded-md p-4 flex items-start">
-              <div className="flex-shrink-0 mr-3 mt-0.5">
-                <svg
-                  className="h-5 w-5 text-red-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-red-500">Error</h3>
-                <p className="mt-1 text-xs text-white/70">{error}</p>
-              </div>
+      {error && (
+        <div className="mb-4 space-y-2">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-md p-4 flex items-start">
+            <div className="flex-shrink-0 mr-3 mt-0.5">
+              <svg
+                className="h-5 w-5 text-red-500"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-red-500">Error</h3>
+              <p className="mt-1 text-xs text-white/70">{error}</p>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Cargo Views */}
-        {view === "cargo-list" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-lg font-semibold text-white">
-                  Cargo Items
-                </h1>
-                <p className="text-xs text-gray-400 mt-1 mb-4">
-                  Manage cargo items and containers for your application.
-                </p>
-                <div className="flex space-x-1 mt-2">
-                  <Button
-                    onClick={() => {
-                      setView("cargo-list");
-                      setSelectedCargo(null);
-                      setSelectedContainer(null);
-                    }}
-                    variant={
-                      (view as string) === "cargo-list"
-                        ? "primary"
-                        : "secondary"
-                    }
-                    className={
-                      (view as string) === "cargo-list"
-                        ? "font-bold"
-                        : "font-normal"
-                    }
-                  >
-                    Cargo
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setView("container-list");
-                      setSelectedCargo(null);
-                      setSelectedContainer(null);
-                    }}
-                    variant={
-                      (view as string) === "container-list"
-                        ? "primary"
-                        : "secondary"
-                    }
-                    className={
-                      (view as string) === "container-list"
-                        ? "font-bold"
-                        : "font-normal"
-                    }
-                  >
-                    Containers
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
+      {/* Cargo Views */}
+      {view === "cargo-list" && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-white">Cargo Items</h1>
+              <p className="text-xs text-gray-400 mt-1 mb-4">
+                Manage cargo items and containers for your application.
+              </p>
+              <div className="flex space-x-1 mt-2">
                 <Button
                   onClick={() => {
-                    resetCargoForm();
-                    setView("cargo-create");
+                    setView("cargo-list");
+                    setSelectedCargo(null);
+                    setSelectedContainer(null);
                   }}
-                  icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
-                  variant="secondary"
+                  variant={
+                    (view as string) === "cargo-list" ? "primary" : "secondary"
+                  }
+                  className={
+                    (view as string) === "cargo-list"
+                      ? "font-bold"
+                      : "font-normal"
+                  }
                 >
-                  Create Cargo
+                  Cargo
+                </Button>
+                <Button
+                  onClick={() => {
+                    setView("container-list");
+                    setSelectedCargo(null);
+                    setSelectedContainer(null);
+                  }}
+                  variant={
+                    (view as string) === "container-list"
+                      ? "primary"
+                      : "secondary"
+                  }
+                  className={
+                    (view as string) === "container-list"
+                      ? "font-bold"
+                      : "font-normal"
+                  }
+                >
+                  Containers
                 </Button>
               </div>
             </div>
-
-            <div className="space-y-2">
-              {cargoItems.length > 0 ? (
-                cargoItems.map((cargo) => (
-                  <div
-                    key={cargo.id}
-                    className="bg-stone-950 border border-stone-900 rounded-md cursor-pointer hover:border-stone-900 transition-all duration-200"
-                    onClick={() => {
-                      setSelectedCargo(cargo);
-                      setView("cargo-view");
-                    }}
-                  >
-                    <div className="px-6 h-20 flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        {cargo.type === "local" ? (
-                          <FileIcon className="w-5 h-5 text-gray-400" />
-                        ) : (
-                          <LinkIcon className="w-5 h-5 text-gray-400" />
-                        )}
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-white">
-                            {cargo.name}
-                          </div>
-                          <div className="text-xs text-gray-400 mt-1">
-                            {cargo.description || "No description"}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <ChevronRightIcon className="w-4 h-4 text-gray-400" />
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
-                  <div className="flex flex-col items-center justify-center">
-                    <FolderIcon className="w-6 h-6 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500 mb-2">No Cargo found</p>
-                    <Button
-                      onClick={() => {
-                        resetCargoForm();
-                        setView("cargo-create");
-                      }}
-                      icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
-                      variant="secondary"
-                    >
-                      Create Cargo
-                    </Button>
-                  </div>
-                </div>
-              )}
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={() => {
+                  resetCargoForm();
+                  setView("cargo-create");
+                }}
+                icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+                variant="secondary"
+              >
+                Create Cargo
+              </Button>
             </div>
           </div>
-        )}
 
-        {view === "cargo-create" && renderCargoForm("create")}
-        {view === "cargo-edit" && renderCargoForm("edit")}
-        {view === "cargo-view" && renderCargoDetails()}
-
-        {/* Container Views */}
-        {view === "container-list" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-lg font-semibold text-white">Containers</h1>
-                <p className="text-xs text-gray-400 mt-1 mb-4">
-                  Manage cargo items and containers for your application.
-                </p>
-                <div className="flex space-x-1">
+          <div className="space-y-2">
+            {cargoItems.length > 0 ? (
+              cargoItems.map((cargo) => (
+                <div
+                  key={cargo.id}
+                  className="bg-stone-950 border border-stone-900 rounded-md cursor-pointer hover:border-stone-900 transition-all duration-200"
+                  onClick={() => {
+                    setSelectedCargo(cargo);
+                    setView("cargo-view");
+                  }}
+                >
+                  <div className="px-6 h-20 flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      {cargo.type === "local" ? (
+                        <FileIcon className="w-5 h-5 text-gray-400" />
+                      ) : (
+                        <LinkIcon className="w-5 h-5 text-gray-400" />
+                      )}
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-white">
+                          {cargo.name}
+                        </div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {cargo.description || "No description"}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
+                <div className="flex flex-col items-center justify-center">
+                  <FolderIcon className="w-6 h-6 text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-500 mb-2">No Cargo found</p>
                   <Button
                     onClick={() => {
-                      setView("cargo-list");
-                      setSelectedCargo(null);
-                      setSelectedContainer(null);
+                      resetCargoForm();
+                      setView("cargo-create");
                     }}
-                    variant={
-                      (view as string) === "cargo-list"
-                        ? "primary"
-                        : "secondary"
-                    }
-                    className={
-                      (view as string) === "cargo-list"
-                        ? "font-bold"
-                        : "font-normal"
-                    }
+                    icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+                    variant="secondary"
                   >
-                    Cargo
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setView("container-list");
-                      setSelectedCargo(null);
-                      setSelectedContainer(null);
-                    }}
-                    variant={
-                      (view as string) === "container-list"
-                        ? "primary"
-                        : "secondary"
-                    }
-                    className={
-                      (view as string) === "container-list"
-                        ? "font-bold"
-                        : "font-normal"
-                    }
-                  >
-                    Containers
+                    Create Cargo
                   </Button>
                 </div>
               </div>
-              <div className="flex items-center space-x-3">
+            )}
+          </div>
+        </div>
+      )}
+
+      {view === "cargo-create" && renderCargoForm("create")}
+      {view === "cargo-edit" && renderCargoForm("edit")}
+      {view === "cargo-view" && renderCargoDetails()}
+
+      {/* Container Views */}
+      {view === "container-list" && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-white">Containers</h1>
+              <p className="text-xs text-gray-400 mt-1 mb-4">
+                Manage cargo items and containers for your application.
+              </p>
+              <div className="flex space-x-1">
                 <Button
                   onClick={() => {
-                    resetContainerForm();
-                    setView("container-create");
+                    setView("cargo-list");
+                    setSelectedCargo(null);
+                    setSelectedContainer(null);
                   }}
-                  icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
-                  variant="secondary"
+                  variant={
+                    (view as string) === "cargo-list" ? "primary" : "secondary"
+                  }
+                  className={
+                    (view as string) === "cargo-list"
+                      ? "font-bold"
+                      : "font-normal"
+                  }
                 >
-                  Create Container
+                  Cargo
+                </Button>
+                <Button
+                  onClick={() => {
+                    setView("container-list");
+                    setSelectedCargo(null);
+                    setSelectedContainer(null);
+                  }}
+                  variant={
+                    (view as string) === "container-list"
+                      ? "primary"
+                      : "secondary"
+                  }
+                  className={
+                    (view as string) === "container-list"
+                      ? "font-bold"
+                      : "font-normal"
+                  }
+                >
+                  Containers
                 </Button>
               </div>
             </div>
-
-            <div className="space-y-2">
-              {containers.length > 0 ? (
-                containers.map((container) => (
-                  <div
-                    key={container.id}
-                    className="bg-stone-950 border border-stone-900 rounded-md shadow-xs cursor-pointer hover:border-gray-600 transition-all duration-200"
-                    onClick={() => {
-                      setSelectedContainer(container);
-                      setView("container-view");
-                    }}
-                  >
-                    <div className="px-6 h-20 flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <FolderIcon className="w-5 h-5 text-gray-400" />
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-900">
-                            {container.name}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {container.items.length} item
-                            {container.items.length !== 1 ? "s" : ""}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <ChevronRightIcon className="w-4 h-4 text-gray-400" />
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
-                  <div className="flex flex-col items-center justify-center">
-                    <FolderIcon className="w-6 h-6 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500 mb-2">
-                      No containers found
-                    </p>
-                    <Button
-                      onClick={() => {
-                        resetContainerForm();
-                        setView("container-create");
-                      }}
-                      icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
-                      variant="secondary"
-                    >
-                      Create Container
-                    </Button>
-                  </div>
-                </div>
-              )}
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={() => {
+                  resetContainerForm();
+                  setView("container-create");
+                }}
+                icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+                variant="secondary"
+              >
+                Create Container
+              </Button>
             </div>
           </div>
-        )}
 
-        {view === "container-create" && renderContainerForm("create")}
-        {view === "container-edit" && renderContainerForm("edit")}
-        {view === "container-view" && renderContainerDetails()}
-      </div>
+          <div className="space-y-2">
+            {containers.length > 0 ? (
+              containers.map((container) => (
+                <div
+                  key={container.id}
+                  className="bg-stone-950 border border-stone-900 rounded-md shadow-xs cursor-pointer hover:border-gray-600 transition-all duration-200"
+                  onClick={() => {
+                    setSelectedContainer(container);
+                    setView("container-view");
+                  }}
+                >
+                  <div className="px-6 h-20 flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <FolderIcon className="w-5 h-5 text-gray-400" />
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-900">
+                          {container.name}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {container.items.length} item
+                          {container.items.length !== 1 ? "s" : ""}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
+                <div className="flex flex-col items-center justify-center">
+                  <FolderIcon className="w-6 h-6 text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-500 mb-2">
+                    No containers found
+                  </p>
+                  <Button
+                    onClick={() => {
+                      resetContainerForm();
+                      setView("container-create");
+                    }}
+                    icon={<PlusIcon className="w-3.5 h-3.5 mr-1.5" />}
+                    variant="secondary"
+                  >
+                    Create Container
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {view === "container-create" && renderContainerForm("create")}
+      {view === "container-edit" && renderContainerForm("edit")}
+      {view === "container-view" && renderContainerDetails()}
+    </div>
   );
 };
 

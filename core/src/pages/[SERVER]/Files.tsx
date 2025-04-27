@@ -464,16 +464,23 @@ const FileManager: React.FC = () => {
         { headers: { Authorization: `Bearer ${server?.validationToken}` } },
       );
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        const errorMessage =
-          errorData?.message || "Failed to fetch directory contents";
+      let data = null;
+      if (response.ok) {
+        data = await response.json();
+        setFiles(data.contents || []);
+      } else {
+        // Try to parse error message, fallback to text if not JSON
+        let errorMessage = "";
+        try {
+          const errorData = await response.json();
+          errorMessage =
+            errorData?.message || "Failed to fetch directory contents";
+        } catch {
+          errorMessage = await response.text();
+        }
         showToast(errorMessage, "error");
         setFiles([]);
       }
-
-      const data = await response.json();
-      setFiles(data.contents || []);
     } catch (err) {
       console.error("Error fetching files:", err);
       const errorMessage =

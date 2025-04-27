@@ -132,7 +132,7 @@ const EnvironmentVariableForm: React.FC<{
       {variables.map((variable, index) => (
         <div key={index} className="border-t border-stone-900 p-3 space-y-3">
           <div className="flex justify-between items-start">
-            <div className="grow space-y-3">  
+            <div className="grow space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <input
                   type="text"
@@ -1405,94 +1405,94 @@ const AdminUnitsPage: React.FC = () => {
 
   return (
     <div className="card min-h-screen bg-stone-950">
-        {view === "list" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-semibold text-[#FFFFFF]">Units</h1>
-                <p className="text-xs text-gray-400 mt-1">
-                  Manage units and their configuration for accessing the panel.
-                </p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="file"
-                  id="importFile"
-                  className="hidden"
-                  accept=".json"
-                  onChange={handleImportFile}
-                />
-                <Button
-                  onClick={() => document.getElementById("importFile")?.click()}
-                  variant="secondary"
-                >
-                  Import Unit
-                </Button>
-                <input
-                  type="file"
-                  id="importEgg"
-                  className="hidden"
-                  accept=".json"
-                  onChange={handleImportEgg}
-                />
-                <Button
-                  onClick={() => document.getElementById("importEgg")?.click()}
-                  variant="secondary"
-                >
-                  Import Pterodactyl Egg
-                </Button>
-                <input
-                  type="file"
-                  id="importEgg"
-                  className="hidden"
-                  accept=".json"
-                  onChange={handleImportEgg}
-                />
-                <Button onClick={() => setView("create")} variant="secondary">
-                  Create Unit
-                </Button>
-              </div>
+      {view === "list" && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-[#FFFFFF]">Units</h1>
+              <p className="text-xs text-gray-400 mt-1">
+                Manage units and their configuration for accessing the panel.
+              </p>
             </div>
-
-            <div className="space-y-2">
-              {units.map((unit) => (
-                <Card
-                  key={unit.id}
-                  className="bg-stone-950 border-t border-stone-900 cursor-pointer"
-                  onClick={() => {
-                    setSelectedUnit(unit);
-                    setView("view");
-                  }}
-                >
-                  <div className="px-6 h-20 flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-[#FFFFFF]">
-                        {unit.name}
-                      </div>
-                      <div className="text-xs mt-1 text-gray-400">
-                        {unit.shortName} • {unit.dockerImage}
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <ChevronRightIcon className="w-4 h-4 text-gray-400" />
-                    </div>
-                  </div>
-                </Card>
-              ))}
-
-              {units.length === 0 && (
-                <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
-                  <p className="text-xs text-[#FFFFFF]">No units found</p>
-                </div>
-              )}
+            <div className="flex items-center space-x-3">
+              <input
+                type="file"
+                id="importFile"
+                className="hidden"
+                accept=".json"
+                onChange={handleImportFile}
+              />
+              <Button
+                onClick={() => document.getElementById("importFile")?.click()}
+                variant="secondary"
+              >
+                Import Unit
+              </Button>
+              <input
+                type="file"
+                id="importEgg"
+                className="hidden"
+                accept=".json"
+                onChange={handleImportEgg}
+              />
+              <Button
+                onClick={() => document.getElementById("importEgg")?.click()}
+                variant="secondary"
+              >
+                Import Pterodactyl Egg
+              </Button>
+              <input
+                type="file"
+                id="importEgg"
+                className="hidden"
+                accept=".json"
+                onChange={handleImportEgg}
+              />
+              <Button onClick={() => setView("create")} variant="secondary">
+                Create Unit
+              </Button>
             </div>
           </div>
-        )}
 
-        {view === "create" && renderUnitForm("create")}
-        {view === "edit" && renderUnitForm("edit")}
-        {view === "view" && renderUnitDetails()}
-      </div>
+          <div className="space-y-2">
+            {units.map((unit) => (
+              <Card
+                key={unit.id}
+                className="bg-stone-950 border-t border-stone-900 cursor-pointer"
+                onClick={() => {
+                  setSelectedUnit(unit);
+                  setView("view");
+                }}
+              >
+                <div className="px-6 h-20 flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-[#FFFFFF]">
+                      {unit.name}
+                    </div>
+                    <div className="text-xs mt-1 text-gray-400">
+                      {unit.shortName} • {unit.dockerImage}
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+                  </div>
+                </div>
+              </Card>
+            ))}
+
+            {units.length === 0 && (
+              <div className="text-center py-6 bg-stone-950 rounded-md border border-stone-900">
+                <p className="text-xs text-[#FFFFFF]">No units found</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {view === "create" && renderUnitForm("create")}
+      {view === "edit" && renderUnitForm("edit")}
+      {view === "view" && renderUnitDetails()}
+    </div>
   );
 };
 

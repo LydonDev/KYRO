@@ -9,17 +9,25 @@ import {
   HomeModernIcon,
   ArrowsPointingOutIcon,
   GlobeAmericasIcon,
-  UserIcon,
   CogIcon,
   PuzzlePieceIcon,
   ArrowLeftOnRectangleIcon,
   SparklesIcon,
+  CreditCardIcon,
+  TicketIcon,
+  CircleStackIcon as DatabaseIcon,
+  WrenchIcon as Hammer,
+  UserCircleIcon as UserCircleIcon,
+  BookOpenIcon,
 } from "@heroicons/react/24/outline";
 import { useAuth } from "../pages/[AUTH]/SignIn";
-import { DatabaseIcon, Hammer, UserCircleIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { WrenchIcon } from "lucide-react";
 
 const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+const appLogo =
+  import.meta.env.VITE_APP_LOGO ??
+  "https://cdn.vev.design/cdn-cgi/image/f=auto,q=82/private/pK53XiUzGnRFw1uPeFta7gdedx22/image/MtcO428PYQ.png";
 
 function Navbar() {
   return null;
@@ -130,9 +138,12 @@ function Sidebar() {
       <div className="h-14 flex items-center p-1">
         <Link
           to="/servers"
-          className="h-12 flex items-center w-full px-4 hover:bg-stone-900 rounded-lg active:scale-95 transition"
+          className="h-12 flex items-center w-full px-4 active:scale-95 transition"
         >
-          <span className="text-base font-semibold text-white">{appName}</span>
+          <img src={appLogo} alt="Logo" className="w-4 h-4 invert" />
+          <span className="text-base font-semibold text-white ml-2 uppercase text-sm">
+            {appName}
+          </span>
         </Link>
       </div>
 
@@ -147,10 +158,42 @@ function Sidebar() {
 
           <NavItem
             to="/profile"
-            icon={UserIcon}
+            icon={UserCircleIcon}
             label="Profile"
             isActive={location.pathname === "/profile"}
           />
+
+          <>
+            <SectionHeader label="Support" />
+            <NavItem
+              to="/comingsoon"
+              icon={TicketIcon}
+              label="Tickets"
+              isActive={location.pathname === "/comingsoon"}
+            />
+            <NavItem
+              to="/comingsoon"
+              icon={BookOpenIcon}
+              label="Documentation"
+              isActive={location.pathname === "/comingsoon"}
+            />
+          </>
+
+          <>
+            <SectionHeader label="Billing" />
+            <NavItem
+              to="/comingsoon"
+              icon={WrenchIcon}
+              label="Services"
+              isActive={location.pathname === "/comingsoon"}
+            />
+            <NavItem
+              to="/comingsoon"
+              icon={CreditCardIcon}
+              label="Billing"
+              isActive={location.pathname === "/comingsoon"}
+            />
+          </>
 
           {isServerPage && (
             <>
@@ -302,10 +345,11 @@ function Sidebar() {
               >
                 <div className="py-1">
                   <Link to="/profile">
-                  <button className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center">
-                    <UserCircleIcon className="mr-2 h-4 w-4 text-gray-500" />
-                    Profile
-                  </button></Link>
+                    <button className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center">
+                      <UserCircleIcon className="mr-2 h-4 w-4 text-gray-500" />
+                      Profile
+                    </button>
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center"

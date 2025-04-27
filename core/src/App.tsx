@@ -58,7 +58,9 @@ function Layout({ children }: LayoutProps) {
     "/forgot-password",
   ];
   // Check for exact match or prefix match (in case of nested auth routes)
-  const isAuthRoute = noSidebarRoutes.some(route => location.pathname.startsWith(route));
+  const isAuthRoute = noSidebarRoutes.some((route) =>
+    location.pathname.startsWith(route),
+  );
   const shouldHaveSidebar = !isAuthRoute;
 
   return (

@@ -5,7 +5,7 @@ export default function Profile() {
         <h1 className="text-2xl font-semibold text-white">Profile</h1>
         <p className="text-sm text-gray-400">Manage your profile</p>
       </div>
-      
+
       <div className="flex flex-1 items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center px-4">
           <svg

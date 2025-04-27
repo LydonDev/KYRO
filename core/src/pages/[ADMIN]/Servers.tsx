@@ -737,9 +737,7 @@ const AdminServersPage = () => {
         )}
 
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-white">
-            Name
-          </label>
+          <label className="block text-xs font-medium text-white">Name</label>
           <input
             type="text"
             value={editFormData.name}
@@ -756,9 +754,7 @@ const AdminServersPage = () => {
         </div>
 
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-white">
-            Unit
-          </label>
+          <label className="block text-xs font-medium text-white">Unit</label>
           <select
             value={editFormData.unitId}
             onChange={(e) =>
