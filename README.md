@@ -49,12 +49,12 @@ Kyro is a high-performance, modern, and user-friendly server management platform
    ```
 3. **Database Setup:**
    ```bash
+   kyro bolt migrate --force
    kyro user:create
    kyro unit seed
-   kyro bolt migrate --force
    ```
 4. **Configure environment:**
-   - Copy `.env.example` to `.env` in each repo and fill in required values (see docs for details).
+   - Copy `example.config.json` to `config.json` in each repo and fill in required values.
 
 ---
 
