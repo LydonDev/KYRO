@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { BaseModal, InputModal, FormModal } from "@/components/ui/modal";
 import Editor from "@monaco-editor/react";
 import {
   ChevronRightIcon,
@@ -38,6 +37,7 @@ import {
 } from "@heroicons/react/24/solid";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { Button } from "../../components/UI";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Node {
   id: string;
@@ -87,13 +87,13 @@ interface UploadProgress {
 
 interface Modal {
   type:
-    | "new-folder"
-    | "new-file"
-    | "file-editor"
-    | "compress"
-    | "rename"
-    | "move"
-    | "chmod";
+  | "new-folder"
+  | "new-file"
+  | "file-editor"
+  | "compress"
+  | "rename"
+  | "move"
+  | "chmod";
   data?: any;
   loading?: boolean;
 }
@@ -243,11 +243,10 @@ const Checkbox: React.FC<{
 }> = ({ checked, onChange, className = "" }) => (
   <label className={`inline-flex items-center cursor-pointer ${className}`}>
     <div
-      className={`bg-stone-950 w-4 h-4 rounded border transition-colors flex items-center justify-center ${
-        checked
-          ? "bg-stone-950 border-stone-900"
-          : "border-stone-900 bg-stone-950"
-      }`}
+      className={`bg-stone-950 w-4 h-4 rounded border transition-colors flex items-center justify-center ${checked
+        ? "bg-stone-950 border-stone-900"
+        : "border-stone-900 bg-stone-950"
+        }`}
       onClick={(e) => {
         e.stopPropagation();
         onChange();
@@ -1263,10 +1262,9 @@ const FileManager: React.FC = () => {
               onClick={navigateUp}
               disabled={currentPath.length === 0}
               className={`p-2 text-[#9CA3AF] transition-colors duration-100
-                ${
-                  currentPath.length === 0
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:text-[#FFFFFF]"
+                ${currentPath.length === 0
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:text-[#FFFFFF]"
                 }`}
             >
               <ArrowLeftIcon className="w-4 h-4" />
@@ -1491,27 +1489,26 @@ const FileManager: React.FC = () => {
                       <td className="px-4 py-3">
                         <div className="flex items-center space-x-3">
                           <FileIcon
-                            className={`w-4 h-4 ${
-                              !file.isFile
-                                ? "text-[#8146ab]"
-                                : file.mime.startsWith("image/")
-                                  ? "text-[#F59E0B]"
-                                  : file.mime.startsWith("text/") ||
-                                      file.mime.includes("javascript") ||
-                                      file.mime.includes("json")
-                                    ? "text-[#10B981]"
-                                    : file.mime.includes("pdf")
-                                      ? "text-[#EF4444]"
-                                      : file.mime.startsWith("audio/")
-                                        ? "text-[#F59E0B]"
-                                        : file.mime.startsWith("video/")
-                                          ? "text-[#EF4444]"
-                                          : file.mime.includes("zip") ||
-                                              file.mime.includes("tar") ||
-                                              file.mime.includes("compress")
-                                            ? "text-[#F59E0B]"
-                                            : "text-[#9CA3AF]"
-                            }`}
+                            className={`w-4 h-4 ${!file.isFile
+                              ? "text-[#8146ab]"
+                              : file.mime.startsWith("image/")
+                                ? "text-[#F59E0B]"
+                                : file.mime.startsWith("text/") ||
+                                  file.mime.includes("javascript") ||
+                                  file.mime.includes("json")
+                                  ? "text-[#10B981]"
+                                  : file.mime.includes("pdf")
+                                    ? "text-[#EF4444]"
+                                    : file.mime.startsWith("audio/")
+                                      ? "text-[#F59E0B]"
+                                      : file.mime.startsWith("video/")
+                                        ? "text-[#EF4444]"
+                                        : file.mime.includes("zip") ||
+                                          file.mime.includes("tar") ||
+                                          file.mime.includes("compress")
+                                          ? "text-[#F59E0B]"
+                                          : "text-[#9CA3AF]"
+                              }`}
                           />
                           <div className="flex flex-col">
                             <span className="text-sm text-[#FFFFFF]">
@@ -1583,218 +1580,348 @@ const FileManager: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Modals */}
+        {/* File Editor Modal */}
         {modal && modal.type === "file-editor" && (
-          <BaseModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title={modal.data.file.name}
-            footer={
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setModal(null)}>
-                  Cancel
-                </Button>
-                {!modal.data.file.readonly && (
-                  <Button
-                    onClick={async () => {
-                      setModal((prev) =>
-                        prev ? { ...prev, loading: true } : null,
-                      );
-                      const success = await handleSaveFile(
-                        modal.data.file,
-                        modal.data.content,
-                      );
-                      if (success) {
-                        setModal(null);
-                      } else {
-                        setModal((prev) =>
-                          prev ? { ...prev, loading: false } : null,
-                        );
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 overflow-hidden max-w-[80vw] max-h-[80vh]">
+              <div className="flex flex-col h-full w-full">
+                <DialogHeader className="flex">
+                  <DialogTitle className="text-lg font-semibold text-white mb-2">
+                    {modal.data.file.name}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col h-full overflow-hidden">
+                  {modal.data.file.readonly && (
+                    <span className="text-xs text-[#EF4444] mb-2">
+                      Read-only file
+                    </span>
+                  )}
+                  <div className="flex-1 overflow-hidden rounded-md">
+                    <Editor
+                      value={modal.data.content}
+                      language={
+                        modal.data.file.name.endsWith(".properties")
+                          ? "properties"
+                          : modal.data.file.mime.split("/")[1] || "plaintext"
                       }
-                    }}
-                    disabled={modal.data.file.readonly || modal.loading}
-                    isLoading={modal.loading}
-                  >
-                    Save Changes
+                      theme="vs-dark"
+                      options={{
+                        minimap: { enabled: false },
+                        fontSize: 16,
+                        lineNumbers: "on",
+                        scrollBeyondLastLine: false,
+                        wordWrap: "on",
+                        readOnly: modal.data.file.readonly === true,
+                        automaticLayout: true,
+                        fixedOverflowWidgets: true,
+                        scrollbar: {
+                          vertical: "hidden",
+                          horizontal: "hidden",
+                        },
+                      }}
+                      height="500px"
+                      width="100%"
+                      onChange={(content) => {
+                        setModal((prev) =>
+                          prev
+                            ? {
+                              ...prev,
+                              data: { ...prev.data, content },
+                            }
+                            : null,
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+                <DialogFooter className="flex items-center justify-end space-x-2 mt-4">
+                  <Button variant="outline" onClick={() => setModal(null)}>
+                    Cancel
                   </Button>
-                )}
+                  {!modal.data.file.readonly && (
+                    <Button
+                      onClick={async () => {
+                        setModal((prev) =>
+                          prev ? { ...prev, loading: true } : null,
+                        );
+                        const success = await handleSaveFile(
+                          modal.data.file,
+                          modal.data.content,
+                        );
+                        if (success) {
+                          setModal(null);
+                        } else {
+                          setModal((prev) =>
+                            prev ? { ...prev, loading: false } : null,
+                          );
+                        }
+                      }}
+                      disabled={modal.data.file.readonly || modal.loading}
+                      isLoading={modal.loading}
+                    >
+                      Save Changes
+                    </Button>
+                  )}
+                </DialogFooter>
               </div>
-            }
-          >
-            <div className="flex flex-col h-[calc(95vh-8rem)]">
-              {modal.data.file.readonly && (
-                <span className="text-xs text-[#EF4444] mb-2">
-                  Read-only file
-                </span>
-              )}
-              <div className="flex-1 overflow-hidden rounded-md border border-stone-900">
-                <Editor
-                  value={modal.data.content}
-                  language={
-                    modal.data.file.name.endsWith(".properties")
-                      ? "properties"
-                      : modal.data.file.mime.split("/")[1] || "plaintext"
-                  }
-                  theme="vs-dark"
-                  options={{
-                    minimap: { enabled: false },
-                    fontSize: 14,
-                    lineNumbers: "on",
-                    scrollBeyondLastLine: false,
-                    wordWrap: "on",
-                    padding: { top: 20 },
-                    readOnly: modal.data.file.readonly === true,
-                  }}
-                  onChange={(content) => {
-                    setModal((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            data: { ...prev.data, content },
-                          }
-                        : null,
-                    );
-                  }}
-                />
-              </div>
-            </div>
-          </BaseModal>
+            </DialogContent>
+          </Dialog>
         )}
 
+        {/* New File Modal */}
         {modal && modal.type === "new-file" && (
-          <InputModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title="Create New File"
-            onSubmit={handleCreateFile}
-            isSubmitting={modal.loading}
-            placeholder="File name"
-            submitText={modal.loading ? "Creating..." : "Create"}
-          />
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Create New File</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await handleCreateFile(formData.get("name") as string);
+                }}
+                className="flex flex-col gap-4"
+              >
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="File name"
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900 text-sm text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900 transition-colors duration-200"
+                  autoFocus
+                />
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setModal(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" isLoading={modal.loading}>
+                    {modal.loading ? "Creating..." : "Create"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
 
+        {/* New Folder Modal */}
         {modal && modal.type === "new-folder" && (
-          <InputModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title="Create New Folder"
-            onSubmit={handleCreateFolder}
-            isSubmitting={modal.loading}
-            placeholder="Folder name"
-            submitText={modal.loading ? "Creating..." : "Create"}
-          />
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Create New Folder</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await handleCreateFolder(formData.get("name") as string);
+                }}
+                className="flex flex-col gap-4"
+              >
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Folder name"
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900 text-sm text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900 transition-colors duration-200"
+                  autoFocus
+                />
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setModal(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" isLoading={modal.loading}>
+                    {modal.loading ? "Creating..." : "Create"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
+
+        {/* Rename Modal */}
         {modal && modal.type === "rename" && (
-          <InputModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title="Rename File"
-            onSubmit={(name: string) => handleRenameFile(modal.data.file, name)}
-            isSubmitting={modal.loading}
-            placeholder="File name"
-            initialValue={modal.data.file.name}
-            submitText={modal.loading ? "Renaming..." : "Rename"}
-          />
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Rename File</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await handleRenameFile(modal.data.file, formData.get("name") as string);
+                }}
+                className="flex flex-col gap-4"
+              >
+                <input
+                  type="text"
+                  name="name"
+                  defaultValue={modal.data.file.name}
+                  placeholder="File name"
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900 text-sm text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900 transition-colors duration-200"
+                  autoFocus
+                />
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setModal(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" isLoading={modal.loading}>
+                    {modal.loading ? "Renaming..." : "Rename"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
 
+        {/* Move/Copy Modal */}
         {modal && modal.type === "move" && (
-          <FormModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title={`${modal.data.isCopy ? "Copy" : "Move"} ${modal.data.file.name}`}
-            onSubmit={(e: React.FormEvent) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget as HTMLFormElement);
-              handleMoveFile(
-                modal.data.file,
-                formData.get("path") as string,
-                modal.data.isCopy,
-              );
-            }}
-            isSubmitting={modal.loading}
-            submitText={
-              modal.loading
-                ? modal.data.isCopy
-                  ? "Copying..."
-                  : "Moving..."
-                : modal.data.isCopy
-                  ? "Copy"
-                  : "Move"
-            }
-          >
-            <input
-              type="text"
-              name="path"
-              defaultValue={
-                currentPath.length > 0 ? currentPath.join("/") : "/"
-              }
-              autoFocus
-              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
-                    transition-colors duration-200"
-            />
-          </FormModal>
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 max-w-sm">
+              <DialogHeader>
+                <DialogTitle>
+                  {modal.data.isCopy ? "Copy" : "Move"} {modal.data.file.name}
+                </DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await handleMoveFile(
+                    modal.data.file,
+                    formData.get("path") as string,
+                    modal.data.isCopy,
+                  );
+                }}
+                className="flex flex-col gap-4"
+              >
+                <input
+                  type="text"
+                  name="path"
+                  defaultValue={currentPath.length > 0 ? currentPath.join("/") : "/"}
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900 text-sm text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900 transition-colors duration-200"
+                  autoFocus
+                />
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setModal(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" isLoading={modal.loading}>
+                    {modal.loading
+                      ? modal.data.isCopy
+                        ? "Copying..."
+                        : "Moving..."
+                      : modal.data.isCopy
+                        ? "Copy"
+                        : "Move"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
 
+        {/* Chmod Modal */}
         {modal && modal.type === "chmod" && (
-          <FormModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title="Change Permissions"
-            onSubmit={(e: React.FormEvent) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget as HTMLFormElement);
-              handleChmodFile(modal.data.file, formData.get("mode") as string);
-            }}
-            isSubmitting={modal.loading}
-            submitText={modal.loading ? "Changing..." : "Change"}
-          >
-            <label className="block text-sm font-medium text-[#9CA3AF] mb-1">
-              Permission Mode (Octal)
-            </label>
-            <input
-              type="text"
-              name="mode"
-              defaultValue={modal.data.file.mode}
-              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
-                    transition-colors duration-200"
-            />
-            <div className="text-xs text-[#9CA3AF] mt-1">
-              Examples: 644 (rw-r--r--), 755 (rwxr-xr-x), 777 (rwxrwxrwx)
-            </div>
-          </FormModal>
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Change Permissions</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await handleChmodFile(modal.data.file, formData.get("mode") as string);
+                }}
+                className="flex flex-col gap-4"
+              >
+                <label className="block text-sm font-medium text-[#9CA3AF] mb-1">
+                  Permission Mode (Octal)
+                </label>
+                <input
+                  type="text"
+                  name="mode"
+                  defaultValue={modal.data.file.mode}
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900 text-sm text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900 transition-colors duration-200"
+                />
+                <div className="text-xs text-[#9CA3AF] mt-1">
+                  Examples: 644 (rw-r--r--), 755 (rwxr-xr-x), 777 (rwxrwxrwx)
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setModal(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" isLoading={modal.loading}>
+                    {modal.loading ? "Changing..." : "Change"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
 
+        {/* Compress Modal */}
         {modal && modal.type === "compress" && (
-          <FormModal
-            isOpen={true}
-            onClose={() => setModal(null)}
-            title="Create Archive"
-            onSubmit={(e: React.FormEvent) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget as HTMLFormElement);
-              handleCompress(formData.get("name") as string);
-            }}
-            isSubmitting={modal.loading}
-            submitText={modal.loading ? "Creating..." : "Create Archive"}
-          >
-            <input
-              type="text"
-              name="name"
-              placeholder="Archive name (without .zip)"
-              className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900
-                    text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
-                    transition-colors duration-200"
-            />
-            <div className="mt-2 text-xs text-[#9CA3AF]">
-              Selected items: {Array.from(selectedFiles).join(", ")}
-            </div>
-          </FormModal>
+          <Dialog open={true} onOpenChange={() => setModal(null)}>
+            <DialogContent className="bg-stone-950 border border-stone-900 max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Create Archive</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await handleCompress(formData.get("name") as string);
+                }}
+                className="flex flex-col gap-4"
+              >
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Archive name (without .zip)"
+                  className="w-full px-3 py-2 rounded-md bg-stone-950 border border-stone-900 text-sm text-[#FFFFFF] focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900 transition-colors duration-200"
+                />
+                <div className="mt-2 text-xs text-[#9CA3AF]">
+                  Selected items: {Array.from(selectedFiles).join(", ")}
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setModal(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" isLoading={modal.loading}>
+                    {modal.loading ? "Creating..." : "Create Archive"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
+
 
         {/* Context Menu */}
         <AnimatePresence>
