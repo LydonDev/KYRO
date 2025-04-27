@@ -11,8 +11,7 @@ import { FormModal } from "@/components/ui/modal";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "../[AUTH]/SignIn";
 import { useNavigate } from "react-router-dom";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_NAME } from "@/config";
 
 interface Node {
   id: string;
@@ -546,11 +545,11 @@ const AdminServersPage = () => {
                 {nodes
                   .find((n) => n.id === createFormData.nodeId)
                   ?.allocations?.filter((a) => !a.assigned).length === 0 && (
-                  <p className="text-xs text-red-500 mt-1">
-                    No available allocations on this node. Please select a
-                    different node or create allocations.
-                  </p>
-                )}
+                    <p className="text-xs text-red-500 mt-1">
+                      No available allocations on this node. Please select a
+                      different node or create allocations.
+                    </p>
+                  )}
               </div>
             )}
           </>
@@ -610,7 +609,7 @@ const AdminServersPage = () => {
                   </p>
                 )}
                 <p className="text-xs text-gray-300 mt-1">
-                  {appName} will automatically select the best node in this
+                  {APP_NAME} will automatically select the best node in this
                   region
                 </p>
               </>
@@ -1083,11 +1082,10 @@ const AdminServersPage = () => {
                         <div className="flex items-center space-x-3">
                           <div className="flex-shrink-0">
                             <div
-                              className={`h-1.5 w-1.5 rounded-full ${
-                                server.status?.status?.state === "running"
-                                  ? "bg-[#10B981]"
-                                  : "bg-[#9CA3AF]"
-                              }`}
+                              className={`h-1.5 w-1.5 rounded-full ${server.status?.status?.state === "running"
+                                ? "bg-[#10B981]"
+                                : "bg-[#9CA3AF]"
+                                }`}
                             ></div>
                           </div>
                           <div className="min-w-0">

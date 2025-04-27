@@ -1,0 +1,16 @@
+{
+    "app": {
+        "url": "http://localhost",
+        "port": 5173,
+        "domain": "yourdomain.com",
+        "name": "Your App Name",
+        "first_user_has_admin": true,
+        "version": "1.0.0",
+        "logs_dir": "./logs",
+        "logo": "your-logo-url"
+    },
+    "api": {
+        "port": 3000,
+        "url": "http://localhost"
+    }
+}

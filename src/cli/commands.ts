@@ -5,6 +5,7 @@ import gradient from "gradient-string";
 import fs from "fs";
 import path from "path";
 import figlet from "figlet";
+import { APP_NAME, KYRO_VERSION, LOGS_DIR, API_URL, API_PORT, APP_URL, APP_PORT } from "../config";
 
 const stopServerOnPort = (port: number) => {
   return new Promise<void>((resolve, reject) => {
@@ -29,15 +30,7 @@ const stopAllServers = async () => {
   await Promise.all([3000, 5173, 8080].map(stopServerOnPort));
 };
 
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
-const localVersion = import.meta.env.VITE_APP_VERSION || "0.0.0";
-const logsDir = import.meta.env.LOGS_DIR || "./logs";
-const appUrl = import.meta.env.VITE_APP_URL || "http://localhost";
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost";
-const appPort = import.meta.env.VITE_APP_PORT || 5173;
-const apiPort = import.meta.env.VITE_API_PORT || 3000;
-
-figlet(appName, (err, data) => {
+figlet(APP_NAME, (err, data) => {
   if (err) {
     console.error(err);
     return;
@@ -45,19 +38,19 @@ figlet(appName, (err, data) => {
   fs.writeFileSync("./_ascii.txt", data, "utf-8");
 });
 
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+if (!fs.existsSync(LOGS_DIR)) {
+  fs.mkdirSync(LOGS_DIR, { recursive: true });
 }
 
 export const checkVersionCommand = new Command("check-version")
-  .description(`Check if your ${appName} installation is up to date`)
+  .description(`Check if your ${APP_NAME} installation is up to date`)
   .action(async () => {
     try {
       const res = await fetch(
         "https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD",
       );
       const remoteVersion = (await res.text()).trim();
-      const result = compareVersions(localVersion, remoteVersion);
+      const result = compareVersions(KYRO_VERSION, remoteVersion);
 
       if (result < 0) {
         console.log(
@@ -67,7 +60,7 @@ export const checkVersionCommand = new Command("check-version")
         );
         console.log(
           chalk.hex("#a2b3ff")(
-            `│ 🚀 ${appName} Environment                        │`,
+            `│ 🚀 ${APP_NAME} Environment                        │`,
           ),
         );
         console.log(
@@ -82,7 +75,7 @@ export const checkVersionCommand = new Command("check-version")
         );
         console.log(
           chalk.hex("#a2b3ff")(
-            `│ 🧩 Version: Your version (${localVersion}) is         │`,
+            `│ 🧩 Version: Your version (${KYRO_VERSION}) is         │`,
           ),
         );
         console.log(
@@ -103,7 +96,7 @@ export const checkVersionCommand = new Command("check-version")
         );
         console.log(
           chalk.hex("#a2b3ff")(
-            `│ 🚀 ${appName} Environment                        │`,
+            `│ 🚀 ${APP_NAME} Environment                        │`,
           ),
         );
         console.log(
@@ -123,7 +116,7 @@ export const checkVersionCommand = new Command("check-version")
         );
         console.log(
           chalk.hex("#a2b3ff")(
-            `│  version Current: ${localVersion}, Latest: ${remoteVersion}    │`,
+            `│  version Current: ${KYRO_VERSION}, Latest: ${remoteVersion}    │`,
           ),
         );
         console.log(
@@ -139,7 +132,7 @@ export const checkVersionCommand = new Command("check-version")
         );
         console.log(
           chalk.hex("#a2b3ff")(
-            `│ 🚀 ${appName} Environment                        │`,
+            `│ 🚀 ${APP_NAME} Environment                        │`,
           ),
         );
         console.log(
@@ -154,7 +147,7 @@ export const checkVersionCommand = new Command("check-version")
         );
         console.log(
           chalk.hex("#a2b3ff")(
-            `│ 🧩 Version: ${localVersion} (Up to date)             │`,
+            `│ 🧩 Version: ${KYRO_VERSION} (Up to date)             │`,
           ),
         );
         console.log(
@@ -186,9 +179,9 @@ const printVersionStatus = async () => {
       "https://raw.githubusercontent.com/LydonDev/KYRO-VERSION/main/VERSION.MD",
     );
     const remoteVersion = (await res.text()).trim();
-    const result = compareVersions(localVersion, remoteVersion);
+    const result = compareVersions(KYRO_VERSION, remoteVersion);
 
-    const versionLine = chalk.hex("#a2b3ff")(`│ 🧩 Version: ${localVersion}`);
+    const versionLine = chalk.hex("#a2b3ff")(`│ 🧩 Version: ${KYRO_VERSION}`);
     const statusLine =
       result < 0
         ? chalk.red(" (Outdated)")
@@ -214,7 +207,7 @@ const printBanner = async () => {
   );
   console.log(
     chalk.hex("#a2b3ff")(
-      `│ 🚀 ${appName} Environment                        │`,
+      `│ 🚀 ${APP_NAME} Environment                        │`,
     ),
   );
   console.log(
@@ -228,11 +221,11 @@ const printBanner = async () => {
     chalk.hex("#a2b3ff")("│                                            │"),
   );
   console.log(
-    chalk.hex("#a2b3ff")(`│ 🔌 API: ${apiUrl}:${apiPort}              │`),
+    chalk.hex("#a2b3ff")(`│ 🔌 API: ${API_URL}:${API_PORT}              │`),
   );
   console.log(
     chalk.hex("#a2b3ff")(
-      `│ 🖥️  ${appName}: ${appUrl}:${appPort}             │`,
+      `│ 🖥️  ${APP_NAME}: ${APP_URL}:${APP_PORT}             │`,
     ),
   );
   console.log(
@@ -262,7 +255,7 @@ const spawnWithLogs = (proc: {
   cwd: string;
 }) => {
   const logPath = path.join(
-    logsDir,
+    LOGS_DIR,
     `${proc.name.replace(/\s+/g, "_").toLowerCase()}.log`,
   );
   const logStream = fs.createWriteStream(logPath, { flags: "a" });
@@ -284,7 +277,7 @@ const spawnWithLogs = (proc: {
 };
 
 export const devCommand = new Command("development")
-  .description(`Run ${appName} in development mode`)
+  .description(`Run ${APP_NAME} in development mode`)
   .action(async () => {
     const os = require("os");
 
@@ -298,16 +291,16 @@ export const devCommand = new Command("development")
         cwd: "/opt/KYRO/kyro/core",
       },
       {
-        name: `${appName} Frontend`,
+        name: `${APP_NAME} Backend`,
+        cmd: "bun",
+        args: ["run", "dev"],
+        cwd: "/opt/KYRO/kyro",
+      },
+      {
+        name: `${APP_NAME} Frontend`,
         cmd: "bun",
         args: ["run", "dev"],
         cwd: "/opt/KYRO/kyro/core",
-      },
-      {
-        name: `${appName} Backend`,
-        cmd: "bun",
-        args: ["run", "start"],
-        cwd: "/opt/KYRO/kyro",
       },
       {
         name: "Krypton",
@@ -321,14 +314,14 @@ export const devCommand = new Command("development")
 
     setTimeout(() => {
       require("child_process").exec(
-        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${appUrl}:${appPort}`,
+        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${APP_URL}:${APP_PORT}`,
       );
     }, 1000);
 
     processes.forEach((proc) => {
       const child = spawnWithLogs(proc);
 
-      if (proc.name === `${appName} Frontend`) {
+      if (proc.name === `${APP_NAME} Frontend`) {
         child.stdout.on("data", async (data) => {
           if (!bannerPrinted) {
             bannerPrinted = true;
@@ -353,7 +346,7 @@ export const devCommand = new Command("development")
   });
 
 export const prodCommand = new Command("production")
-  .description(`Run ${appName} in production mode`)
+  .description(`Run ${APP_NAME} in production mode`)
   .action(async () => {
     const os = require("os");
 
@@ -367,13 +360,13 @@ export const prodCommand = new Command("production")
         cwd: "/opt/KYRO/kyro/core",
       },
       {
-        name: `${appName} Frontend`,
+        name: `${APP_NAME} Frontend`,
         cmd: "bun",
         args: ["run", "build"],
         cwd: "/opt/KYRO/kyro/core",
       },
       {
-        name: `${appName} Backend`,
+        name: `${APP_NAME} Backend`,
         cmd: "bun",
         args: ["run", "start"],
         cwd: "/opt/KYRO/kyro",
@@ -390,14 +383,14 @@ export const prodCommand = new Command("production")
 
     setTimeout(() => {
       require("child_process").exec(
-        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${appUrl}:${appPort}`,
+        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${APP_URL}:${APP_PORT}`,
       );
     }, 1000);
 
     processes.forEach((proc) => {
       const child = spawnWithLogs(proc);
 
-      if (proc.name === `${appName} Frontend`) {
+      if (proc.name === `${APP_NAME} Frontend`) {
         child.stdout.on("data", async (data) => {
           if (!bannerPrinted) {
             bannerPrinted = true;
@@ -440,7 +433,7 @@ export const logsClearCommand = new Command("clear:logs")
   });
 
 export const logsCommand = new Command("logs")
-  .description(`View logs for ${appName}`)
+  .description(`View logs for ${APP_NAME}`)
   .action(() => {
     const http = require("http");
     const path = require("path");
@@ -448,7 +441,7 @@ export const logsCommand = new Command("logs")
     const os = require("os");
 
     const port = 4321;
-    const logsPath = logsDir;
+    const logsPath = LOGS_DIR;
     const highlightJsCdn =
       "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js";
     const highlightCssCdn =
@@ -469,12 +462,12 @@ export const logsCommand = new Command("logs")
 <html>
 <head>
   <meta charset='utf-8'>
-  <title>${appName} Logs</title>
+  <title>${APP_NAME} Logs</title>
   <link rel="stylesheet" href="${highlightCssCdn}">
   <style>body{font-family:sans-serif;padding:2em;}pre{background:#222;color:#eee;padding:1em;overflow:auto;}</style>
 </head>
 <body>
-  <h2>${appName} Logs</h2>
+  <h2>${APP_NAME} Logs</h2>
   <ul>
     ${files.map((f) => `<li><a href="/log/${encodeURIComponent(f)}">${f}</a></li>`).join("")}
   </ul>
@@ -508,7 +501,7 @@ export const logsCommand = new Command("logs")
   <style>body{font-family:sans-serif;padding:2em;}pre{background:#222;color:#eee;padding:1em;overflow:auto;}</style>
 </head>
 <body>
-  <h3><a href="/">&larr; ${appName} Logs</a> / ${safeName}</h3>
+  <h3><a href="/">&larr; ${APP_NAME} Logs</a> / ${safeName}</h3>
   <pre class="hljs">${data}</pre>
   <script src="${highlightJsCdn}"></script>
   <script>hljs.highlightAll();</script>
@@ -519,7 +512,7 @@ export const logsCommand = new Command("logs")
 
     setTimeout(() => {
       require("child_process").exec(
-        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${appUrl}:${port}`,
+        `${os.platform() === "win32" ? "start" : os.platform() === "darwin" ? "open" : "xdg-open"} ${APP_URL}:${port}`,
       );
     }, 5000);
 
@@ -545,7 +538,7 @@ export const logsCommand = new Command("logs")
       );
       console.log(
         chalk.hex("#a2b3ff")(
-          `│ 🚀 ${appName} Environment                        │`,
+          `│ 🚀 ${APP_NAME} Environment                        │`,
         ),
       );
       console.log(
@@ -555,7 +548,7 @@ export const logsCommand = new Command("logs")
         chalk.hex("#a2b3ff")("│                                            │"),
       );
       console.log(
-        chalk.hex("#a2b3ff")(`│ ⚙️  Logs: ${appUrl}:${port}             │`),
+        chalk.hex("#a2b3ff")(`│ ⚙️  Logs: ${APP_URL}:${port}             │`),
       );
       console.log(
         chalk.hex("#a2b3ff")(

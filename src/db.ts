@@ -11,8 +11,7 @@ import chalk from "chalk";
 import { existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_NAME } from "./config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,7 +32,7 @@ export class DB {
   readonly projects;
   readonly regions;
 
-  constructor(dbPath: string = `${appName}.db`) {
+  constructor(dbPath: string = `${APP_NAME}.db`) {
     this.db = new Database(dbPath);
 
     if (!isMigrationCommand) {
@@ -134,7 +133,7 @@ export class DB {
         console.error(
           chalk.yellow("\nPlease run Bolt migrations to set up the database:"),
         );
-        console.error(chalk.blue(`  ${appName} bolt migrate --run`));
+        console.error(chalk.blue(`  ${APP_NAME} bolt migrate --run`));
       } else {
         console.error(
           chalk.yellow(
@@ -143,7 +142,7 @@ export class DB {
         );
         console.error(chalk.blue(`  migrations/[timestamp]_init_schema.ts`));
         console.error(chalk.yellow("\nThen run migrations:"));
-        console.error(chalk.blue(`  ${appName} bolt migrate --run`));
+        console.error(chalk.blue(`  ${APP_NAME} bolt migrate --run`));
       }
 
       process.exit(1);

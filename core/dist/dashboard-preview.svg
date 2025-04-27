@@ -1,0 +1,108 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#000000"/>
+  
+  <!-- Left Sidebar -->
+  <rect x="0" y="0" width="220" height="600" fill="#111111"/>
+  <rect x="0" y="0" width="220" height="60" fill="#111111"/>
+  <rect x="0" y="59" width="220" height="1" fill="#333333"/>
+  
+  <!-- Sidebar Logo -->
+  <text x="20" y="37" font-family="Arial" font-size="22" font-weight="bold" fill="white">KYRO</text>
+  
+  <!-- Sidebar Menu Items -->
+  <rect x="15" y="80" width="190" height="36" rx="5" fill="#222222"/>
+  <text x="50" y="103" font-family="Arial" font-size="14" fill="white">Servers</text>
+  <circle cx="32" cy="98" r="10" fill="#111111"/>
+  <path d="M32 93 L32 103 M27 98 L37 98" stroke="white" stroke-width="1.5"/>
+  
+  <rect x="15" y="125" width="190" height="36" rx="5" fill="#111111"/>
+  <text x="50" y="148" font-family="Arial" font-size="14" fill="#888888">Projects</text>
+  <circle cx="32" cy="143" r="10" fill="#111111"/>
+  <path d="M28 140 L36 140 L36 146 L28 146 Z" stroke="#888888" stroke-width="1.5" fill="none"/>
+  
+  <rect x="15" y="170" width="190" height="36" rx="5" fill="#111111"/>
+  <text x="50" y="193" font-family="Arial" font-size="14" fill="#888888">Users</text>
+  <circle cx="32" cy="188" r="10" fill="#111111"/>
+  <path d="M32 185 C33.5 185 35 186.5 35 188 C35 189.5 33.5 191 32 191 C30.5 191 29 189.5 29 188 C29 186.5 30.5 185 32 185 Z" stroke="#888888" stroke-width="1.5" fill="none"/>
+  <path d="M27 194 C27 192 29.5 191 32 191 C34.5 191 37 192 37 194" stroke="#888888" stroke-width="1.5" fill="none"/>
+  
+  <rect x="15" y="215" width="190" height="36" rx="5" fill="#111111"/>
+  <text x="50" y="238" font-family="Arial" font-size="14" fill="#888888">Nodes</text>
+  <circle cx="32" cy="233" r="10" fill="#111111"/>
+  <rect x="28" y="229" width="8" height="8" stroke="#888888" stroke-width="1.5" fill="none"/>
+  
+  <!-- Top Navbar -->
+  <rect x="220" y="0" width="980" height="60" fill="#000000"/>
+  <rect x="220" y="59" width="980" height="1" fill="#333333"/>
+  
+  <!-- Main content area -->
+  <rect x="220" y="60" width="980" height="540" fill="#000000"/>
+  
+  <!-- Page Title -->
+  <text x="250" y="100" font-family="Arial" font-size="20" font-weight="bold" fill="white">Servers</text>
+  
+  <!-- New Server Button -->
+  <rect x="1030" y="80" width="120" height="34" rx="5" fill="white"/>
+  <text x="1070" y="103" font-family="Arial" font-size="14" fill="black" text-anchor="middle">New Server</text>
+  <path d="M1045 95 L1045 105 M1040 100 L1050 100" stroke="black" stroke-width="1.5"/>
+  
+  <!-- Stats Cards -->
+  <rect x="250" y="130" width="230" height="70" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <text x="270" y="155" font-family="Arial" font-size="12" fill="#888888">Total Servers</text>
+  <text x="270" y="185" font-family="Arial" font-size="24" fill="white">12</text>
+  
+  <rect x="500" y="130" width="230" height="70" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <text x="520" y="155" font-family="Arial" font-size="12" fill="#888888">Online</text>
+  <text x="520" y="185" font-family="Arial" font-size="24" fill="#27c93f">8</text>
+  
+  <rect x="750" y="130" width="230" height="70" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <text x="770" y="155" font-family="Arial" font-size="12" fill="#888888">Offline</text>
+  <text x="770" y="185" font-family="Arial" font-size="24" fill="#ff5f56">4</text>
+  
+  <!-- Server Cards -->
+  <rect x="250" y="220" width="350" height="120" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <circle cx="270" cy="250" r="5" fill="#27c93f"/>
+  <text x="290" y="245" font-family="Arial" font-size="16" font-weight="bold" fill="white">Minecraft Server #1</text>
+  <text x="290" y="270" font-family="Arial" font-size="12" fill="#888888">Memory: 2GB / CPU: 2 cores</text>
+  <rect x="290" y="285" width="45" height="22" rx="3" fill="#222222"/>
+  <text x="312" y="300" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Java</text>
+  <rect x="345" y="285" width="55" height="22" rx="3" fill="#222222"/>
+  <text x="372" y="300" font-family="Arial" font-size="12" fill="white" text-anchor="middle">1.20.4</text>
+  
+  <rect x="620" y="220" width="350" height="120" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <circle cx="640" cy="250" r="5" fill="#27c93f"/>
+  <text x="660" y="245" font-family="Arial" font-size="16" font-weight="bold" fill="white">Minecraft Server #2</text>
+  <text x="660" y="270" font-family="Arial" font-size="12" fill="#888888">Memory: 2GB / CPU: 2 cores</text>
+  <rect x="660" y="285" width="45" height="22" rx="3" fill="#222222"/>
+  <text x="682" y="300" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Java</text>
+  <rect x="715" y="285" width="55" height="22" rx="3" fill="#222222"/>
+  <text x="742" y="300" font-family="Arial" font-size="12" fill="white" text-anchor="middle">1.20.4</text>
+  
+  <rect x="250" y="360" width="350" height="120" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <circle cx="270" cy="390" r="5" fill="#ff5f56"/>
+  <text x="290" y="385" font-family="Arial" font-size="16" font-weight="bold" fill="white">Minecraft Server #3</text>
+  <text x="290" y="410" font-family="Arial" font-size="12" fill="#888888">Memory: 2GB / CPU: 2 cores</text>
+  <rect x="290" y="425" width="45" height="22" rx="3" fill="#222222"/>
+  <text x="312" y="440" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Java</text>
+  <rect x="345" y="425" width="55" height="22" rx="3" fill="#222222"/>
+  <text x="372" y="440" font-family="Arial" font-size="12" fill="white" text-anchor="middle">1.20.4</text>
+  
+  <rect x="620" y="360" width="350" height="120" rx="5" fill="#111111" stroke="#333333" stroke-width="1"/>
+  <circle cx="640" cy="390" r="5" fill="#ff5f56"/>
+  <text x="660" y="385" font-family="Arial" font-size="16" font-weight="bold" fill="white">Minecraft Server #4</text>
+  <text x="660" y="410" font-family="Arial" font-size="12" fill="#888888">Memory: 2GB / CPU: 2 cores</text>
+  <rect x="660" y="425" width="45" height="22" rx="3" fill="#222222"/>
+  <text x="682" y="440" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Java</text>
+  <rect x="715" y="425" width="55" height="22" rx="3" fill="#222222"/>
+  <text x="742" y="440" font-family="Arial" font-size="12" fill="white" text-anchor="middle">1.20.4</text>
+  
+  <!-- URL Bar at top of mockup -->
+  <rect x="0" y="0" width="1200" height="30" fill="#111111"/>
+  <rect x="0" y="29" width="1200" height="1" fill="#333333"/>
+  <circle cx="20" cy="15" r="5" fill="#ff5f56"/>
+  <circle cx="35" cy="15" r="5" fill="#ffbd2e"/>
+  <circle cx="50" cy="15" r="5" fill="#27c93f"/>
+  <rect x="80" y="8" width="300" height="14" rx="7" fill="#222222"/>
+  <text x="230" y="19" font-family="Arial" font-size="10" fill="#888888" text-anchor="middle">https://kyro.panel/servers</text>
+</svg> 

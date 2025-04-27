@@ -3,8 +3,7 @@ import { Navigate, useNavigate, Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Button } from "../../components/UI";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_NAME } from "@/config";
 
 interface User {
   username: string;
@@ -215,7 +214,7 @@ export const AuthPage: React.FC = () => {
       {/* Left panel */}
       <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-white">{appName}</h1>
+          <h1 className="text-2xl font-semibold text-white">{APP_NAME}</h1>
         </div>
 
         <div className="my-6">
@@ -230,7 +229,7 @@ export const AuthPage: React.FC = () => {
             to="https://github.com/lydondev"
             className="inline-flex items-center text-gray-400 border-b border-stone-900"
           >
-            Powered by {appName}
+            Powered by {APP_NAME}
             <svg
               className="ml-1 w-4 h-4"
               fill="none"

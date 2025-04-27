@@ -13,11 +13,10 @@ import { Badge } from "@/components/UI";
 import { useEffect, useState } from "react";
 import { useAuth } from "../[AUTH]/SignIn";
 import { useNavigate } from "react-router-dom";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_NAME, KYRO_VERSION } from "@/config";
 
 const AdminPage = () => {
-  const currentVersion = import.meta.env.VITE_KYRO_VERSION || "0.0.0";
+  const currentVersion = KYRO_VERSION || "0.0.0";
   const [versionStatus, setVersionStatus] = useState<
     "latest" | "outdated" | "ahead"
   >("latest");
@@ -76,7 +75,7 @@ const AdminPage = () => {
         <div>
           <h1 className="text-lg font-semibold text-white">Overview</h1>
           <p className="text-xs text-gray-500 mt-1 mb-8">
-            A quick administrative overview of your {appName} panel.
+            A quick administrative overview of your {APP_NAME} panel.
           </p>
         </div>
         <div className="grid flex items-center justify-center">
@@ -86,7 +85,7 @@ const AdminPage = () => {
                 <div className="w-full">
                   <CardTitle className="flex items-center text-[#FFFFFF] w-full">
                     <span className="text-lg font-semibold">
-                      {appName} Panel
+                      {APP_NAME} Panel
                     </span>
                     {versionStatus === "latest" && (
                       <Badge variant="success" className="ml-2">
@@ -105,7 +104,7 @@ const AdminPage = () => {
                     )}
                   </CardTitle>
                   <CardDescription className="mt-2 w-full">
-                    {appName} is an open-source, self-hosted, web-based panel
+                    {APP_NAME} is an open-source, self-hosted, web-based panel
                     for managing your servers and services. It is designed to be
                     easy to use, fast, and secure.
                   </CardDescription>
@@ -121,10 +120,10 @@ const AdminPage = () => {
                     <span className="text-lg font-semibold">Competitor</span>
                   </CardTitle>
                   <CardDescription className="mt-2">
-                    {appName} was created to bring something new to the game
+                    {APP_NAME} was created to bring something new to the game
                     server management panel market as all the other alternatives
                     are no longer maintained, have vulnerabilities, or just look
-                    horrible. Unlike traditional options, {appName} focuses on
+                    horrible. Unlike traditional options, {APP_NAME} focuses on
                     modern design, security, and performance to offer a superior
                     user experience.
                   </CardDescription>

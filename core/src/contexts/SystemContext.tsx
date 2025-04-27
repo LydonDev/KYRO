@@ -5,8 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_NAME } from "@/config";
 
 interface SystemInfo {
   name: string;
@@ -21,9 +20,9 @@ interface SystemContextType {
 }
 
 const defaultSystemInfo: SystemInfo = {
-  name: appName, // Fallback name
+  name: APP_NAME, // Fallback name
   api: "",
-  "powered-by": appName,
+  "powered-by": APP_NAME,
 };
 
 const SystemContext = createContext<SystemContextType>({

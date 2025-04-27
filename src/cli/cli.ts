@@ -31,8 +31,7 @@ import {
   logsClearCommand,
 } from "./commands";
 import { sendWelcomeEmail } from "../services/email";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { API_PORT, API_URL, APP_NAME } from "../config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -66,7 +65,7 @@ try {
 
   class HelloDB extends DB {
     constructor() {
-      super(join(PROJECT_ROOT, `${appName}.db`));
+      super(join(PROJECT_ROOT, `${APP_NAME}.db`));
     }
   }
 
@@ -75,7 +74,7 @@ try {
   console.error(chalk.red(`Error loading required modules: ${error.message}`));
   console.error(
     chalk.yellow(
-      `Make sure you're running the CLI from within an ${appName} project or using the global installation correctly.`,
+      `Make sure you're running the CLI from within an ${APP_NAME} project or using the global installation correctly.`,
     ),
   );
   process.exit(1);
@@ -91,12 +90,12 @@ program.addCommand(logsClearCommand);
 
 program
   .command("where")
-  .description(`Show which ${appName} instance this CLI is operating on`)
+  .description(`Show which ${APP_NAME} instance this CLI is operating on`)
   .action(() => {
-    console.log(chalk.blue(`${appName} CLI location: ${__filename}`));
+    console.log(chalk.blue(`${APP_NAME} CLI location: ${__filename}`));
     console.log(chalk.blue(`Project root: ${PROJECT_ROOT}`));
     console.log(
-      chalk.blue(`Database location: ${join(PROJECT_ROOT, `${appName}.db`)}`),
+      chalk.blue(`Database location: ${join(PROJECT_ROOT, `${APP_NAME}.db`)}`),
     );
 
     const packageJsonPath = join(PROJECT_ROOT, "package.json");
@@ -113,15 +112,15 @@ program
     } else {
       console.warn(
         chalk.yellow(
-          `Warning: This doesn't appear to be a valid ${appName} installation (no package.json found)`,
+          `Warning: This doesn't appear to be a valid ${APP_NAME} installation (no package.json found)`,
         ),
       );
     }
   });
 
 program
-  .name(appName)
-  .description(`${appName} CLI for management`)
+  .name(APP_NAME)
+  .description(`${APP_NAME} CLI for management`)
   .version("v1.0.0-dev (Revenant)");
 
 program
@@ -188,11 +187,11 @@ program
       const sendWelcome = options.sendWelcome || answers.sendWelcome;
       let permissions = options.permissions
         ? options.permissions
-            .split(",")
-            .reduce(
-              (acc, perm) => acc | Permissions[perm.trim().toUpperCase()],
-              0,
-            )
+          .split(",")
+          .reduce(
+            (acc, perm) => acc | Permissions[perm.trim().toUpperCase()],
+            0,
+          )
         : answers.permissions.reduce((acc, perm) => acc | perm, 0);
 
       const existingUser = await db.users.getUserByUsername(username);
@@ -460,14 +459,14 @@ program
 
 const boltCommand = program
   .command("bolt")
-  .description(`${appName} database management system`);
+  .description(`${APP_NAME} database management system`);
 
 boltCommand
   .command("sql")
-  .description(`Start an interactive SQL shell for the ${appName} database`)
+  .description(`Start an interactive SQL shell for the ${APP_NAME} database`)
   .option("-q, --query <sql>", "Execute a single SQL query and exit")
   .action(async (options) => {
-    const dbPath = join(PROJECT_ROOT, `${appName}.db`);
+    const dbPath = join(PROJECT_ROOT, `${APP_NAME}.db`);
 
     if (!existsSync(dbPath)) {
       console.error(chalk.red(`Database file not found at ${dbPath}`));
@@ -485,7 +484,7 @@ boltCommand
         process.exit(1);
       }
     } else {
-      console.log(chalk.blue(`=== ${appName} Bolt SQL Shell ===`));
+      console.log(chalk.blue(`=== ${APP_NAME} Bolt SQL Shell ===`));
       console.log(chalk.blue(`Connected to database: ${dbPath}`));
       console.log(chalk.blue('Enter SQL commands or "exit" to quit'));
       console.log(chalk.blue("-------------------------------"));
@@ -539,7 +538,7 @@ boltCommand
 
 boltCommand
   .command("migrate")
-  .description(`${appName} database migrations`)
+  .description(`${APP_NAME} database migrations`)
   .option("-c, --create <name>", "Create a new migration")
   .option("-r, --run", "Run pending migrations")
   .option("-l, --list", "List all migrations and their status")
@@ -600,7 +599,7 @@ export function down(db: Database) {
     }
 
     if (options.list) {
-      const dbPath = join(PROJECT_ROOT, `${appName}.db`);
+      const dbPath = join(PROJECT_ROOT, `${APP_NAME}.db`);
       const db = new Database(dbPath);
 
       db.exec(`
@@ -638,7 +637,7 @@ export function down(db: Database) {
         })
         .sort((a, b) => a.id.localeCompare(b.id));
 
-      console.log(chalk.blue(`=== ${appName} Migrations ===`));
+      console.log(chalk.blue(`=== ${APP_NAME} Migrations ===`));
       console.table(
         migrationFiles.map(({ id, name, status }) => ({ id, name, status })),
       );
@@ -652,7 +651,7 @@ export function down(db: Database) {
     }
 
     if (options.run || options.force) {
-      const dbPath = join(PROJECT_ROOT, `${appName}.db`);
+      const dbPath = join(PROJECT_ROOT, `${APP_NAME}.db`);
       const db = new Database(dbPath);
 
       db.exec(`
@@ -767,10 +766,10 @@ export function down(db: Database) {
 
 boltCommand
   .command("backup")
-  .description(`${appName} database backup`)
+  .description(`${APP_NAME} database backup`)
   .option("-o, --output <path>", "Specify backup file path")
   .action(async (options) => {
-    const dbPath = join(PROJECT_ROOT, `${appName}.db`);
+    const dbPath = join(PROJECT_ROOT, `${APP_NAME}.db`);
 
     if (!existsSync(dbPath)) {
       console.error(chalk.red(`Database file not found at ${dbPath}`));
@@ -785,7 +784,7 @@ boltCommand
     const defaultBackupPath = join(
       PROJECT_ROOT,
       "backups",
-      `${appName}_backup_${timestamp}.db`,
+      `${APP_NAME}_backup_${timestamp}.db`,
     );
     const backupPath = options.output || defaultBackupPath;
 
@@ -819,9 +818,9 @@ boltCommand
 
 boltCommand
   .command("info")
-  .description(`${appName} database information`)
+  .description(`${APP_NAME} database information`)
   .action(async () => {
-    const dbPath = join(PROJECT_ROOT, `${appName}.db`);
+    const dbPath = join(PROJECT_ROOT, `${APP_NAME}.db`);
 
     if (!existsSync(dbPath)) {
       console.error(chalk.red(`Database file not found at ${dbPath}`));
@@ -855,7 +854,7 @@ boltCommand
         };
       });
 
-      console.log(chalk.blue(`=== ${appName} Database Information ===`));
+      console.log(chalk.blue(`=== ${APP_NAME} Database Information ===`));
       console.log(chalk.blue(`Database file: ${dbPath}`));
       console.log(chalk.blue(`Database size: ${size}`));
       console.log(chalk.blue(`Number of tables: ${tables.length}`));
@@ -874,7 +873,7 @@ boltCommand
 
 const unitCommand = program
   .command("unit")
-  .description(`Manage ${appName} units`);
+  .description(`Manage ${APP_NAME} units`);
 
 unitCommand
   .command("list")
@@ -887,7 +886,7 @@ unitCommand
       if (options.json) {
         console.log(JSON.stringify(units, null, 2));
       } else {
-        console.log(chalk.blue(`=== ${appName} Units ===`));
+        console.log(chalk.blue(`=== ${APP_NAME} Units ===`));
 
         if (units.length === 0) {
           console.log(chalk.yellow(`No units found`));
@@ -1028,7 +1027,7 @@ unitCommand
       } else {
         console.error(
           chalk.yellow(
-            `${appName} Please specify either --file or --interactive`,
+            `${APP_NAME} Please specify either --file or --interactive`,
           ),
         );
         process.exit(1);
@@ -1072,7 +1071,7 @@ unitCommand
         const units = await db.units.findMany();
 
         if (units.length === 0) {
-          console.error(chalk.red(`${appName} No units found`));
+          console.error(chalk.red(`${APP_NAME} No units found`));
           process.exit(1);
         }
 
@@ -1098,7 +1097,7 @@ unitCommand
       }
 
       if (!unit) {
-        console.error(chalk.red(`${appName} Unit not found`));
+        console.error(chalk.red(`${APP_NAME} Unit not found`));
         process.exit(1);
       }
 
@@ -1153,7 +1152,7 @@ unitCommand
         const units = await db.units.findMany();
 
         if (units.length === 0) {
-          console.error(chalk.red(`${appName} No units found`));
+          console.error(chalk.red(`${APP_NAME} No units found`));
           process.exit(1);
         }
 
@@ -1179,7 +1178,7 @@ unitCommand
       }
 
       if (!unit) {
-        console.error(chalk.red(`${appName} Unit not found`));
+        console.error(chalk.red(`${APP_NAME} Unit not found`));
         process.exit(1);
       }
 
@@ -1237,7 +1236,7 @@ unitCommand
       if (existing) {
         console.log(
           chalk.yellow(
-            `${appName} A unit with short name '${shortName}' already exists`,
+            `${APP_NAME} A unit with short name '${shortName}' already exists`,
           ),
         );
 
@@ -1275,7 +1274,7 @@ unitCommand
                 const exists = await db.units.findFirst({
                   where: { shortName: input },
                 });
-                return exists ? `${appName} Short name already exists` : true;
+                return exists ? `${APP_NAME} Short name already exists` : true;
               },
             },
           ]);
@@ -1427,7 +1426,7 @@ unitCommand
 
 const cargoCommand = program
   .command("cargo")
-  .description(`Manage ${appName} cargo`);
+  .description(`Manage ${APP_NAME} cargo`);
 
 cargoCommand
   .command("list")
@@ -1440,7 +1439,7 @@ cargoCommand
       if (options.json) {
         console.log(JSON.stringify(cargo, null, 2));
       } else {
-        console.log(chalk.blue(`=== ${appName} Cargo ===`));
+        console.log(chalk.blue(`=== ${APP_NAME} Cargo ===`));
 
         if (cargo.length === 0) {
           console.log(chalk.yellow("No cargo items found"));
@@ -1476,7 +1475,7 @@ cargoCommand
         const cargoItems = await db.cargo.findManyCargo();
 
         if (cargoItems.length === 0) {
-          console.error(chalk.red("No cargo items found"));
+          console.error(chalk.red(`${APP_NAME} No cargo items found`));
           process.exit(1);
         }
 
@@ -1498,7 +1497,7 @@ cargoCommand
       }
 
       if (!cargoItem) {
-        console.error(chalk.red("Cargo item not found"));
+        console.error(chalk.red(`${APP_NAME} Cargo item not found`));
         process.exit(1);
       }
 
@@ -2617,7 +2616,7 @@ async function promptUnitDetails() {
 
 program
   .command("deploy")
-  .description(`Deploy ${appName} with UI`)
+  .description(`Deploy ${APP_NAME} with UI`)
   .option("-f, --force", "Skip confirmations")
   .option("-l, --local", "Force local deployment")
   .option("-d, --domain <domain>", "Specify domain for production deployment")
@@ -2653,7 +2652,7 @@ program
       ...options,
     };
 
-    const expectedUIPath = resolve(PROJECT_ROOT, "..", `${appName}-ui`);
+    const expectedUIPath = resolve(PROJECT_ROOT, "..", `${APP_NAME}-ui`);
     let uiPath = expectedUIPath;
 
     if (!options.force && !existsSync(uiPath)) {
@@ -2661,7 +2660,7 @@ program
         {
           type: "confirm",
           name: "confirm",
-          message: `Please confirm that '${appName}-ui' is located in the preceding folder to '${appName}-core' (the current directory)`,
+          message: `Please confirm that '${APP_NAME}-ui' is located in the preceding folder to '${APP_NAME}-core' (the current directory)`,
           default: true,
         },
       ]);
@@ -2671,7 +2670,7 @@ program
           {
             type: "input",
             name: "customPath",
-            message: `Enter the path to ${appName}-ui:`,
+            message: `Enter the path to ${APP_NAME}-ui:`,
             validate: (input) =>
               existsSync(input) ? true : "Path does not exist",
           },
@@ -2680,14 +2679,14 @@ program
       }
     }
 
-    console.log(chalk.blue(`Looking for '${appName}-ui'...`));
+    console.log(chalk.blue(`Looking for '${APP_NAME}-ui'...`));
 
     if (!existsSync(uiPath)) {
-      console.error(chalk.red(`${appName}-ui not found at ${uiPath}`));
+      console.error(chalk.red(`${APP_NAME}-ui not found at ${uiPath}`));
       process.exit(1);
     }
 
-    console.log(chalk.green(`Found ${appName}-ui at ${uiPath}!`));
+    console.log(chalk.green(`Found ${APP_NAME}-ui at ${uiPath}!`));
 
     console.log(chalk.blue(`Installing modules (bun install)...`));
     const installResult = spawnSync("bun", ["install"], {
@@ -2697,7 +2696,7 @@ program
 
     if (installResult.status !== 0) {
       console.error(
-        chalk.red(`Failed to install dependencies in ${appName}-ui`),
+        chalk.red(`Failed to install dependencies in ${APP_NAME}-ui`),
       );
       process.exit(1);
     }
@@ -2713,7 +2712,7 @@ program
         {
           type: "list",
           name: "deployment",
-          message: `Do you have a domain or would you like to run ${appName} locally?`,
+          message: `Do you have a domain or would you like to run ${APP_NAME} locally?`,
           choices: [
             { name: "Run locally", value: "local" },
             { name: "Deploy with domain", value: "domain" },
@@ -2825,12 +2824,12 @@ program
 
     console.log(
       chalk.blue(
-        `Writing \`${appName}-ui\` .env file with "API_URL=${apiUrl}"`,
+        `Writing \`${APP_NAME}-ui\` .env file with "API_URL=${API_URL}:${API_PORT}"`,
       ),
     );
 
     try {
-      writeFileSync(join(uiPath, ".env"), `API_URL=${apiUrl}\n`);
+      writeFileSync(join(uiPath, ".env"), `API_URL=${API_URL}:${API_PORT}\n`);
     } catch (error) {
       console.error(chalk.red(`Failed to write .env file: ${error.message}`));
       process.exit(1);
@@ -2867,7 +2866,7 @@ program
 
     console.log(
       chalk.blue(
-        `Copying \`dist\` files from \`${appName}-ui\` to \`${appName}-core/_dist\`...`,
+        `Copying \`dist\` files from \`${APP_NAME}-ui\` to \`${APP_NAME}-core/_dist\`...`,
       ),
     );
 
@@ -3011,7 +3010,7 @@ program
         ),
       );
       console.log(
-        chalk.green(`You can access ${appName} at http://localhost:${webPort}`),
+        chalk.green(`You can access ${APP_NAME} at http://localhost:${webPort}`),
       );
     } else {
       console.log(chalk.blue(`Setting up production server with API proxy...`));
@@ -3187,7 +3186,7 @@ program
       );
       console.log(
         chalk.green(
-          `You can access ${appName} at ${apiUrl.replace("/api", "")}`,
+          `You can access ${APP_NAME} at ${apiUrl.replace("/api", "")}`,
         ),
       );
     }
@@ -3205,7 +3204,7 @@ program
     process.on("SIGINT", cleanup);
     process.on("SIGTERM", cleanup);
 
-    await new Promise(() => {});
+    await new Promise(() => { });
   });
 
 function formatPermissions(permissionBitmap: number): string {

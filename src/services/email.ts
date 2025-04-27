@@ -1,20 +1,18 @@
 import { Resend } from "resend";
-import { EMAIL_CONFIG } from "../config";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { EMAIL_CONFIG, APP_NAME } from "../config";
 
 const resend = EMAIL_CONFIG.RESEND_API_KEY
   ? new Resend(EMAIL_CONFIG.RESEND_API_KEY)
   : ({
-      emails: {
-        send: async () => ({
-          id: "mock-email-id",
-          from: "",
-          to: "",
-          created_at: new Date().toISOString(),
-        }),
-      },
-    } as unknown as Resend);
+    emails: {
+      send: async () => ({
+        id: "mock-email-id",
+        from: "",
+        to: "",
+        created_at: new Date().toISOString(),
+      }),
+    },
+  } as unknown as Resend);
 
 const styles = {
   paragraph:
@@ -74,7 +72,7 @@ const createEmailTemplate = (
                     </div>
                     ${buttonSection}
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333333; text-align: center;">
-                      <p style="font-size: 14px; color: #888888; margin: 0;">The ${appName} Team</p>
+                      <p style="font-size: 14px; color: #888888; margin: 0;">The ${APP_NAME} Team</p>
                     </div>
                   </td>
                 </tr>
@@ -107,9 +105,9 @@ export const sendWelcomeEmail = async (
     const result = await resend.emails.send({
       from: EMAIL_CONFIG.DEFAULT_FROM,
       to: email,
-      subject: `Welcome to ${appName}!`,
+      subject: `Welcome to ${APP_NAME}!`,
       html: createEmailTemplate(
-        `Welcome to ${appName}!`,
+        `Welcome to ${APP_NAME}!`,
         content,
         "Access Dashboard",
         EMAIL_CONFIG.APP_URL,
@@ -139,7 +137,7 @@ export const sendVerificationCodeEmail = async (
     const result = await resend.emails.send({
       from: EMAIL_CONFIG.DEFAULT_FROM,
       to: email,
-      subject: "Your Verification Code",
+      subject: `Your Verification Code`,
       html: createEmailTemplate("Verify Your Email", content),
     });
 
@@ -167,7 +165,7 @@ export const sendNotificationEmail = async (
     const result = await resend.emails.send({
       from: EMAIL_CONFIG.DEFAULT_FROM,
       to: email,
-      subject: title,
+      subject: `${APP_NAME}: ${title}`,
       html: createEmailTemplate(title, content, actionText, actionLink),
     });
 

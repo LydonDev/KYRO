@@ -7,9 +7,7 @@ import express from "express";
 import { join, resolve } from "path";
 import { existsSync, statSync } from "fs";
 import { loadRouters } from "./utils/routes_loader";
-import { PORT } from "./config";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_PORT, APP_NAME, KYRO_VERSION } from "./config";
 
 const app = express();
 const __dirname = process.cwd();
@@ -21,9 +19,9 @@ app.use(loadRouters(routersDir));
 
 app.get("/api/system", (req, res) => {
   res.json({
-    name: appName,
-    version: "1.0.0",
-    "powered-by": appName,
+    name: APP_NAME,
+    version: KYRO_VERSION,
+    "powered-by": APP_NAME,
   });
 });
 
@@ -47,7 +45,7 @@ if (frontendExists && indexExists) {
     res.status(404).send(`
       <html>
         <head>
-          <title>${appName} - Frontend Not Found</title>
+          <title>${APP_NAME} - Frontend Not Found</title>
           <style>
             body {
               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -68,16 +66,16 @@ if (frontendExists && indexExists) {
           <p class="info">The frontend build directory was not found at ${frontendPath}</p>
           <p>Please ensure you've built the frontend application and the files are in the correct location.</p>
           <p>API routes are still available at <span class="api-path">/api/*</span></p>
-          <p>For more information, please refer to the <a href="https://docs.${appName}.lol">${appName} documentation</a>.</p>
+          <p>For more information, please refer to the <a href="https://docs.kyro.lol">${APP_NAME} documentation</a>.</p>
           <p>If you need help, please join our <a href="https://discord.gg/compute">Discord server</a>.</p>
-          <p><i>${appName} 1.0.0-dev (Revenant)</i></p>
+          <p><i>${APP_NAME} ${KYRO_VERSION}</i></p>
         </body>
       </html>
     `);
   });
 }
 
-app.listen(PORT, () => {
-  const serverUrl = `http://localhost:${PORT}`;
+app.listen(APP_PORT, () => {
+  const serverUrl = `http://localhost:${APP_PORT}`;
   const boxWidth = Math.max(serverUrl.length + 24, 45);
 });

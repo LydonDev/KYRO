@@ -19,8 +19,8 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { motion } from "framer-motion";
 import { useAuth } from "../[AUTH]/SignIn";
 import { useNavigate } from "react-router-dom";
+import { APP_NAME } from "@/config";
 
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
 interface SystemState {
   version: string;
@@ -244,11 +244,10 @@ const NodeContextMenu: React.FC<{
             e.stopPropagation();
             action();
           }}
-          className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${
-            destructive
-              ? "text-red-500 hover:bg-red-900/20"
-              : "text-[#9CA3AF] hover:bg-stone-900"
-          }`}
+          className={`w-full px-3 py-2 text-left flex items-center space-x-2 text-sm ${destructive
+            ? "text-red-500 hover:bg-red-900/20"
+            : "text-[#9CA3AF] hover:bg-stone-900"
+            }`}
         >
           <Icon className="w-4 h-4" />
           <span>{label}</span>
@@ -871,11 +870,10 @@ const AdminNodesPage = () => {
               <button
                 key={pageNum}
                 onClick={() => onPageChange(pageNum)}
-                className={`px-2 py-1 rounded ${
-                  currentPage === pageNum
-                    ? "bg-stone-950 text-white"
-                    : "border border-stone-900 hover:bg-stone-900"
-                }`}
+                className={`px-2 py-1 rounded ${currentPage === pageNum
+                  ? "bg-stone-950 text-white"
+                  : "border border-stone-900 hover:bg-stone-900"
+                  }`}
               >
                 {pageNum}
               </button>
@@ -911,12 +909,12 @@ const AdminNodesPage = () => {
       Math.max(
         0,
         (allocationPagination.page - 1) * allocationPagination.limit -
-          assignedAllocations.length,
+        assignedAllocations.length,
       ),
       Math.max(
         0,
         allocationPagination.page * allocationPagination.limit -
-          assignedAllocations.length,
+        assignedAllocations.length,
       ),
     );
 
@@ -1562,11 +1560,10 @@ const AdminNodesPage = () => {
                   <div className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
                       <div
-                        className={`h-2 w-2 rounded-full ${
-                          server.status.state === "running"
-                            ? "bg-green-400"
-                            : "bg-gray-300"
-                        }`}
+                        className={`h-2 w-2 rounded-full ${server.status.state === "running"
+                          ? "bg-green-400"
+                          : "bg-gray-300"
+                          }`}
                       />
                     </div>
                     <div>
@@ -1861,7 +1858,7 @@ const AdminNodesPage = () => {
                 <h1 className="text-lg font-semibold text-white">Nodes</h1>
                 <p className="text-xs text-gray-400 mt-1">
                   Nodes are where your servers run and live. Learn how to set up{" "}
-                  {appName}'s Krypton daemon via the{" "}
+                  {APP_NAME}'s Krypton daemon via the{" "}
                   <a
                     href="https://docs.kyro.lol"
                     target="_blank"

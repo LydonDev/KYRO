@@ -23,11 +23,7 @@ import {
 import { useAuth } from "../pages/[AUTH]/SignIn";
 import { useEffect, useRef, useState } from "react";
 import { WrenchIcon } from "lucide-react";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
-const appLogo =
-  import.meta.env.VITE_APP_LOGO ??
-  "https://cdn.vev.design/cdn-cgi/image/f=auto,q=82/private/pK53XiUzGnRFw1uPeFta7gdedx22/image/MtcO428PYQ.png";
+import { APP_NAME, APP_LOGO } from "../config";
 
 function Navbar() {
   return null;
@@ -47,11 +43,10 @@ const NavItem = ({
   return (
     <Link
       to={to}
-      className={`flex items-center h-8 ml-2 text-sm font-medium rounded-sm transition active:scale-95 duration-200 ${
-        isActive
-          ? "shadow-sm px-2 bg-stone-800 border border-stone-700 text-white rounded-sm "
-          : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF] rounded-sm"
-      }`}
+      className={`flex items-center h-8 ml-2 text-sm font-medium rounded-sm transition active:scale-95 duration-200 ${isActive
+        ? "shadow-sm px-2 bg-stone-800 border border-stone-700 text-white rounded-sm "
+        : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF] rounded-sm"
+        }`}
     >
       <Icon
         strokeWidth="2"
@@ -140,9 +135,9 @@ function Sidebar() {
           to="/servers"
           className="h-12 flex items-center w-full px-4 active:scale-95 transition"
         >
-          <img src={appLogo} alt="Logo" className="w-4 h-4 invert" />
+          <img src={APP_LOGO} alt="Logo" className="w-4 h-4 invert" />
           <span className="text-base font-semibold text-white ml-2 uppercase text-sm">
-            {appName}
+            {APP_NAME}
           </span>
         </Link>
       </div>
@@ -337,11 +332,10 @@ function Sidebar() {
               <div
                 ref={dropdownRef}
                 className={`absolute ${dropdownAlignLeft ? "left-42" : "right-42"} ${dropdownShiftUp ? "bottom-full mb-1" : "top-full mt-1"} w-48 bg-stone-950 rounded-md shadow-lg border border-stone-900 
-                       overflow-hidden max-h-[calc(100vh-80px)] overflow-auto transform transition-all duration-200 ease-in-out origin-top-right z-50 ${
-                         isDropdownOpen
-                           ? "opacity-100 scale-y-100 translate-y-0"
-                           : "opacity-0 scale-y-95 translate-y-1 pointer-events-none"
-                       }`}
+                       overflow-hidden max-h-[calc(100vh-80px)] overflow-auto transform transition-all duration-200 ease-in-out origin-top-right z-50 ${isDropdownOpen
+                    ? "opacity-100 scale-y-100 translate-y-0"
+                    : "opacity-0 scale-y-95 translate-y-1 pointer-events-none"
+                  }`}
               >
                 <div className="py-1">
                   <Link to="/profile">

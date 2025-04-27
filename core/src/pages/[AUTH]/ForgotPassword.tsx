@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "../../components/UI";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
+import { APP_NAME } from "@/config";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -189,7 +188,7 @@ const ForgotPassword: React.FC = () => {
       {/* Left panel */}
       <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-[#FFFFFF]">{appName}</h1>
+          <h1 className="text-2xl font-semibold text-[#FFFFFF]">{APP_NAME}</h1>
         </div>
 
         <div className="my-6">
@@ -206,7 +205,7 @@ const ForgotPassword: React.FC = () => {
             to="https://github.com/lydondev"
             className="inline-flex items-center border-b border-stone-900 pb-1 text-[#9CA3AF]"
           >
-            Powered by {appName}
+            Powered by {APP_NAME}
             <svg
               className="ml-1 w-4 h-4"
               fill="none"

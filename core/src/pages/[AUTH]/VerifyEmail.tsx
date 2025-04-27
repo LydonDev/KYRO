@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import { Button } from "../../components/UI";
+import { APP_NAME } from "@/config";
 
 interface VerificationState {
   userId: string | null;
@@ -8,7 +9,6 @@ interface VerificationState {
   requiresVerification: boolean;
 }
 
-const appName = import.meta.env.VITE_APP_NAME ?? "Kyro";
 
 const VerifyEmail: React.FC = () => {
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
@@ -200,7 +200,7 @@ const VerifyEmail: React.FC = () => {
     <div className="min-h-screen flex bg-stone-950">
       <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-white">{appName}</h1>
+          <h1 className="text-2xl font-semibold text-white">{APP_NAME}</h1>
         </div>
 
         <div className="my-6">
