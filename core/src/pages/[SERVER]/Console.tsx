@@ -13,7 +13,16 @@ import AnsiParser from "../../components/AnsiParser";
 import { motion } from "framer-motion";
 import { CommandLineIcon } from "@heroicons/react/24/solid";
 import { Badge } from "@/components/UI";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
 
 interface Node {
   id: string;
@@ -79,6 +88,38 @@ const formatBytes = (bytes: number | undefined, decimals = 2): string => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
+// Custom tooltip component for charts
+const CustomTooltip = ({ active, payload, label, dataType }: { active: boolean; payload: any; label: any; dataType: string }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-stone-950 border border-stone-900 rounded-md shadow-lg p-3 text-xs">
+        <div className="font-medium text-white mb-1">
+          {dataType === "cpu" ? "CPU Usage" :
+            dataType === "memory" ? "Memory Usage" :
+              dataType === "network" ? "Network I/O" : "Usage"}
+        </div>
+        <div className="flex items-center">
+          <div
+            className={`h-2 w-2 rounded-full mr-2 ${dataType === "cpu" ? "bg-blue-500" :
+              dataType === "memory" ? "bg-green-500" :
+                dataType === "network" ? "bg-purple-500" : "bg-gray-500"
+              }`}
+          />
+          <span className="text-white">
+            {dataType === "network"
+              ? formatBytes(payload[0].value) + "/s"
+              : `${payload[0].value.toFixed(1)}%`}
+          </span>
+        </div>
+        <div className="text-stone-400 text-[10px] mt-1">
+          {new Date(label).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 const ServerConsolePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -99,8 +140,20 @@ const ServerConsolePage = () => {
     network: { rxBytes: 0, txBytes: 0 },
   });
 
+  // Stats history for charts
+  const [statsHistory, setStatsHistory] = useState<{
+    cpu: Array<{ time: number; value: number }>;
+    memory: Array<{ time: number; value: number }>;
+    network: Array<{ time: number; value: number }>;
+  }>({
+    cpu: Array(24).fill(0).map((_, i) => ({ time: Date.now() - (23 - i) * 5000, value: 0 })),
+    memory: Array(24).fill(0).map((_, i) => ({ time: Date.now() - (23 - i) * 5000, value: 0 })),
+    network: Array(24).fill(0).map((_, i) => ({ time: Date.now() - (23 - i) * 5000, value: 0 })),
+  });
+
   const wsRef = useRef<WebSocket | null>(null);
   const consoleRef = useRef<HTMLDivElement>(null);
+  const prevNetworkRxRef = useRef<number>(0);
 
   useEffect(() => {
     const fetchServer = async () => {
@@ -187,15 +240,49 @@ const ServerConsolePage = () => {
 
         case "stats":
           if (message.data.cpu_percent !== undefined) {
-            setLiveStats({
+            const newStats = {
               cpuPercent: message.data.cpu_percent || 0,
               memory: message.data.memory || { used: 0, limit: 0, percent: 0 },
               network: message.data.network
                 ? {
-                    rxBytes: message.data.network.rx_bytes,
-                    txBytes: message.data.network.tx_bytes,
-                  }
+                  rxBytes: message.data.network.rx_bytes,
+                  txBytes: message.data.network.tx_bytes,
+                }
                 : { rxBytes: 0, txBytes: 0 },
+            };
+
+            setLiveStats(newStats);
+
+            // Calculate network rate (bytes/s) by comparing with previous value
+            const currentRxBytes = newStats.network.rxBytes;
+            const networkRate = prevNetworkRxRef.current > 0
+              ? Math.max(0, currentRxBytes - prevNetworkRxRef.current)
+              : 0;
+            prevNetworkRxRef.current = currentRxBytes;
+
+            // Update stats history for charts
+            const now = Date.now();
+            setStatsHistory(prev => {
+              // Update CPU history
+              const newCpuHistory = [...prev.cpu];
+              newCpuHistory.push({ time: now, value: newStats.cpuPercent });
+              if (newCpuHistory.length > 24) newCpuHistory.shift();
+
+              // Update Memory history
+              const newMemoryHistory = [...prev.memory];
+              newMemoryHistory.push({ time: now, value: newStats.memory.percent });
+              if (newMemoryHistory.length > 24) newMemoryHistory.shift();
+
+              // Update Network history
+              const newNetworkHistory = [...prev.network];
+              newNetworkHistory.push({ time: now, value: networkRate });
+              if (newNetworkHistory.length > 24) newNetworkHistory.shift();
+
+              return {
+                cpu: newCpuHistory,
+                memory: newMemoryHistory,
+                network: newNetworkHistory
+              };
             });
           }
 
@@ -300,7 +387,6 @@ const ServerConsolePage = () => {
   }
 
   // Did this because the websocket would cause the error boundary error and just fuck the page so dont touch this
-
   if (error) {
     setTimeout(() => {
       setError(null);
@@ -309,6 +395,7 @@ const ServerConsolePage = () => {
 
   if (!server) {
     navigate("/unauthorized");
+    return null;
   }
 
   const isServerActive = server?.state?.toLowerCase() === "running";
@@ -412,84 +499,170 @@ const ServerConsolePage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          <Card
-            className="border border-stone-900 bg-stone-950 p-4"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
-              backgroundSize: "15px 15px",
-            }}
-          >
-            <p className="text-sm font-medium text-gray-500">CPU Usage</p>
-            <div className="flex items-baseline mt-2">
-              <p className="text-2xl font-semibold text-gray-400">
-                {isServerActive ? `${liveStats.cpuPercent.toFixed(1)}%` : "-"}
-              </p>
-            </div>
-          </Card>
-
-          <Card
-            className="border border-stone-900 bg-stone-950 p-4"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
-              backgroundSize: "15px 15px",
-            }}
-          >
-            <p className="text-sm font-medium text-gray-500">Memory</p>
-            <div className="flex items-baseline mt-2">
-              <p className="text-2xl font-semibold text-gray-400">
-                {isServerActive ? formatBytes(liveStats.memory.used) : "-"}
-              </p>
-              {isServerActive && (
-                <span className="ml-2 text-sm font-medium text-gray-500">
-                  / {formatBytes(server?.status.memory_limit)}
-                </span>
+        {/* Resource Usage Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* CPU Usage Chart */}
+          <Card className="bg-stone-950 border border-stone-900 overflow-hidden">
+            <CardContent className="p-3">
+              <div className="flex justify-between items-center mb-1">
+                <div className="text-xs font-medium text-[#9CA3AF]">
+                  CPU Usage
+                </div>
+                <div className="text-xs font-medium text-[#3B82F6]">
+                  {isServerActive ? `${liveStats.cpuPercent.toFixed(1)}%` : '-'}
+                </div>
+              </div>
+              <div className="h-[80px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={statsHistory.cpu}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis
+                      dataKey="time"
+                      tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                      stroke="#4B5563"
+                      tickLine={false}
+                      axisLine={false}
+                      hide
+                    />
+                    <YAxis
+                      tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                      stroke="#4B5563"
+                      tickLine={false}
+                      axisLine={false}
+                      domain={[0, 100]}
+                      hide
+                    />
+                    <Tooltip
+                      content={<CustomTooltip active={true} payload={[]} label={""} dataType="cpu" />}
+                      cursor={{ stroke: '#6B7280', strokeWidth: 1, strokeDasharray: '3 3' }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#3B82F6"
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4, fill: '#3B82F6', stroke: '#1E40AF' }}
+                      isAnimationActive={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              {!isServerActive && (
+                <div className="text-center text-xs text-[#9CA3AF] mt-1">
+                  Server offline
+                </div>
               )}
-            </div>
+            </CardContent>
           </Card>
 
-          <Card
-            className="border border-stone-900 bg-stone-950 p-4"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
-              backgroundSize: "15px 15px",
-            }}
-          >
-            <p className="text-sm font-medium text-gray-500">Network I/O</p>
-            <div className="flex items-baseline mt-2">
-              <p className="text-2xl font-semibold text-gray-400">
-                {isServerActive ? formatBytes(liveStats.network.rxBytes) : "-"}
-              </p>
-              {isServerActive && (
-                <span className="ml-2 text-sm font-medium text-gray-500">
-                  /s in
-                </span>
+          {/* Memory Usage Chart */}
+          <Card className="bg-stone-950 border border-stone-900 overflow-hidden">
+            <CardContent className="p-3">
+              <div className="flex justify-between items-center mb-1">
+                <div className="text-xs font-medium text-[#9CA3AF]">
+                  Memory Usage
+                </div>
+                <div className="text-xs font-medium text-[#10B981]">
+                  {isServerActive ? `${formatBytes(liveStats.memory.used)}` : '-'}
+                </div>
+              </div>
+              <div className="h-[80px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={statsHistory.memory}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis
+                      dataKey="time"
+                      tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                      stroke="#4B5563"
+                      tickLine={false}
+                      axisLine={false}
+                      hide
+                    />
+                    <YAxis
+                      tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                      stroke="#4B5563"
+                      tickLine={false}
+                      axisLine={false}
+                      domain={[0, 100]}
+                      hide
+                    />
+                    <Tooltip
+                      content={<CustomTooltip active={true} payload={[]} label={""} dataType="memory" />}
+                      cursor={{ stroke: '#6B7280', strokeWidth: 1, strokeDasharray: '3 3' }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#10B981"
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4, fill: '#10B981', stroke: '#065F46' }}
+                      isAnimationActive={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              {!isServerActive && (
+                <div className="text-center text-xs text-[#9CA3AF] mt-1">
+                  Server offline
+                </div>
               )}
-            </div>
+            </CardContent>
           </Card>
 
-          <Card
-            className="border border-stone-900 bg-stone-950 p-4"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0), radial-gradient(circle at 7.5px 7.5px, rgba(49, 49, 53, 0.3) 1px, transparent 0)",
-              backgroundSize: "15px 15px",
-            }}
-          >
-            <p className="text-sm font-medium text-gray-500">Disk Space</p>
-            <div className="flex items-baseline mt-2">
-              <p className="text-2xl font-semibold text-gray-400">
-                {isServerActive
-                  ? formatBytes((server?.diskMiB || 0) * 1024 * 1024)
-                  : "-"}
-              </p>
-              <span className="ml-2 text-sm font-medium text-gray-500">
-                {isServerActive ? "total" : ""}
-              </span>
-            </div>
+          {/* Network I/O Chart */}
+          <Card className="bg-stone-950 border border-stone-900 overflow-hidden">
+            <CardContent className="p-3">
+              <div className="flex justify-between items-center mb-1">
+                <div className="text-xs font-medium text-[#9CA3AF]">
+                  Network I/O
+                </div>
+                <div className="text-xs font-medium text-[#8B5CF6]">
+                  {isServerActive ? `${formatBytes(statsHistory.network[statsHistory.network.length - 1]?.value || 0)}/s` : '-'}
+                </div>
+              </div>
+              <div className="h-[80px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={statsHistory.network}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis
+                      dataKey="time"
+                      tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                      stroke="#4B5563"
+                      tickLine={false}
+                      axisLine={false}
+                      hide
+                    />
+                    <YAxis
+                      tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                      stroke="#4B5563"
+                      tickLine={false}
+                      axisLine={false}
+                      hide
+                    />
+                    <Tooltip
+                      content={<CustomTooltip active={true} payload={[]} label={""} dataType="network" />}
+                      cursor={{ stroke: '#6B7280', strokeWidth: 1, strokeDasharray: '3 3' }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#8B5CF6"
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4, fill: '#8B5CF6', stroke: '#5B21B6' }}
+                      isAnimationActive={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              {!isServerActive && (
+                <div className="text-center text-xs text-[#9CA3AF] mt-1">
+                  Server offline
+                </div>
+              )}
+            </CardContent>
           </Card>
         </div>
 
@@ -499,7 +672,7 @@ const ServerConsolePage = () => {
             ref={consoleRef}
             className="min-h-screen flex-1 p-4 font-mono text-xs text-white bg-stone-950 overflow-auto"
             style={{
-              height: "100%",
+              height: "80%",
               maxHeight: "425px",
               minHeight: "425px",
               backgroundSize: "30px 30px",

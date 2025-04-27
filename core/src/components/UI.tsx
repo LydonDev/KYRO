@@ -71,7 +71,7 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         ref={modalRef}
-        className={`bg-[#0E0E0F] border border-[#1E1E20] rounded-md w-full ${maxWidth} transition-all duration-200 ${isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100"}`}
+        className={`bg-stone-950 border border-stone-900 rounded-md w-full ${maxWidth} transition-all duration-200 ${isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100"}`}
       >
         <div className="flex justify-between items-center px-6 mt-6">
           <h3 className="text-lg font-semibold leading-none tracking-tight text-[#FFFFFF]">
@@ -335,7 +335,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
       {isOpen && (
         <div
-          className={`absolute z-10 mt-2 w-48 rounded-md bg-[#0E0E0F] border border-[#1E1E20] ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          className={`absolute z-10 mt-2 w-48 rounded-md bg-stone-950 border border-stone-900 ring-1 ring-black ring-opacity-5 focus:outline-none ${
             align === "right" ? "right-0" : "left-0"
           }`}
         >
@@ -385,7 +385,7 @@ export const Input: React.FC<InputProps> = ({
         </label>
       )}
       <input
-        className={`w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+        className={`w-full pl-3 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
                     focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
                     transition-colors duration-200 ${
@@ -421,13 +421,13 @@ export const TextArea: React.FC<TextAreaProps> = ({
           {label}
           {props.required && <span className="text-[#EF4444] ml-1">*</span>}
         </label>
-      )}
+      )}  
       <textarea
-        className={`w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+        className={`w-full pl-3 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200 ${
-                      error ? "border-[#EF4444]" : ""
+                      error ? "border-stone-900" : ""
                     } ${className}`}
         {...props}
       />
@@ -463,11 +463,11 @@ export const Select: React.FC<SelectProps> = ({
       )}
       <div className="relative">
         <select
-          className={`w-full pl-3 pr-3 py-1 rounded-md bg-[#0E0E0F] border border-[#1E1E20]
+          className={`w-full pl-3 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
-                    focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
+                    focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
                     transition-colors duration-200 ${
-                      error ? "border-[#EF4444]" : ""
+                      error ? "border-stone-900" : ""
                     } ${className}`}
           {...props}
         >
@@ -509,11 +509,11 @@ export const Badge: React.FC<BadgeProps> = ({
   className = "",
 }) => {
   const variantClasses = {
-    default: "bg-[#1E1E20] text-[#FFFFFF] border-[#232325]",
+    default: "bg-stone-950 text-[#FFFFFF] border-stone-900",
     success: "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20",
     warning: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20",
     danger: "bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20",
-    info: "bg-[#0E0E0F] text-[#9CA3AF] border-[#1E1E20]",
+    info: "bg-stone-950 text-[#9CA3AF] border-stone-900",
   };
 
   return (
