@@ -14,54 +14,65 @@
   font-weight: bold;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Bold_Italic-web-1.32.woff2") format("woff2");
   font-weight: bold;
   font-style: italic;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Extra_Light-web-1.32.woff2") format("woff2");
   font-weight: 200;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Extra_Light_Italic-web-1.32.woff2") format("woff2");
   font-weight: 200;
   font-style: italic;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Light-web-1.32.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Light_Italic-web-1.32.woff2") format("woff2");
   font-weight: 300;
   font-style: italic;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Medium-web-1.32.woff2") format("woff2");
-  font-weight: 450; /* Adjusted weight */
+  font-weight: 450;
+  /* Adjusted weight */
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Medium_Italic-web-1.32.woff2") format("woff2");
-  font-weight: 450; /* Adjusted weight */
+  font-weight: 450;
+  /* Adjusted weight */
   font-style: italic;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Regular-web-1.32.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Sans";
   src: url("/Coinbase_Sans-Regular_Italic-web-1.32.woff2") format("woff2");
@@ -76,24 +87,28 @@
   font-weight: bold;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Mono";
   src: url("/Coinbase_Mono-Extra_Light-web.woff2") format("woff2");
   font-weight: 200;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Mono";
   src: url("/Coinbase_Mono-Light-web.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Mono";
   src: url("/Coinbase_Mono-Medium-web.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Coinbase Mono";
   src: url("/Coinbase_Mono-Regular-web.woff2") format("woff2");
@@ -103,8 +118,10 @@
 
 * {
   font-family: "Coinbase Sans", sans-serif;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 html,
@@ -144,11 +161,15 @@ body {
 }
 
 .font-medium {
-  font-weight: 400; /* Adjusted weight */
+  font-weight: 400;
 }
 
 .font-semibold {
-  font-weight: 500; /* Adjusted weight */
+  font-weight: 500;
+}
+
+.inverted-logo {
+  filter: invert(1) sepia(1) saturate(0) hue-rotate(180deg);
 }
 
 @layer base {
@@ -229,6 +250,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -239,6 +261,7 @@ body {
     transform: scale(0.95);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
