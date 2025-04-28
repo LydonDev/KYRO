@@ -8,17 +8,8 @@
   "environmentVariables": [
     {
       "name": "jarfile",
-      "description": "Server JAR file to run",
-      "defaultValue": "pufferfish-1.20.4.jar",
-      "required": true,
-      "userViewable": true,
-      "userEditable": true,
-      "rules": "string"
-    },
-    {
-      "name": "version",
-      "description": "Minecraft version",
-      "defaultValue": "1.20.4",
+      "description": "",
+      "defaultValue": "pufferfish-paperclip-1.21.3-R0.1-SNAPSHOT-mojmap.jar",
       "required": true,
       "userViewable": true,
       "userEditable": true,
@@ -28,7 +19,7 @@
   "installScript": {
     "dockerImage": "ghcr.io/lydondev/images:debian",
     "entrypoint": "bash",
-    "script": "wget https://ci.pufferfish.host/job/Pufferfish-1.20/lastSuccessfulBuild/artifact/build/libs/pufferfish-paperclip-1.20.4-R0.1-SNAPSHOT.jar -O pufferfish-1.20.4.jar && echo \"eula=true\" > eula.txt && if [ ! -f server.properties ]; then echo \"server-port=25565\nquery.port=25565\ngamemode=survival\ndifficulty=easy\nmax-players=20\nlevel-name=world\nview-distance=10\nspawn-protection=0\nonline-mode=true\nmotd=A Minecraft Server\n\" > server.properties; fi"
+    "script": "wget https://ci.pufferfish.host/job/Pufferfish-1.21/27/artifact/build/libs/pufferfish-paperclip-1.21.3-R0.1-SNAPSHOT-mojmap.jar"
   },
   "startup": {
     "userEditable": false

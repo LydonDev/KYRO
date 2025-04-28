@@ -3,31 +3,13 @@
   "shortName": "purpur",
   "description": "A drop-in replacement for Paper with additional features and performance optimizations.",
   "dockerImage": "ghcr.io/lydondev/images:java_21",
-  "defaultStartupCommand": "java -Xms512M -Xmx1G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar %jarfile%",
+  "defaultStartupCommand": "java -Xms512M -Xmx1G -jar %jarfile%",
   "configFiles": [],
   "environmentVariables": [
     {
       "name": "jarfile",
-      "description": "Server JAR file to run",
-      "defaultValue": "purpur-1.21.jar",
-      "required": true,
-      "userViewable": true,
-      "userEditable": true,
-      "rules": "string"
-    },
-    {
-      "name": "version",
-      "description": "Minecraft version",
-      "defaultValue": "1.21",
-      "required": true,
-      "userViewable": true,
-      "userEditable": true,
-      "rules": "string"
-    },
-    {
-      "name": "build",
-      "description": "Purpur build number",
-      "defaultValue": "latest",
+      "description": "",
+      "defaultValue": "purpur-1.21.4-2416.jar",
       "required": true,
       "userViewable": true,
       "userEditable": true,
@@ -37,7 +19,7 @@
   "installScript": {
     "dockerImage": "ghcr.io/lydondev/images:debian",
     "entrypoint": "bash",
-    "script": "wget -O purpur-1.21.jar \"https://api.purpurmc.org/v2/purpur/1.21/latest/download\" && echo \"eula=true\" > eula.txt && if [ ! -f server.properties ]; then echo \"server-port=25565\nquery.port=25565\ngamemode=survival\ndifficulty=easy\nmax-players=20\nlevel-name=world\nview-distance=10\nsimulation-distance=10\nspawn-protection=0\nonline-mode=true\nmotd=A Purpur Minecraft Server\n\" > server.properties; fi"
+    "script": "wget https://api.purpurmc.org/v2/purpur/1.21.4/2416/download"
   },
   "startup": {
     "userEditable": false
