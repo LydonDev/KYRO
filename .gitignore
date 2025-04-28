@@ -11,3 +11,4 @@ package-lock.json
 .DS_Store
 logs/
 config.json
+Kyro.txt

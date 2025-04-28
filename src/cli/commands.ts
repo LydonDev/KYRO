@@ -35,7 +35,7 @@ figlet(APP_NAME, (err, data) => {
     console.error(err);
     return;
   }
-  fs.writeFileSync("./_ascii.txt", data, "utf-8");
+  fs.writeFileSync(`./${APP_NAME}.txt`, data, "utf-8");
 });
 
 if (!fs.existsSync(LOGS_DIR)) {
@@ -196,7 +196,7 @@ const printVersionStatus = async () => {
 };
 
 const printBanner = async () => {
-  const asciiPath = "/opt/KYRO/kyro/_ascii.txt";
+  const asciiPath = `/opt/KYRO/kyro/${APP_NAME}.txt`;
   const ascii = fs.readFileSync(asciiPath, "utf-8");
   const asciiGradient = gradient("FFFFFF", "#a2b3ff");
 
