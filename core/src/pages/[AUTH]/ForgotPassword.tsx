@@ -1,45 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/UI";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { APP_NAME } from "@/config";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [verificationStep, setVerificationStep] = useState(false);
-  const [code, setCode] = useState<string[]>(Array(6).fill(""));
+  const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [verificationStep, setVerificationStep] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
   const navigate = useNavigate();
-
-  const inputRefs = Array(6)
-    .fill(0)
-    .map(() => React.createRef<HTMLInputElement>());
-
-  const handleChange = (index: number, value: string) => {
-    if (isNaN(Number(value))) return;
-
-    const newCode = [...code];
-    newCode[index] = value;
-    setCode(newCode);
-
-    if (value && index < 5) {
-      inputRefs[index + 1].current?.focus();
-    }
-  };
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace") {
-      if (!code[index] && index > 0) {
-        inputRefs[index - 1].current?.focus();
-      }
-    }
-  };
 
   const handleSendResetEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,18 +98,8 @@ const ForgotPassword: React.FC = () => {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!newPassword || !confirmPassword) {
-      setError("Please enter and confirm your new password");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (newPassword.length < 8) {
-      setError("Password must be at least 8 characters long");
+    if (!newPassword) {
+      setError("Please enter a new password");
       return;
     }
 
@@ -154,8 +119,7 @@ const ForgotPassword: React.FC = () => {
         },
         body: JSON.stringify({
           userId,
-          password: newPassword,
-          code: code.join(""),
+          newPassword,
         }),
       });
 
@@ -166,36 +130,39 @@ const ForgotPassword: React.FC = () => {
       }
 
       setSuccess(true);
-
       setTimeout(() => {
         navigate("/login");
       }, 2000);
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Password reset failed",
-      );
+      setError(error instanceof Error ? error.message : "Failed to reset password");
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const handleCodeChange = (index: number, value: string) => {
+    if (value.length > 1) return;
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`code-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
 
   return (
     <div className="min-h-screen flex bg-stone-950">
       {/* Left panel */}
       <div className="w-2/5 p-10 flex flex-col justify-center border-r border-stone-900">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-[#FFFFFF]">{APP_NAME}</h1>
+          <h1 className="text-2xl font-semibold text-white">{APP_NAME}</h1>
         </div>
 
         <div className="my-6">
-          <h2 className="text-2xl font-semibold text-[#FFFFFF]">
-            Reset your password
-          </h2>
-          <p className="text-lg mt-2 text-[#9CA3AF]">
+          <h2 className="text-2xl font-semibold text-white">Reset your password</h2>
+          <p className="text-lg mt-2 text-gray-400">
             We'll help you get back into your account.
           </p>
         </div>
@@ -203,7 +170,7 @@ const ForgotPassword: React.FC = () => {
         <div className="mt-8">
           <Link
             to="https://github.com/lydondev"
-            className="inline-flex items-center border-b border-stone-900 pb-1 text-[#9CA3AF]"
+            className="inline-flex items-center text-gray-400 border-b border-stone-900"
           >
             Powered by {APP_NAME}
             <svg
@@ -226,179 +193,127 @@ const ForgotPassword: React.FC = () => {
 
       {/* Right panel */}
       <div className="w-3/5 flex items-center justify-center bg-stone-950">
-        <div className="bg-stone-950 rounded-xl p-8 w-full max-w-md border border-stone-900">
-          {!verificationStep && !success ? (
-            <>
-              <h2 className="text-2xl font-semibold text-[#FFFFFF] mb-1">
-                Forgot Password
-              </h2>
-              <p className="text-sm text-[#9CA3AF] mb-6">
-                Enter your email address to receive a verification code.
-              </p>
+        <div className="rounded-xl p-8 w-full max-w-md bg-stone-950 border border-stone-900">
+          <h2 className="text-2xl font-semibold mb-1 text-white">Forgot Password</h2>
+          <p className="text-sm mb-6 text-gray-400">
+            {!verificationStep
+              ? "Enter your email to receive a reset code."
+              : "Enter the verification code sent to your email."}
+          </p>
 
-              <form onSubmit={handleSendResetEmail} className="space-y-5">
-                {error && (
-                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
-                    <p className="text-xs text-[#EF4444]">{error}</p>
-                  </div>
-                )}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-xs font-medium text-[#9CA3AF] mb-1.5"
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-3 py-2 rounded-md border border-stone-900 bg-stone-950 text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-stone-900"
-                    placeholder="email@example.com"
-                    required
-                  />
+          {!verificationStep ? (
+            <form onSubmit={handleSendResetEmail} className="space-y-5">
+              {error && (
+                <div className="rounded-md p-3 mb-4 bg-red-500/10 border border-red-500/20">
+                  <p className="text-xs text-red-500">{error}</p>
                 </div>
-
-                <Button
-                  type="submit"
-                  variant="secondary"
-                  size="md"
-                  className="w-full"
-                  isLoading={isLoading}
-                >
-                  Send Reset Link
-                </Button>
-
-                <div className="text-center mt-6">
-                  <p className="text-sm text-[#9CA3AF]">
-                    Remember your password? <Link to="/login">Sign in</Link>
+              )}
+              {success && (
+                <div className="rounded-md p-3 mb-4 bg-green-500/10 border border-green-500/20">
+                  <p className="text-xs text-green-500">
+                    Verification code sent! Please check your email.
                   </p>
                 </div>
-              </form>
-            </>
-          ) : verificationStep ? (
-            <>
-              <h2 className="text-2xl font-semibold text-[#FFFFFF] mb-1">
-                Verification Code
-              </h2>
-              <p className="text-sm text-[#9CA3AF] mb-6">
-                Enter the 6-digit code sent to your email.
-              </p>
+              )}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-xs font-medium mb-1.5 text-gray-400"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
 
-              <form onSubmit={handleVerifyCode} className="space-y-5">
-                {error && (
-                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
-                    <p className="text-xs text-[#EF4444]">{error}</p>
-                  </div>
-                )}
-                <div className="flex justify-center space-x-2 my-6">
+              <Button
+                type="submit"
+                variant="secondary"
+                size="md"
+                className="w-full"
+                isLoading={isLoading}
+              >
+                Send Reset Code
+              </Button>
+
+              <div className="text-center mt-6">
+                <p className="text-sm text-gray-400">
+                  Remember your password?{" "}
+                  <Link to="/login" className="text-gray-400 no-underline">
+                    Sign in
+                  </Link>
+                </p>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleVerifyCode} className="space-y-5">
+              {error && (
+                <div className="rounded-md p-3 mb-4 bg-red-500/10 border border-red-500/20">
+                  <p className="text-xs text-red-500">{error}</p>
+                </div>
+              )}
+              {success && (
+                <div className="rounded-md p-3 mb-4 bg-green-500/10 border border-green-500/20">
+                  <p className="text-xs text-green-500">
+                    Code verified! Please set your new password.
+                  </p>
+                </div>
+              )}
+
+              <div>
+                <label
+                  htmlFor="code"
+                  className="block text-xs font-medium mb-1.5 text-gray-400"
+                >
+                  Verification Code
+                </label>
+                <div className="flex gap-2">
                   {code.map((digit, index) => (
                     <input
                       key={index}
-                      ref={inputRefs[index]}
+                      id={`code-${index}`}
                       type="text"
                       maxLength={1}
                       value={digit}
-                      onChange={(e) => handleChange(index, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(index, e)}
-                      className="w-10 h-12 border border-stone-900 rounded text-center text-[#FFFFFF] font-medium text-lg bg-stone-950 focus:outline-none focus:ring-1 focus:ring-stone-900"
+                      onChange={(e) => handleCodeChange(index, e.target.value)}
+                      className="w-12 h-12 text-center rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
+                      required
                     />
                   ))}
                 </div>
+              </div>
 
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="md"
-                  className="w-full"
-                  isLoading={isLoading}
-                >
-                  Verify Code
-                </Button>
+              <Button
+                type="submit"
+                variant="secondary"
+                size="md"
+                className="w-full"
+                isLoading={isLoading}
+              >
+                Verify Code
+              </Button>
 
-                <div className="text-center mt-6">
-                  <p className="text-sm text-[#9CA3AF]">
-                    Didn't receive a code?{" "}
-                    <button
-                      type="button"
-                      onClick={handleSendResetEmail}
-                      className="text-[#FFFFFF] hover:text-[#9CA3AF]"
-                    >
-                      Resend
-                    </button>
-                  </p>
-                </div>
-              </form>
-            </>
-          ) : (
-            <>
-              <h2 className="text-2xl font-semibold text-[#FFFFFF] mb-1">
-                Reset Password
-              </h2>
-              <p className="text-sm text-[#9CA3AF] mb-6">
-                Create a new secure password for your account.
-              </p>
-
-              <form onSubmit={handleResetPassword} className="space-y-5">
-                {error && (
-                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
-                    <p className="text-xs text-[#EF4444]">{error}</p>
-                  </div>
-                )}
-                {success && (
-                  <div className="bg-stone-950 border border-stone-900 rounded-md p-3 mb-4">
-                    <p className="text-xs text-[#10B981]">
-                      Password reset successful! Redirecting to login...
-                    </p>
-                  </div>
-                )}
-                <div>
-                  <label
-                    htmlFor="newPassword"
-                    className="block text-xs font-medium text-[#9CA3AF] mb-1.5"
+              <div className="text-center mt-6">
+                <p className="text-sm text-gray-400">
+                  Didn't receive the code?{" "}
+                  <button
+                    type="button"
+                    onClick={handleSendResetEmail}
+                    className="text-gray-400 no-underline"
+                    disabled={resendLoading}
                   >
-                    New Password
-                  </label>
-                  <input
-                    id="newPassword"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="block w-full px-3 py-2 rounded-md border border-stone-900 bg-stone-950 text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-stone-900"
-                    placeholder="New password"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block text-xs font-medium text-[#9CA3AF] mb-1.5"
-                  >
-                    Confirm Password
-                  </label>
-                  <input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="block w-full px-3 py-2 rounded-md border border-stone-900 bg-stone-950 text-[#FFFFFF] text-sm transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-stone-900"
-                    placeholder="Confirm new password"
-                    required
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="md"
-                  className="w-full"
-                  isLoading={isLoading}
-                >
-                  Reset Password
-                </Button>
-              </form>
-            </>
+                    {resendLoading ? "Sending..." : "Resend Code"}
+                  </button>
+                </p>
+              </div>
+            </form>
           )}
         </div>
       </div>

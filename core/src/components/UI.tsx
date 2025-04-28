@@ -178,11 +178,9 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`font-medium rounded-md focus:outline-none focus:ring-1 transition-all duration-150 cursor-pointer ${
-        sizeClasses[size]
-      } ${variantClasses[variant]} ${
-        disabled || isLoading ? "opacity-50 cursor-not-allowed" : ""
-      } ${className}`}
+      className={`font-medium rounded-md focus:outline-none focus:ring-1 transition-all duration-150 cursor-pointer ${sizeClasses[size]
+        } ${variantClasses[variant]} ${disabled || isLoading ? "opacity-50 cursor-not-allowed" : ""
+        } ${className}`}
       disabled={disabled || isLoading}
       {...props}
     >
@@ -335,9 +333,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
       {isOpen && (
         <div
-          className={`absolute z-10 mt-2 w-48 rounded-md bg-stone-950 border border-stone-900 ring-1 ring-black ring-opacity-5 focus:outline-none ${
-            align === "right" ? "right-0" : "left-0"
-          }`}
+          className={`absolute z-10 mt-2 w-48 rounded-md bg-stone-950 border border-stone-900 ring-1 ring-black ring-opacity-5 focus:outline-none ${align === "right" ? "right-0" : "left-0"
+            }`}
         >
           <div className="py-1">{children}</div>
         </div>
@@ -388,9 +385,8 @@ export const Input: React.FC<InputProps> = ({
         className={`w-full pl-3 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
                     focus:outline-none focus:ring-1 focus:ring-[#232325] focus:border-[#232325]
-                    transition-colors duration-200 ${
-                      error ? "border-[#EF4444]" : ""
-                    } ${className}`}
+                    transition-colors duration-200 ${error ? "border-[#EF4444]" : ""
+          } ${className}`}
         {...props}
       />
       {error && <p className="mt-1 text-xs text-[#EF4444]">{error}</p>}
@@ -421,14 +417,13 @@ export const TextArea: React.FC<TextAreaProps> = ({
           {label}
           {props.required && <span className="text-[#EF4444] ml-1">*</span>}
         </label>
-      )}  
+      )}
       <textarea
         className={`w-full pl-3 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
                     focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
-                    transition-colors duration-200 ${
-                      error ? "border-stone-900" : ""
-                    } ${className}`}
+                    transition-colors duration-200 ${error ? "border-stone-900" : ""
+          } ${className}`}
         {...props}
       />
       {error && <p className="mt-1 text-xs text-[#EF4444]">{error}</p>}
@@ -466,9 +461,8 @@ export const Select: React.FC<SelectProps> = ({
           className={`w-full pl-3 pr-3 py-1 rounded-md bg-stone-950 border border-stone-900
                     text-sm text-[#FFFFFF]
                     focus:outline-none focus:ring-1 focus:ring-stone-900 focus:border-stone-900
-                    transition-colors duration-200 ${
-                      error ? "border-stone-900" : ""
-                    } ${className}`}
+                    transition-colors duration-200 ${error ? "border-stone-900" : ""
+            } ${className}`}
           {...props}
         >
           {options.map((option) => (

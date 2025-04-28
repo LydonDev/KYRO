@@ -71,11 +71,9 @@ export const RegisterPage: React.FC = () => {
         </div>
 
         <div className="my-6">
-          <h2 className="text-2xl font-semibold text-white">
-            Create an account
-          </h2>
+          <h2 className="text-2xl font-semibold text-white">Create an account</h2>
           <p className="text-lg mt-2 text-gray-400">
-            Join us to manage your servers.
+            Sign up to get started with your dashboard.
           </p>
         </div>
 
@@ -106,9 +104,9 @@ export const RegisterPage: React.FC = () => {
       {/* Right panel */}
       <div className="w-3/5 flex items-center justify-center bg-stone-950">
         <div className="rounded-xl p-8 w-full max-w-md bg-stone-950 border border-stone-900">
-          <h2 className="text-2xl font-semibold mb-1 text-white">Register</h2>
+          <h2 className="text-2xl font-semibold mb-1 text-white">Sign up</h2>
           <p className="text-sm mb-6 text-gray-400">
-            Create a new account to get started.
+            Enter your details to create your account.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -117,6 +115,7 @@ export const RegisterPage: React.FC = () => {
                 <p className="text-xs text-red-500">{error}</p>
               </div>
             )}
+
             <div>
               <label
                 htmlFor="email"
@@ -130,10 +129,11 @@ export const RegisterPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="block w-full px-3 py-2 rounded-md text-sm bg-stone-950 border border-stone-900 text-white outline-none"
-                placeholder="email@example.com"
+                placeholder="your@email.com"
                 required
               />
             </div>
+
             <div>
               <label
                 htmlFor="username"
@@ -227,7 +227,7 @@ export const RegisterPage: React.FC = () => {
             <div className="text-center mt-6">
               <p className="text-sm text-gray-400">
                 Already have an account?{" "}
-                <Link to="/login" className="text-gray-400">
+                <Link to="/login" className="text-gray-400 no-underline">
                   Sign in
                 </Link>
               </p>

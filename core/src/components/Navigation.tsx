@@ -19,6 +19,8 @@ import {
   WrenchIcon as Hammer,
   UserCircleIcon as UserCircleIcon,
   BookOpenIcon,
+  Bars3Icon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useAuth } from "../pages/[AUTH]/SignIn";
 import { useEffect, useRef, useState } from "react";
@@ -34,15 +36,18 @@ const NavItem = ({
   icon: Icon,
   label,
   isActive,
+  onClick,
 }: {
   to: string;
   icon: React.ElementType;
   label: string;
   isActive: boolean;
+  onClick?: () => void;
 }) => {
   return (
     <Link
       to={to}
+      onClick={onClick}
       className={`flex items-center h-8 ml-2 text-sm font-medium rounded-sm transition active:scale-95 duration-200 ${isActive
         ? "shadow-sm px-2 bg-stone-800 border border-stone-700 text-white rounded-sm "
         : "border border-transparent shadow-transparent px-2 hover:text-white text-[#9CA3AF] rounded-sm"
@@ -85,6 +90,7 @@ function Sidebar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownAlignLeft, setDropdownAlignLeft] = useState(false);
   const [dropdownShiftUp, setDropdownShiftUp] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const buttonRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -118,6 +124,14 @@ function Sidebar() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   const isServerPage =
     location.pathname.startsWith("/servers/") &&
     location.pathname.split("/").length > 3;
@@ -129,235 +143,221 @@ function Sidebar() {
   const hasAdminPermission = user?.permissions?.includes("admin") || false;
 
   return (
-    <div className="fixed inset-y-0 left-0 w-56 flex flex-col">
-      <div className="h-14 flex items-center p-1">
-        <Link
-          to="/servers"
-          className="h-12 flex items-center w-full px-4 active:scale-95 transition"
-        >
-          <img src={APP_LOGO} alt="Logo" className="w-4 h-4 invert" />
-          <span className="text-base font-semibold text-white ml-2 uppercase text-sm">
-            {APP_NAME}
-          </span>
-        </Link>
-      </div>
+    <>
+      {/* Mobile menu button */}
+      <button
+        onClick={toggleMobileMenu}
+        className="fixed top-4 left-4 z-50 xl:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+      >
+        {isMobileMenuOpen ? (
+          <XMarkIcon className="h-6 w-6" />
+        ) : (
+          <Bars3Icon className="h-6 w-6" />
+        )}
+      </button>
 
-      <div className="flex-1 overflow-y-auto">
-        <nav className="p-1 mt-2 pr-3 space-y-0.5">
-          <NavItem
+      {/* Backdrop overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 xl:hidden"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed inset-y-0 left-0 w-56 flex flex-col bg-stone-950 transform transition-transform duration-300 ease-in-out z-40 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full xl:translate-x-0"
+          }`}
+      >
+        <div className="h-14 flex items-center p-1">
+          <Link
             to="/servers"
-            icon={SparklesIcon}
-            label="Overview"
-            isActive={location.pathname === "/servers"}
-          />
+            className="h-12 flex items-center w-full px-4 active:scale-95 transition"
+            onClick={closeMobileMenu}
+          >
+            <img src={APP_LOGO} alt="Logo" className="w-4 h-4 invert" />
+            <span className="text-base font-semibold text-white ml-2 uppercase text-sm">
+              {APP_NAME}
+            </span>
+          </Link>
+        </div>
 
-          <NavItem
-            to="/profile"
-            icon={UserCircleIcon}
-            label="Profile"
-            isActive={location.pathname === "/profile"}
-          />
+        <div className="flex-1 overflow-y-auto">
+          <nav className="p-1 mt-2 pr-3 space-y-0.5">
+            <NavItem
+              to="/servers"
+              icon={SparklesIcon}
+              label="Overview"
+              isActive={location.pathname === "/servers"}
+              onClick={closeMobileMenu}
+            />
 
-          <>
-            <SectionHeader label="Support" />
             <NavItem
-              to="/comingsoon"
-              icon={TicketIcon}
-              label="Tickets"
-              isActive={location.pathname === "/comingsoon"}
+              to="/profile"
+              icon={UserCircleIcon}
+              label="Profile"
+              isActive={location.pathname === "/profile"}
+              onClick={closeMobileMenu}
             />
-            <NavItem
-              to="/comingsoon"
-              icon={BookOpenIcon}
-              label="Documentation"
-              isActive={location.pathname === "/comingsoon"}
-            />
-          </>
 
-          <>
-            <SectionHeader label="Billing" />
-            <NavItem
-              to="/comingsoon"
-              icon={WrenchIcon}
-              label="Services"
-              isActive={location.pathname === "/comingsoon"}
-            />
-            <NavItem
-              to="/comingsoon"
-              icon={CreditCardIcon}
-              label="Billing"
-              isActive={location.pathname === "/comingsoon"}
-            />
-          </>
-
-          {isServerPage && (
             <>
-              <SectionHeader label="Server" />
-
+              <SectionHeader label="Support" />
               <NavItem
-                to={`/servers/${serverId}/console`}
-                icon={CommandLineIcon}
-                label="Console"
-                isActive={location.pathname.endsWith("/console")}
+                to="/comingsoon"
+                icon={TicketIcon}
+                label="Tickets"
+                isActive={location.pathname === "/comingsoon"}
+                onClick={closeMobileMenu}
               />
-
               <NavItem
-                to={`/servers/${serverId}/files`}
-                icon={FolderIcon}
-                label="Files"
-                isActive={location.pathname.endsWith("/files")}
-              />
-
-              <NavItem
-                to={`/servers/${serverId}/plugins`}
-                icon={PuzzlePieceIcon}
-                label="Plugins"
-                isActive={location.pathname.endsWith("/plugins")}
-              />
-
-              <NavItem
-                to={`/servers/${serverId}/mods`}
-                icon={Hammer}
-                label="Mods"
-                isActive={location.pathname.endsWith("/mods")}
-              />
-
-              <NavItem
-                to={`/servers/${serverId}/players`}
-                icon={UsersIcon}
-                label="Players"
-                isActive={location.pathname.endsWith("/players")}
-              />
-
-              <NavItem
-                to={`/servers/${serverId}/backups`}
-                icon={ArchiveBoxIcon}
-                label="Backups"
-                isActive={location.pathname.endsWith("/backups")}
-              />
-
-              <NavItem
-                to={`/servers/${serverId}/databases`}
-                icon={DatabaseIcon}
-                label="Databases"
-                isActive={location.pathname.endsWith("/databases")}
-              />
-
-              <NavItem
-                to={`/servers/${serverId}/settings`}
-                icon={CogIcon}
-                label="Settings"
-                isActive={location.pathname.endsWith("/settings")}
+                to="/comingsoon"
+                icon={BookOpenIcon}
+                label="Documentation"
+                isActive={location.pathname === "/comingsoon"}
+                onClick={closeMobileMenu}
               />
             </>
-          )}
 
-          {hasAdminPermission && (
             <>
-              <SectionHeader label="Admin" />
-
+              <SectionHeader label="Billing" />
               <NavItem
-                to="/admin"
-                icon={HomeModernIcon}
-                label="Overview"
-                isActive={location.pathname === "/admin"}
+                to="/comingsoon"
+                icon={WrenchIcon}
+                label="Services"
+                isActive={location.pathname === "/comingsoon"}
+                onClick={closeMobileMenu}
               />
-              {isAdminPage && (
-                <>
-                  <NavItem
-                    to="/admin/servers"
-                    icon={ServerIcon}
-                    label="Servers"
-                    isActive={location.pathname === "/admin/servers"}
-                  />
-
-                  <NavItem
-                    to="/admin/regions"
-                    icon={GlobeAmericasIcon}
-                    label="Regions"
-                    isActive={location.pathname === "/admin/regions"}
-                  />
-
-                  <NavItem
-                    to="/admin/nodes"
-                    icon={CubeIcon}
-                    label="Nodes"
-                    isActive={location.pathname === "/admin/nodes"}
-                  />
-
-                  <NavItem
-                    to="/admin/users"
-                    icon={UsersIcon}
-                    label="Users"
-                    isActive={location.pathname === "/admin/users"}
-                  />
-
-                  <NavItem
-                    to="/admin/units"
-                    icon={ArchiveBoxIcon}
-                    label="Units"
-                    isActive={location.pathname === "/admin/units"}
-                  />
-
-                  <NavItem
-                    to="/admin/cargo"
-                    icon={ArrowsPointingOutIcon}
-                    label="Cargo"
-                    isActive={location.pathname === "/admin/cargo"}
-                  />
-                </>
-              )}
+              <NavItem
+                to="/comingsoon"
+                icon={CreditCardIcon}
+                label="Billing"
+                isActive={location.pathname === "/comingsoon"}
+                onClick={closeMobileMenu}
+              />
             </>
-          )}
-        </nav>
-      </div>
 
-      <div className="p-1">
-        <div className="flex justify-start space-x-2">
-          {user && (
-            <div className="relative">
-              <div
-                ref={buttonRef}
-                className="flex items-center gap-3 cursor-pointer mr-2 py-2 px-1 rounded-xl hover:bg-stone-900 active:scale-95 shadow-sm  transition duration-200 ease-in-out backdrop-blur w-44"
-                onClick={toggleDropdown}
-              >
-                <UserAvatar username={user.username || "User"} />
-                <div className="flex flex-col">
-                  <span className="text-white text-sm">{user.username}</span>
-                  <span className="text-gray-400 text-xs ">
-                    {user.permissions}
-                  </span>
-                </div>
+            {isServerPage && (
+              <>
+                <SectionHeader label="Server" />
+
+                <NavItem
+                  to={`/servers/${serverId}/console`}
+                  icon={CommandLineIcon}
+                  label="Console"
+                  isActive={location.pathname.endsWith("/console")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/files`}
+                  icon={FolderIcon}
+                  label="Files"
+                  isActive={location.pathname.endsWith("/files")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/plugins`}
+                  icon={PuzzlePieceIcon}
+                  label="Plugins"
+                  isActive={location.pathname.endsWith("/plugins")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/mods`}
+                  icon={Hammer}
+                  label="Mods"
+                  isActive={location.pathname.endsWith("/mods")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/players`}
+                  icon={UsersIcon}
+                  label="Players"
+                  isActive={location.pathname.endsWith("/players")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/backups`}
+                  icon={ArchiveBoxIcon}
+                  label="Backups"
+                  isActive={location.pathname.endsWith("/backups")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/databases`}
+                  icon={DatabaseIcon}
+                  label="Databases"
+                  isActive={location.pathname.endsWith("/databases")}
+                  onClick={closeMobileMenu}
+                />
+
+                <NavItem
+                  to={`/servers/${serverId}/settings`}
+                  icon={CogIcon}
+                  label="Settings"
+                  isActive={location.pathname.endsWith("/settings")}
+                  onClick={closeMobileMenu}
+                />
+              </>
+            )}
+
+            {hasAdminPermission && (
+              <>
+                <SectionHeader label="Admin" />
+                <NavItem
+                  to="/admin"
+                  icon={ServerIcon}
+                  label="Admin"
+                  isActive={location.pathname === "/admin"}
+                  onClick={closeMobileMenu}
+                />
+              </>
+            )}
+          </nav>
+        </div>
+
+        <div className="p-4 border-t border-stone-900">
+          <div
+            ref={buttonRef}
+            className="flex items-center justify-between cursor-pointer"
+            onClick={toggleDropdown}
+          >
+            <div className="flex items-center space-x-3">
+              <UserAvatar username={user?.username || "User"} />
+              <div>
+                <p className="text-sm font-medium text-white">
+                  {user?.username || "User"}
+                </p>
+                <p className="text-xs text-gray-400">View Profile</p>
               </div>
-              <div
-                ref={dropdownRef}
-                className={`absolute ${dropdownAlignLeft ? "left-42" : "right-42"} ${dropdownShiftUp ? "bottom-full mb-1" : "top-full mt-1"} w-48 bg-stone-950 rounded-md shadow-lg border border-stone-900 
-                       overflow-hidden max-h-[calc(100vh-80px)] overflow-auto transform transition-all duration-200 ease-in-out origin-top-right z-50 ${isDropdownOpen
-                    ? "opacity-100 scale-y-100 translate-y-0"
-                    : "opacity-0 scale-y-95 translate-y-1 pointer-events-none"
-                  }`}
-              >
-                <div className="py-1">
-                  <Link to="/profile">
-                    <button className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center">
-                      <UserCircleIcon className="mr-2 h-4 w-4 text-gray-500" />
-                      Profile
-                    </button>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full px-4 py-2 text-sm text-gray-400 hover:bg-stone-900 flex items-center"
-                  >
-                    <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4 text-gray-500" />
-                    Sign out
-                  </button>
-                </div>
+            </div>
+          </div>
+
+          {isDropdownOpen && (
+            <div
+              ref={dropdownRef}
+              className={`absolute bottom-16 ${dropdownAlignLeft ? "right-0" : "left-0"
+                } ${dropdownShiftUp ? "bottom-16" : "top-16"
+                } w-48 rounded-md shadow-lg bg-stone-900 ring-1 ring-black ring-opacity-5 focus:outline-none`}
+            >
+              <div className="py-1">
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-400 hover:bg-stone-800 hover:text-white"
+                >
+                  Sign out
+                </button>
               </div>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

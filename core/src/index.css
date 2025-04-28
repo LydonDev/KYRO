@@ -130,7 +130,6 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,6 +149,40 @@ body {
 
   transform: scaleY(0.95);
 }
+
+@media screen and (max-width: 1600px) {
+  .card {
+    padding: 2rem;
+    border-radius: 12px;
+    width: 1200px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .card {
+    padding: 2rem;
+    border-radius: 12px;
+    width: 1000px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .card {
+    padding: 2rem;
+    border-radius: 12px;
+    width: 800px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card {
+    padding: 1rem;
+    border-radius: 12px;
+    width: 95%;
+    /* Slightly wider on very small screens */
+  }
+}
+
 
 /* Chrome, Safari and Opera */
 *::-webkit-scrollbar {

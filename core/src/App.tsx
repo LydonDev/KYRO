@@ -76,7 +76,7 @@ function Layout({ children }: LayoutProps) {
       {shouldHaveSidebar && <Sidebar />}
       <div
         className={`
-          ${shouldHaveSidebar ? "pl-56" : ""} 
+          ${shouldHaveSidebar ? "xl:pl-56" : ""} 
           min-h-screen transition-all duration-200 ease-in-out
         `}
       >
