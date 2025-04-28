@@ -110,7 +110,7 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 - **How do I change the panel's name?**
 
-  - Set the `VITE_APP_NAME` variable in all `.env` files to your desired name. This will also rename all Kyro commands and require you to stop all running Kyro processes and rename your Kyro database accordingly.
+  - Set the `name` variable in all `config.json` files to your desired name. This will also rename all Kyro commands and require you to stop all running Kyro processes and rename your Kyro database accordingly.
 
 - **Can I install a theme or plugins?**
 
