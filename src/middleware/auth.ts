@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config";
+import { JWT_SECRET, MAINTENANCE } from "../config";
 import { db } from "../db";
 import { Permission, hasPermission } from "../permissions";
 
@@ -32,6 +32,10 @@ export const authMiddleware = async (
   next: NextFunction,
 ) => {
   try {
+    if (MAINTENANCE) {
+      return res.status(503).json({ error: "The server is currently under maintenance." });
+    }
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader?.startsWith("Bearer ")) {

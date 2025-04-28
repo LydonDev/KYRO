@@ -1,12 +1,13 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Suspense, lazy, ReactNode } from "react";
+import { Suspense, lazy, ReactNode, useEffect } from "react";
 import { Sidebar } from "./components/Navigation";
 import ErrorBoundary from "./pages/[ERRORS]/ErrorBoundary";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { AuthProvider, ProtectedRoute, AuthPage } from "./pages/[AUTH]/SignIn";
 import { SystemProvider } from "./contexts/SystemContext";
 import { usePageTitle } from "./hooks/usePageTitle";
+import { MAINTENANCE } from "./config";
 
 const Servers = lazy(() => import("./pages/[MAIN]/Servers"));
 const NotFound = lazy(() => import("./pages/[ERRORS]/NotFound"));
@@ -62,6 +63,13 @@ function Layout({ children }: LayoutProps) {
     location.pathname.startsWith(route),
   );
   const shouldHaveSidebar = !isAuthRoute;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (MAINTENANCE) {
+      navigate("/maintainence");
+    }
+  }, [navigate]);
 
   return (
     <div>
@@ -79,6 +87,7 @@ function Layout({ children }: LayoutProps) {
 }
 
 function App() {
+
   const location = useLocation();
   usePageTitle();
 

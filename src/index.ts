@@ -6,7 +6,7 @@
 import express from "express";
 import { join } from "path";
 import { loadRouters } from "./utils/routes_loader";
-import { API_PORT, APP_NAME, KYRO_VERSION } from "./config";
+import { API_PORT, APP_NAME, KYRO_VERSION, MAINTENANCE } from "./config";
 
 const app = express();
 const __dirname = process.cwd();
@@ -15,6 +15,12 @@ app.use(express.json());
 
 const routersDir = join(__dirname, "src", "routers");
 app.use(loadRouters(routersDir));
+
+if (MAINTENANCE) {
+  app.use((req, res) => {
+    res.status(503).send("The server is currently under maintenance.");
+  });
+}
 
 app.get("/api/system", (req, res) => {
   res.json({

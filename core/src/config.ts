@@ -10,7 +10,7 @@ type AppConfig = {
         version: string;
         logs_dir: string;
         logo: string;
-        logoInverted: string;
+        maintenance: boolean;
     };
     api: {
         port: number;
@@ -28,6 +28,6 @@ export const FIRST_USER_HAS_ADMIN = typedConfig.app.first_user_has_admin;
 export const KYRO_VERSION = typedConfig.app.version;
 export const LOGS_DIR = typedConfig.app.logs_dir;
 export const APP_LOGO = typedConfig.app.logo;
-export const APP_LOGO_INVERTED = typedConfig.app.logoInverted;
+export const MAINTENANCE = typedConfig.app.maintenance;
 export const API_PORT = typedConfig.api.port;
 export const API_URL = typedConfig.api.url;

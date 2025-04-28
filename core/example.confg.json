@@ -7,7 +7,8 @@
         "first_user_has_admin": true,
         "version": "1.0.0",
         "logs_dir": "./logs",
-        "logo": "your-logo-url"
+        "logo": "your-logo-url",
+        "maintenance": false
     },
     "api": {
         "port": 3000,

@@ -8,7 +8,8 @@
         "version": "1.0.0",
         "logs_dir": "./logs",
         "logo": "your-logo-url",
-        "jwt_secret": "your-jwt-secret"
+        "jwt_secret": "your-jwt-secret",
+        "maintenance": false
     },
     "api": {
         "port": 3000,

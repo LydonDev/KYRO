@@ -11,6 +11,7 @@ type AppConfig = {
     logs_dir: string;
     logo: string;
     jwt_secret: string;
+    maintenance: boolean;
   };
   api: {
     port: number;
@@ -34,6 +35,7 @@ export const APP_LOGO = typedConfig.app.logo;
 export const API_PORT = typedConfig.api.port;
 export const API_URL = typedConfig.api.url;
 export const JWT_SECRET = typedConfig.app.jwt_secret;
+export const MAINTENANCE = typedConfig.app.maintenance;
 
 export const EMAIL_CONFIG = {
   RESEND_API_KEY: typedConfig.mail.resend_api_key,
