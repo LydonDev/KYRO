@@ -1,0 +1,23 @@
+# ----------------------------------
+# Kyro Images Repository units
+# ----------------------------------
+
+images:
+  # Minecraft Servers
+  - name: PaperMc
+    src: games/papermc.json
+
+  - name: PufferfishMC
+    src: games/pufferfish.json
+
+  - name: Vanilla
+    src: games/vanilla.json
+
+  - name: Purpur
+    src: games/purpur.json
+
+  - name: Velocity
+    src: games/velocity.json
+
+  - name: Waterfall
+    src: games/waterfallmc.json

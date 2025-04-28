@@ -1,0 +1,36 @@
+{
+  "name": "Vanilla Minecraft",
+  "shortName": "vanilla",
+  "description": "Official Minecraft server from Mojang.",
+  "dockerImage": "ghcr.io/lydondev/images:java_21",
+  "defaultStartupCommand": "java -Xms512M -Xmx1G -jar %jarfile% nogui",
+  "configFiles": [],
+  "environmentVariables": [
+    {
+      "name": "jarfile",
+      "description": "Server JAR file to run",
+      "defaultValue": "minecraft_server.1.21.jar",
+      "required": true,
+      "userViewable": true,
+      "userEditable": true,
+      "rules": "string"
+    },
+    {
+      "name": "version",
+      "description": "Minecraft version",
+      "defaultValue": "1.21",
+      "required": true,
+      "userViewable": true,
+      "userEditable": true,
+      "rules": "string"
+    }
+  ],
+  "installScript": {
+    "dockerImage": "ghcr.io/lydondev/images:debian",
+    "entrypoint": "bash",
+    "script": "wget https://piston-data.mojang.com/v1/objects/0c3ec587af28e5a785c0c11af353b3b1cb095832/server.jar -O minecraft_server.1.21.jar && echo \"eula=true\" > eula.txt && if [ ! -f server.properties ]; then echo \"server-port=25565\nquery.port=25565\ngamemode=survival\ndifficulty=easy\nmax-players=20\nlevel-name=world\nview-distance=10\nspawn-protection=0\nonline-mode=true\nmotd=A Minecraft Server\n\" > server.properties; fi"
+  },
+  "startup": {
+    "userEditable": false
+  }
+}

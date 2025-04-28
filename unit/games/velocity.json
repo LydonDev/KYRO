@@ -1,0 +1,27 @@
+{
+  "name": "Velocity",
+  "shortName": "velocity",
+  "description": "Modern, high-performance Minecraft proxy server.",
+  "dockerImage": "ghcr.io/lydondev/images:java_21",
+  "defaultStartupCommand": "java -Xms512M -Xmx512M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar %jarfile%",
+  "configFiles": [],
+  "environmentVariables": [
+    {
+      "name": "jarfile",
+      "description": "Server JAR file to run",
+      "defaultValue": "velocity-3.3.0-SNAPSHOT.jar",
+      "required": true,
+      "userViewable": true,
+      "userEditable": true,
+      "rules": "string"
+    }
+  ],
+  "installScript": {
+    "dockerImage": "ghcr.io/lydondev/images:debian",
+    "entrypoint": "bash",
+    "script": "wget https://api.papermc.io/v2/projects/velocity/versions/3.3.0-SNAPSHOT/builds/315/downloads/velocity-3.3.0-SNAPSHOT-315.jar -O velocity-3.3.0-SNAPSHOT.jar && if [ ! -f velocity.toml ]; then echo '[server]\nshow-ping-requests = false\nonline-mode = true\nfailing-limiter-interval = 30\nfailing-limiter-limit = 10\nping-cache-duration = 5\nannounce-forge = false\nkick-existing-players = true\ntcp-fast-open = true\nplugin-announcement-permission = command.alert\nforwarding-secret-file = \"forwarding.secret\"\ncompress-threshold = 256\nbungee-plugin-message-channel = true\nconnect-throttle-limit = 3000\nshow-max-players = 500\nshowmax-sampletext = [\"A Velocity Server\", \"Running on KyroCPanel\"]\n\n[forced-hosts]\n# Configure any of your forced hosts here\n\n[advanced]\ncompression-level = 6\ncompression-threshold = 256\nlogin-ratelimit = 3000\nconnection-timeout = 5000\nread-timeout = 30000\nhaproxy-protocol = false\nproxy-protocol = false\nallow-non-private-address = false\n\n[query]\nenabled = false\nport = 25577\nmap = \"Velocity\"\nshow-plugins = false\n\n[metrics]\nenabled = true\n\n[messages]\nakickcommand = \"You have been disconnected from the server.\"\ndisconnect-command-server = \"server\"\ndisconnect-parse = \"Cannot connect to server\"\nserver-disconnected = \"Lost connection to server.\"\nserver-kick = \"Disconnected from server\\nReason: %s\"\nconnected-proxy-chat = false\n\n[bind]\nhost = \"0.0.0.0\"\nport = 25577\npriority = [\"proximity\", \"join_order\"]\n\n[announce-forge]\nforged-host = \"host\"\nforged-icon = \"icon\"\nforged-motd = \"motd\"\nfml-brand = \"fml,forge\"' > velocity.toml; fi && if [ ! -f forwarding.secret ]; then head /dev/urandom | tr -dc A-Za-z0-9 | head -c 64 > forwarding.secret; fi"
+  },
+  "startup": {
+    "userEditable": false
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Waterfall",
+  "shortName": "waterfall",
+  "description": "High performance fork of the BungeeCord proxy server for Minecraft.",
+  "dockerImage": "ghcr.io/lydondev/images:java_21",
+  "defaultStartupCommand": "java -Xms512M -Xmx512M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -jar %jarfile%",
+  "configFiles": [],
+  "environmentVariables": [
+    {
+      "name": "jarfile",
+      "description": "Server JAR file to run",
+      "defaultValue": "waterfall.jar",
+      "required": true,
+      "userViewable": true,
+      "userEditable": true,
+      "rules": "string"
+    }
+  ],
+  "installScript": {
+    "dockerImage": "ghcr.io/lydondev/images:debian",
+    "entrypoint": "bash",
+    "script": "wget https://api.papermc.io/v2/projects/waterfall/versions/1.21/builds/550/downloads/waterfall-1.21-550.jar -O waterfall.jar"
+  },
+  "startup": {
+    "userEditable": false
+  }
+}

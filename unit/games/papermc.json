@@ -1,0 +1,27 @@
+{
+  "name": "PaperMC",
+  "shortName": "papermc",
+  "description": "The PaperMC server software for Minecraft: Java Edition.",
+  "dockerImage": "ghcr.io/lydondev/images:java_21",
+  "defaultStartupCommand": "java -jar %jarfile%",
+  "configFiles": [],
+  "environmentVariables": [
+    {
+      "name": "jarfile",
+      "description": "",
+      "defaultValue": "paper-1.21.4-221.jar",
+      "required": true,
+      "userViewable": true,
+      "userEditable": true,
+      "rules": "string"
+    }
+  ],
+  "installScript": {
+    "dockerImage": "ghcr.io/lydondev/images:debian",
+    "entrypoint": "bash",
+    "script": "wget https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/221/downloads/paper-1.21.4-221.jar"
+  },
+  "startup": {
+    "userEditable": false
+  }
+}
