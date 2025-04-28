@@ -368,13 +368,13 @@ export const prodCommand = new Command("production")
       {
         name: `${APP_NAME} Backend`,
         cmd: "bun",
-        args: ["run", "start"],
+        args: ["run", "dev"],
         cwd: "/opt/KYRO/kyro",
       },
       {
         name: "Krypton",
         cmd: "bun",
-        args: ["run", "start"],
+        args: ["run", "dev"],
         cwd: "/opt/KYRO/krypton",
       },
     ];
