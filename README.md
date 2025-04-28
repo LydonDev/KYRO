@@ -20,12 +20,12 @@ Kyro is a high-performance, modern, and user-friendly server management platform
 
 ## 🎁 Dependencies
 
-- [Bun](https://bun.sh) (v1.2.10 or newer)
-- [Node.js](https://nodejs.org) (for frontend dependencies)
-- [Docker](https://www.docker.com) (optional, for containers)
+- [Bun](https://bun.sh) 
+- [Node.js](https://nodejs.org) 
+- [Docker](https://www.docker.com) 
 - [Git](https://git-scm.com)
 - [Unzip](https://www.info-zip.org/UnZip.html)
-- [Resend API key](https://resend.com) (for email verification)
+- [Resend API key](https://resend.com) 
 
 ---
 
